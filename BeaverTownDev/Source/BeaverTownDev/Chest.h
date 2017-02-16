@@ -20,11 +20,4 @@ public:
 		FTriggerEvent AlexOpen;
 	UPROPERTY(BlueprintAssignable)
 		FTriggerEvent AlexClose;
-	UPROPERTY(EditAnywhere)
-		ATriggerVolume * Trigger = nullptr;
-		
-	virtual void Tick(float DeltaTime) override;
-
-
-
 };
