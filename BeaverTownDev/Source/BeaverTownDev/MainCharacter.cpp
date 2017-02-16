@@ -66,6 +66,7 @@ void AMainCharacter::RotateToMousePosition()
 	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Camera), false, HitResult);
 	FVector PlayerToCursor = GetActorLocation() - HitResult.Location;
 	PlayerToCursor.Z = 0;
+	//PlayerToCursor += GetWorld()->GetDeltaSeconds * 200.f;
 	if (PlayerToCursor != FVector(0))
 	{
 		SetActorRotation(PlayerToCursor.Rotation());
