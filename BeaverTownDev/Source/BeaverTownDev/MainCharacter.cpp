@@ -135,6 +135,7 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 	//Rotates smoothly towards mouse cursor
 	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(),RotationAngle.Rotation(),DeltaTime,340.f);
 	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
+
 }
 
 float AMainCharacter::GetHealthPercent()
