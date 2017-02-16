@@ -38,6 +38,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float DodgeSpeed = 2000.f;
+	UPROPERTY(EditAnywhere)
+		float InteractReach = 100.f;
 	float Stamina = 100.f;
 	float MaxStamina = 100.f;
 	float Health = 100.f;
