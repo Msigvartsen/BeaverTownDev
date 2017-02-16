@@ -28,8 +28,9 @@ private:
 	//Input Functions
 	void MoveX(float value);
 	void MoveY(float value);
+	void Melee();
 	void Dodge();
-	void RotateToMousePosition();
+	void RotateToMousePosition(float DeltaTime);
 	
 	//Character Variables
 
