@@ -11,11 +11,11 @@ void AChest::Tick(float DeltaTime)
 	{
 		if (Trigger->IsOverlappingActor(Character))
 		{
-			OpenEvent();
+			//OpenEvent();
 		}
 		else
 		{
-			CloseEvent();
+			//CloseEvent();
 		}
 	}
 }

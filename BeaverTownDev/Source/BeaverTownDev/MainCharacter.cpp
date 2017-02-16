@@ -109,15 +109,15 @@ void AMainCharacter::Interact()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
 
-		AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-		if (InteractObject->GetIsOpenEvent())
-		{
-			InteractObject->CloseEvent();
-		}
-		else
-		{
-			InteractObject->OpenEvent();
-		}
+		//AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+		//if (InteractObject->GetIsOpenEvent())
+		//{
+		//	InteractObject->CloseEvent();
+		//}
+		//else
+		//{
+		//	InteractObject->OpenEvent();
+		//}
 	}
 }
 
