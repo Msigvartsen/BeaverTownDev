@@ -89,11 +89,13 @@ void AMainCharacter::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
 	FVector StartTrace = GetActorLocation();
-	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * 500.f);
+	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * InteractReach);
+	EndTrace.Z -= 25.f;
+	StartTrace.Z -= 25.f;
 	FHitResult HitResult;
 
 	// Draws a red line that represents the line trace
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, 1.f, 0, 10.f);
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), true, -1.f, 0, 10.f);
 
 	// Line trace from character mesh to get World Dynamic object
 	GetWorld()->LineTraceSingleByObjectType(
@@ -109,15 +111,18 @@ void AMainCharacter::Interact()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
 
-		//AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-		//if (InteractObject->GetIsOpenEvent())
-		//{
-		//	InteractObject->CloseEvent();
-		//}
-		//else
-		//{
-		//	InteractObject->OpenEvent();
-		//}
+		if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+		{
+			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+			if (InteractObject->GetIsOpenEvent())
+			{
+				InteractObject->CloseEvent();
+			}
+			else
+			{
+				InteractObject->OpenEvent();
+			}
+		}
 	}
 }
 
