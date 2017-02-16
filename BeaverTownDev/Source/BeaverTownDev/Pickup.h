@@ -3,16 +3,16 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Interact.generated.h"
+#include "Pickup.generated.h"
 
 UCLASS()
-class BEAVERTOWNDEV_API AInteract : public AActor
+class BEAVERTOWNDEV_API APickup : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AInteract();
+	APickup();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,18 +22,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void OpenEvent();
-	virtual void CloseEvent();
-	bool GetIsOpenEvent();
-
-protected:
-	bool bIsOpenEvent = false;
+	UFUNCTION()
+	void OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
 
 private:
 	UPROPERTY(EditAnywhere)
-		USceneComponent * MainRoot = nullptr;
+		USceneComponent* PickupRoot;
 	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent * BaseMesh = nullptr;
+		UStaticMeshComponent* PickupMesh;
+	UPROPERTY(EditAnywhere)
+		UShapeComponent* PickupBox;
 
+	
 	
 };

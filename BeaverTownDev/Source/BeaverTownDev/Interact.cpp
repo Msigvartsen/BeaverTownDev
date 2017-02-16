@@ -40,4 +40,9 @@ void AInteract::CloseEvent()
 	UE_LOG(LogTemp, Warning, TEXT("Calling base class CloseEvent"))
 }
 
+bool AInteract::GetIsOpenEvent()
+{
+	return bIsOpenEvent;
+}
+
 

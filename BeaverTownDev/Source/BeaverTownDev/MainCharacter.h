@@ -31,7 +31,9 @@ private:
 	void Melee();
 	void Dodge();
 	void RotateToMousePosition(float DeltaTime);
-	
+	void Shoot();
+	void Interact();
+
 	//Character Variables
 
 	UPROPERTY(EditAnywhere)

@@ -6,29 +6,38 @@
 void AChest::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	AActor* MyActor = Cast<AActor>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	if (Trigger->IsOverlappingActor(MyActor))
+	AActor* Character = Cast<AActor>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	if (Trigger && Character)
 	{
-		OpenEvent();
-	}
-	else
-	{
-		CloseEvent();
+		if (Trigger->IsOverlappingActor(Character))
+		{
+			OpenEvent();
+		}
+		else
+		{
+			CloseEvent();
+		}
 	}
 }
 
 void AChest::OpenEvent()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Calling derived class OpenEvent"))
-	AlexOpen.Broadcast();
+	if (bIsOpenEvent == false)
+	{
+		bIsOpenEvent = true;
+		AlexOpen.Broadcast();
+	}
 }
 
 void AChest::CloseEvent()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Calling derived class CloseEvent"))
-	AlexClose.Broadcast();
-
+	if (bIsOpenEvent == true)
+	{
+		bIsOpenEvent = false;
+		AlexClose.Broadcast();
+	}
 }
 
 
