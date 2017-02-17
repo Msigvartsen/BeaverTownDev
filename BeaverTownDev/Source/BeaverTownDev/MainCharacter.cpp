@@ -134,11 +134,18 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 	FVector2D MouseLocation = FVector2D(X, Y);
 	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 	const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+
 	FVector2D MouseDirection = MouseLocation - ViewportCenter;
+	MouseDirection.Normalize();
 	FVector RotationAngle = FVector(MouseDirection.X, MouseDirection.Y, 0);
 
+	// test
+	FRotator MyRotator = FRotator(0, 90, 0);
+	FRotationMatrix MyRotationMatrix(MyRotator);
+	FVector RotatedMouseVector = MyRotationMatrix.TransformVector(RotationAngle);
+
 	//Rotates smoothly towards mouse cursor
-	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(),RotationAngle.Rotation(),DeltaTime,340.f);
+	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,340.f);
 	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 
 }
