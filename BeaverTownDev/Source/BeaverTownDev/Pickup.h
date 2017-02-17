@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Pickup.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMyEvent);
+
 UCLASS()
 class BEAVERTOWNDEV_API APickup : public AActor
 {
@@ -24,6 +26,9 @@ public:
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
+
+	UPROPERTY(BlueprintAssignable)
+		FMyEvent PlaySoundWhenPickup;
 
 private:
 	UPROPERTY(EditAnywhere)
