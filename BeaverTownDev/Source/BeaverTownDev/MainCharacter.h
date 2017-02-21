@@ -44,7 +44,7 @@ private:
 	float MaxStamina = 100.f;
 	float Health = 100.f;
 	float MaxHealth = 100.f;
-	float StaminaRegeneration = 3.f;
+	float StaminaRegeneration = 10.f;
 
 	//Character Getters
 	UFUNCTION(BlueprintCallable)

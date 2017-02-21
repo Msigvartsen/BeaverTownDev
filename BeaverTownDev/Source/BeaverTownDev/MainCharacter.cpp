@@ -69,7 +69,7 @@ void AMainCharacter::Melee()
 
 void AMainCharacter::Dodge()
 {
-	if (Stamina > 40)
+	if (Stamina > 30)
 	{
 		FVector DodgeDirection(0, 0, 0);
 		DodgeDirection += FVector::ForwardVector * InputComponent->GetAxisValue("MoveX");
@@ -114,37 +114,56 @@ void AMainCharacter::Interact()
 		if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 		{
 			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-			if (InteractObject->GetIsOpenEvent())
+
+			float MaxOpenAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + 45.f;
+			float MinOpenAngle = InteractObject->GetActorForwardVector().Rotation().Yaw - 45.f;
+			float PlayerAngle = GetActorRotation().Yaw;
+
+			UE_LOG(LogTemp, Warning, TEXT("Chest yaw rotation: %f"), InteractObject->GetActorForwardVector().Rotation().Yaw)
+			UE_LOG(LogTemp, Warning, TEXT("Player yaw rotation: %f"), GetActorRotation().Yaw)
+			UE_LOG(LogTemp, Warning, TEXT("MinAngle: %f MaxAngle: %f"), MinOpenAngle, MaxOpenAngle)
+
+			if (PlayerAngle < MaxOpenAngle && PlayerAngle > MinOpenAngle)
 			{
-				InteractObject->CloseEvent();
-			}
-			else
-			{
-				InteractObject->OpenEvent();
+				if (InteractObject->GetIsOpenEvent())
+				{
+					InteractObject->CloseEvent();
+				}
+				else
+				{
+					InteractObject->OpenEvent();
+				}
 			}
 		}
 	}
 }
 
+// Find Viewport Center and mouse 2D position, then get rotation vector based on viewport center. 
+// Character rotates towards mouse position.
 void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
-	//Find Position to Mouse, and store inside Vector. Find Viewport Center and calculate mouse position from center. Character rotates after mouse.
+	/// get viewport center
+	FVector2D ViewportSize;
+	FVector2D  ViewportCenter;
+	GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
+	ViewportCenter = ViewportSize / 2;
+
+	/// get mouse position
 	float X, Y;
 	GetWorld()->GetFirstPlayerController()->GetMousePosition(X, Y);
-	FVector2D MouseLocation = FVector2D(X, Y);
-	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-	const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+	FVector2D MousePosition = FVector2D(X, Y);
 
-	FVector2D MouseDirection = MouseLocation - ViewportCenter;
+	/// Get rotation vector
+	FVector2D MouseDirection = MousePosition - ViewportCenter;
 	MouseDirection.Normalize();
-	FVector RotationAngle = FVector(MouseDirection.X, MouseDirection.Y, 0);
+	FVector MouseDirection3D = FVector(MouseDirection.X, MouseDirection.Y, 0);
 
-	// test
+	/// Fixes rotation offset
 	FRotator MyRotator = FRotator(0, 90, 0);
 	FRotationMatrix MyRotationMatrix(MyRotator);
-	FVector RotatedMouseVector = MyRotationMatrix.TransformVector(RotationAngle);
+	FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
 
-	//Rotates smoothly towards mouse cursor
+	/// Rotates smoothly towards mouse cursor
 	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,340.f);
 	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 
