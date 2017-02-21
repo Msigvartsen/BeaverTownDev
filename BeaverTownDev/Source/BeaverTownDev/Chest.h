@@ -5,7 +5,7 @@
 #include "Interact.h"
 #include "Chest.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTriggerEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FChestTriggerEvent);
 
 UCLASS()
 class BEAVERTOWNDEV_API AChest : public AInteract
@@ -17,7 +17,7 @@ public:
 	virtual void CloseEvent() override;
 	
 	UPROPERTY(BlueprintAssignable)
-		FTriggerEvent AlexOpen;
+		FChestTriggerEvent ChestOpen;
 	UPROPERTY(BlueprintAssignable)
-		FTriggerEvent AlexClose;
+		FChestTriggerEvent ChestClose;
 };

@@ -10,7 +10,7 @@ void AChest::OpenEvent()
 	if (bIsOpenEvent == false)
 	{
 		bIsOpenEvent = true;
-		AlexOpen.Broadcast();
+		ChestOpen.Broadcast();
 	}
 }
 
@@ -20,7 +20,7 @@ void AChest::CloseEvent()
 	if (bIsOpenEvent == true)
 	{
 		bIsOpenEvent = false;
-		AlexClose.Broadcast();
+		ChestClose.Broadcast();
 	}
 }
 
