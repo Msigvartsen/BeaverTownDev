@@ -13,11 +13,9 @@ void ALever::OpenEvent()
 	{
 		bIsOpenEvent = true;
 		LeverOpen.Broadcast();
+
 		// spawn chest
-		// auto SpawnLocation = FVector(FMath::RandRange(-400.f, -600.f), FMath::RandRange(-200.f, -100.f), 125.f);
-		FVector SpawnLocation = FVector(-400, -100, 125);
-		// FVector RandVector = FVector(FMath::RandRange(-100, 100), FMath::RandRange(-100, 100), 125);
-		// FVector SpawnLocation = GetWorld()->GetFirstPlayerController()->GetCharacter()->GetActorLocation() + RandVector;
+		auto SpawnLocation = FVector(FMath::RandRange(-400.f, -600.f), FMath::RandRange(-200.f, -100.f), 125.f);
 		Spawn = GetWorld()->SpawnActor<AChest>(SpawnBlueprint, SpawnLocation, FRotator::ZeroRotator);
 	}
 }
