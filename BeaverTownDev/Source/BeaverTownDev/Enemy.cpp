@@ -31,5 +31,19 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (Health <= 0)
+	{
+		this->Destroy();
+	}
+}
+
+float AEnemy::GetHealthPercent() const
+{
+	return Health / MaxHealth;
+}
+
+void AEnemy::SetDamageTaken(float DamageTaken)
+{
+	Health -= DamageTaken;
 }
 

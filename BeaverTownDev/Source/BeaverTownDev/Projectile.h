@@ -32,4 +32,6 @@ public:
 		UShapeComponent* ProjectileCollision = nullptr;
 	UPROPERTY(EditAnywhere)
 		float ProjectileSpeed = 500.f;
+	UPROPERTY(EditAnywhere)
+		float ProjectileDamage = 35.f;
 };

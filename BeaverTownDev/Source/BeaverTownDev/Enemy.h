@@ -23,6 +23,18 @@ private:
 		UStaticMeshComponent* EnemyMesh = nullptr;
 	UPROPERTY(EditAnywhere)
 		UShapeComponent* EnemyCollision = nullptr;
+	UPROPERTY(EditAnywhere)
+		float Health = 100.f;
+	UPROPERTY(EditAnywhere)
+		float MaxHealth = 100.f;
+
+	UFUNCTION(BlueprintCallable)
+		float GetHealthPercent() const;
+
+
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetDamageTaken(float DamageTaken);
 	
 	
 };

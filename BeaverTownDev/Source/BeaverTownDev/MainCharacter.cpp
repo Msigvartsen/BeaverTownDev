@@ -77,7 +77,8 @@ void AMainCharacter::Melee()
 			if (HitResult.GetActor()->IsA(AEnemy::StaticClass()))
 			{
 				AEnemy* EnemyHit = Cast<AEnemy>(HitResult.GetActor());
-				EnemyHit->Destroy();
+				EnemyHit->SetDamageTaken(MeleeDamage);
+				//EnemyHit->Destroy();
 			}
 	}
 }

@@ -50,8 +50,8 @@ void AProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor *Ot
 {
 	if(OtherActor->IsA(AEnemy::StaticClass()))
 	{
-		UE_LOG(LogTemp,Warning,TEXT("Enemy Hit"))
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"))
 		OtherActor->Destroy();
-		this->Destroy();
+		Destroy();
 	}
 }
