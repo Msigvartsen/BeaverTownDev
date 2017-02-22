@@ -2,7 +2,8 @@
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
 #include "Interact.h"
-
+#include "Enemy.h"
+#include "Projectile.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -55,15 +56,29 @@ void AMainCharacter::MoveY(float value)
 void AMainCharacter::Melee()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Melee!"));
-	FHitResult Hit;
-	bool HitResult = GetWorld()->LineTraceSingleByObjectType(Hit, GetActorLocation(), GetActorLocation() + 10.f,ECC_WorldStatic);
-	FVector StartTrace = GetActorLocation();
-	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * 500.f);
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false, 1.f, 0.f,10.f);
+	FHitResult HitResult;
 	
-	if (HitResult)
+	FVector StartTrace = GetActorLocation();
+	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * MeleeRange);
+	GetWorld()->LineTraceSingleByObjectType(
+		HitResult,
+		StartTrace,
+		EndTrace,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
+		FCollisionQueryParams(FName(TEXT("")), false, Cast<AActor>(this)));
+
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false, 1.f, 0.f,10.f);
+	EndTrace.Z = 25.f;
+	StartTrace.Z = 25.f;
+	if (HitResult.GetActor())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Found HIT"));
+		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
+
+			if (HitResult.GetActor()->IsA(AEnemy::StaticClass()))
+			{
+				AEnemy* EnemyHit = Cast<AEnemy>(HitResult.GetActor());
+				EnemyHit->Destroy();
+			}
 	}
 }
 
@@ -83,6 +98,13 @@ void AMainCharacter::Dodge()
 void AMainCharacter::Shoot()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Shooting!"));
+
+	if (GetWorld())
+	{
+		FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
+		GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
+	}
+	
 }
 
 void AMainCharacter::Interact()
@@ -164,17 +186,17 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 	FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
 
 	/// Rotates smoothly towards mouse cursor
-	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,340.f);
+	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,400.f);
 	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 
 }
 
-float AMainCharacter::GetHealthPercent()
+float AMainCharacter::GetHealthPercent() const
 {
 	return (Health / MaxHealth);
 }
 
-float AMainCharacter::GetStaminaPercent()
+float AMainCharacter::GetStaminaPercent() const
 {
 	return (Stamina / MaxStamina);
 }

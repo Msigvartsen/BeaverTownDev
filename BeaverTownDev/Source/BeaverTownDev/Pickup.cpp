@@ -41,3 +41,4 @@ void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor
 	Destroy();
 }
 
+

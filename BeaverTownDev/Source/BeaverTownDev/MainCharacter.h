@@ -40,16 +40,21 @@ private:
 		float DodgeSpeed = 2000.f;
 	UPROPERTY(EditAnywhere)
 		float InteractReach = 100.f;
+	UPROPERTY(EditAnywhere)
+		float MeleeRange = 75.f;
 	float Stamina = 100.f;
 	float MaxStamina = 100.f;
 	float Health = 100.f;
 	float MaxHealth = 100.f;
 	float StaminaRegeneration = 10.f;
 
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class AProjectile> ProjectileBlueprint;
+
 	//Character Getters
 	UFUNCTION(BlueprintCallable)
-		float GetHealthPercent();
+		float GetHealthPercent() const;
 	UFUNCTION(BlueprintCallable)
-		float GetStaminaPercent();
+		float GetStaminaPercent() const;
 
 };
