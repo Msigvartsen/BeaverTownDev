@@ -48,13 +48,15 @@ void AComplexProjectile::Shoot(float Speed)
 	ProjectileMovement->Activate();
 }
 
-void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
+void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor, UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Overlapped with"))
+
 	if (OtherActor->IsA(AEnemyBase::StaticClass()))
 	{
-		auto Enemy = Cast<AEnemyBase>(OtherActor);
+		AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
 		Enemy->RemoveHealth(50);
+		ProjectileMovement->DestroyComponent();
+		Destroy();
 	}
-	Destroy();
 }
