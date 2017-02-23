@@ -12,11 +12,12 @@ AProjectile::AProjectile()
 
 	//ProjectileRoot = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileRoot"));
 
+	ProjectileRoot = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileRoot"));
+	RootComponent = ProjectileRoot;
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	ProjectileCollision = CreateDefaultSubobject<USphereComponent>(TEXT("ProjectileCollision"));
-	RootComponent = ProjectileCollision;
 	ProjectileMesh->SetupAttachment(RootComponent);
-	//ProjectileCollision->SetupAttachment(RootComponent);
+	ProjectileCollision->SetupAttachment(RootComponent);
 	ProjectileCollision->bGenerateOverlapEvents = true;
 	ProjectileCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnOverlap);
 
@@ -48,6 +49,7 @@ void AProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor *Ot
 	UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult &SweepResult)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Overlapped with: %s"), *OtherActor->GetName())
 	if(OtherActor->IsA(AEnemy::StaticClass()))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"))

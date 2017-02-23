@@ -45,4 +45,18 @@ bool AInteract::GetIsOpenEvent()
 	return bIsOpenEvent;
 }
 
+bool AInteract::GetOnlyInteractFromAngle()
+{
+	return bOnlyInteractFromAngle;
+}
+
+float AInteract::GetMaxOpenAngle()
+{
+	return MaxOpenAngle;
+}
+
+float AInteract::GetMinOpenAngle()
+{
+	return MinOpenAngle;
+}
 
