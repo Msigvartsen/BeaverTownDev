@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
 
+// Forward declarations
+class AComplexProjectile;
+
 UCLASS()
 class BEAVERTOWNDEV_API AMainCharacter : public ACharacter
 {
@@ -51,6 +54,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AProjectile> ProjectileBlueprint;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;
 
 	//Character Getters
 	UFUNCTION(BlueprintCallable)

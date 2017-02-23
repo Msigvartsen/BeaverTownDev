@@ -3,6 +3,7 @@
 #include "MainCharacter.h"
 #include "Interact.h"
 #include "Enemy.h"
+#include "ComplexProjectile.h"
 #include "Projectile.h"
 
 AMainCharacter::AMainCharacter()
@@ -100,12 +101,24 @@ void AMainCharacter::Shoot()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Shooting!"));
 
-	if (GetWorld())
+	//if (GetWorld())
+	//{
+	//	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
+	//	GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
+	//}
+
+	/// Alt Shooting
+	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
+	if (ComplexProjectileBlueprint)
 	{
-		FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
-		GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
+		AComplexProjectile* Projectile = GetWorld()->SpawnActor<AComplexProjectile>(ComplexProjectileBlueprint, SpawnLocation, GetActorRotation());
+		Projectile->Shoot(1000.f);
+
 	}
-	
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No projectile found!"));
+	}
 }
 
 void AMainCharacter::Interact()
