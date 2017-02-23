@@ -5,6 +5,13 @@
 #include "Chest.h"
 #include "Lever.h"
 
+ALever::ALever()
+{
+	bOnlyInteractFromAngle = true;
+	MinOpenAngle -= 20.f;
+	MaxOpenAngle += 20.f;
+}
+
 void ALever::OpenEvent()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Calling Lever OpenEvent"))

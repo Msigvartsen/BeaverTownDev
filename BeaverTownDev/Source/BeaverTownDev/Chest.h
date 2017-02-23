@@ -13,6 +13,8 @@ class BEAVERTOWNDEV_API AChest : public AInteract
 	GENERATED_BODY()
 
 public:
+	//Constructor
+	AChest();
 	virtual void OpenEvent() override;
 	virtual void CloseEvent() override;
 	

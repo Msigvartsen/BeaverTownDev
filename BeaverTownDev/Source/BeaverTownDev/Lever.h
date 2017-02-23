@@ -16,6 +16,9 @@ class BEAVERTOWNDEV_API ALever : public AInteract
 	GENERATED_BODY()
 	
 public:
+	// Constructor
+	ALever();
+
 	virtual void OpenEvent() override;
 	virtual void CloseEvent() override;
 

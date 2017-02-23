@@ -25,10 +25,17 @@ public:
 	virtual void OpenEvent();
 	virtual void CloseEvent();
 	bool GetIsOpenEvent();
+	bool GetOnlyInteractFromAngle();
+	float GetMaxOpenAngle();
+	float GetMinOpenAngle();
 
 protected:
 	bool bIsOpenEvent = false;
-
+	bool bOnlyInteractFromAngle = false;
+	UPROPERTY(EditAnywhere)
+		float MaxOpenAngle = 0;
+	UPROPERTY(EditAnywhere)
+		float MinOpenAngle = 0;
 private:
 	UPROPERTY(EditAnywhere)
 		USceneComponent * MainRoot = nullptr;

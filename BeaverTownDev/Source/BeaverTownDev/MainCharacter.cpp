@@ -123,15 +123,11 @@ void AMainCharacter::Interact()
 		{
 			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
 
-			float MaxOpenAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + 45.f;
-			float MinOpenAngle = InteractObject->GetActorForwardVector().Rotation().Yaw - 45.f;
 			float PlayerAngle = GetActorRotation().Yaw;
+			float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
+			float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
 
-			UE_LOG(LogTemp, Warning, TEXT("Chest yaw rotation: %f"), InteractObject->GetActorForwardVector().Rotation().Yaw)
-			UE_LOG(LogTemp, Warning, TEXT("Player yaw rotation: %f"), GetActorRotation().Yaw)
-			UE_LOG(LogTemp, Warning, TEXT("MinAngle: %f MaxAngle: %f"), MinOpenAngle, MaxOpenAngle)
-
-			if (PlayerAngle < MaxOpenAngle && PlayerAngle > MinOpenAngle)
+			if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
 			{
 				if (InteractObject->GetIsOpenEvent())
 				{
