@@ -42,6 +42,12 @@ void AProjectile::LaunchProjectile(float DeltaTime)
 	FVector NewLocation = GetActorLocation();
 	NewLocation += GetActorForwardVector() * ProjectileSpeed * DeltaTime;
 	SetActorLocation(NewLocation);
+	DespawnTime -= DeltaTime;
+	if (DespawnTime < 0)
+	{
+		Destroy();
+	}
+	
 }
 
 void AProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor,

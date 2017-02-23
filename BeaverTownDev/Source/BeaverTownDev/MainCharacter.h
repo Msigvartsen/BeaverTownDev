@@ -33,7 +33,7 @@ private:
 	void RotateToMousePosition(float DeltaTime);
 	void Shoot();
 	void Interact();
-
+	void GetHitResultFromLineTrace(FHitResult &HitResult);
 	//Character Variables
 
 	UPROPERTY(EditAnywhere)

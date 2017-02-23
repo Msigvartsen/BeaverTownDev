@@ -111,24 +111,9 @@ void AMainCharacter::Shoot()
 void AMainCharacter::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
-	FVector StartTrace = GetActorLocation();
-	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * InteractReach);
-	EndTrace.Z -= 25.f;
-	StartTrace.Z -= 25.f;
+
 	FHitResult HitResult;
-
-	// Draws a red line that represents the line trace
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), true, -1.f, 0, 10.f);
-
-	// Line trace from character mesh to get World Dynamic object
-	GetWorld()->LineTraceSingleByObjectType(
-		HitResult,
-		StartTrace,
-		EndTrace,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
-		FCollisionQueryParams(FName(TEXT("")), false, Cast<AActor>(this))
-	);
-
+	GetHitResultFromLineTrace(HitResult);
 	// Opens chest if hit
 	if (HitResult.GetActor())
 	{
@@ -200,4 +185,25 @@ float AMainCharacter::GetHealthPercent() const
 float AMainCharacter::GetStaminaPercent() const
 {
 	return (Stamina / MaxStamina);
+}
+
+void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult)
+{
+	FVector StartTrace = GetActorLocation();
+	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * InteractReach);
+	EndTrace.Z -= 25.f;
+	StartTrace.Z -= 25.f;
+	HitResult;
+
+	// Draws a red line that represents the line trace
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), true, -1.f, 0, 10.f);
+
+	// Line trace from character mesh to get World Dynamic object
+	GetWorld()->LineTraceSingleByObjectType(
+		HitResult,
+		StartTrace,
+		EndTrace,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
+		FCollisionQueryParams(FName(TEXT("")), false, Cast<AActor>(this))
+		);
 }

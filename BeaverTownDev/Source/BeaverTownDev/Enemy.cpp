@@ -24,12 +24,32 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	MoveDirection = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - GetActorLocation();
+	MoveDirection.Normalize();
+	SetActorRotation(MoveDirection.Rotation());
+
 }
 
 // Called every frame
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FVector NewLocation = GetActorLocation();
+	NewLocation += (MoveDirection * 100.f * DeltaTime);
+	SetActorLocation(NewLocation);
+
+	CurrentTurnDelay -= DeltaTime;
+	///Turns the enemy after some time:
+	if (CurrentTurnDelay < 0.f)
+	{
+		MoveDirection = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - GetActorLocation();
+		MoveDirection.Normalize();
+		SetActorRotation(MoveDirection.Rotation());
+
+		CurrentTurnDelay = FMath::FRandRange(0.f, 1.f);
+	}
+
 
 	if (Health <= 0)
 	{

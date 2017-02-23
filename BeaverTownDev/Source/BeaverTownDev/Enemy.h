@@ -27,10 +27,11 @@ private:
 		float Health = 100.f;
 	UPROPERTY(EditAnywhere)
 		float MaxHealth = 100.f;
-
+	FVector MoveDirection;
+	float CurrentTurnDelay = 2.f;
 	UFUNCTION(BlueprintCallable)
 		float GetHealthPercent() const;
-
+	
 
 public:
 	UFUNCTION(BlueprintCallable)

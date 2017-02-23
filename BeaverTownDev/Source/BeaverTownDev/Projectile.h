@@ -29,9 +29,11 @@ public:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* ProjectileMesh = nullptr;
 	UPROPERTY(EditAnywhere)
-		UShapeComponent* ProjectileCollision = nullptr;
+		UPrimitiveComponent* ProjectileCollision = nullptr;
 	UPROPERTY(EditAnywhere)
-		float ProjectileSpeed = 500.f;
+		float ProjectileSpeed = 1000.f;
 	UPROPERTY(EditAnywhere)
 		float ProjectileDamage = 35.f;
+	UPROPERTY(EditAnywhere)
+		float DespawnTime = .7f;
 };
