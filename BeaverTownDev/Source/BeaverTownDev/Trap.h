@@ -28,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* TrapMesh = nullptr;
 
-	bool Trap = true;
+	bool TrapActive = true;
 
 	void TrapTriggered();
 

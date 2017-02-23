@@ -19,14 +19,16 @@ ATrap::ATrap()
 void ATrap::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
 void ATrap::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+	if (TrapActive)
+	{
+		TrapTriggered();
+	}
 }
 
 void ATrap::TrapTriggered()
@@ -37,6 +39,7 @@ void ATrap::TrapTriggered()
 	{	
 		UE_LOG(LogTemp,Warning,TEXT("Trap triggered!"))
 		GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, GetActorLocation() + GetActorForwardVector() *100.f, GetActorRotation());
+		TrapActive = false;
 	}
 }
 
