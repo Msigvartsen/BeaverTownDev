@@ -2,6 +2,7 @@
 
 #include "BeaverTownDev.h"
 #include "Projectile.h"
+#include "EnemyBase.h"
 #include "Enemy.h"
 
 // Sets default values
