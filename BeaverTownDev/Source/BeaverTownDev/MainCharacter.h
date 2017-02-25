@@ -44,11 +44,10 @@ private:
 	void GetHitResultFromLineTrace(FHitResult &HitResult);
 	void ShowInventory();
 	void HideInventory();
-<<<<<<< HEAD
-=======
+
 	void ThrowRock();
 	void ThrowNut();
->>>>>>> b7b072f64eee56176de7b46314e33a2800a6540e
+
 	//Character Variables
 
 	UPROPERTY(EditAnywhere)

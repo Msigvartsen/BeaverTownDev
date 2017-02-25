@@ -44,11 +44,9 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
 	InputComponent->BindAction("Inventory", IE_Pressed, this, &AMainCharacter::ShowInventory);
 	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
-<<<<<<< HEAD
-=======
 	InputComponent->BindAction("WeaponOne", IE_Pressed, this, &AMainCharacter::WeaponOne);
 	InputComponent->BindAction("WeaponTwo", IE_Pressed, this, &AMainCharacter::WeaponTwo);
->>>>>>> b7b072f64eee56176de7b46314e33a2800a6540e
+
 }
 
 void AMainCharacter::MoveX(float value)
@@ -217,9 +215,6 @@ void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult)
 		);
 }
 
-<<<<<<< HEAD
-=======
-
 void AMainCharacter::ThrowRock()
 {
 	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
@@ -244,7 +239,6 @@ void AMainCharacter::ThrowNut()
 	}
 }
 
->>>>>>> b7b072f64eee56176de7b46314e33a2800a6540e
 void AMainCharacter::ShowInventory()
 {
 	IsInventoryVisible = true;
