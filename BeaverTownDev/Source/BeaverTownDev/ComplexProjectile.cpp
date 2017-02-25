@@ -55,8 +55,7 @@ void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 		AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
 		Enemy->RemoveHealth(25);
 	}
-<<<<<<< HEAD
-=======
+
 	//GetWorld()->DestroyActor(this); //crashes the editor
->>>>>>> 701a26d32d54d8d5e12f249fc138caf6957cda31
+
 }
