@@ -39,9 +39,16 @@ private:
 	void RotateToMousePosition(float DeltaTime);
 	void Shoot();
 	void Interact();
+	void WeaponOne();
+	void WeaponTwo();
 	void GetHitResultFromLineTrace(FHitResult &HitResult);
 	void ShowInventory();
 	void HideInventory();
+<<<<<<< HEAD
+=======
+	void ThrowRock();
+	void ThrowNut();
+>>>>>>> b7b072f64eee56176de7b46314e33a2800a6540e
 	//Character Variables
 
 	UPROPERTY(EditAnywhere)
@@ -50,6 +57,7 @@ private:
 		float InteractReach = 100.f;
 	UPROPERTY(EditAnywhere)
 		float MeleeRange = 75.f;
+	int32 WeaponOfChoice = 1;
 	float Stamina = 100.f;
 	float MaxStamina = 100.f;
 	float Health = 100.f;
