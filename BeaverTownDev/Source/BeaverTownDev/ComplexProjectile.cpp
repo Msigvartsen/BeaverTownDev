@@ -24,7 +24,6 @@ AComplexProjectile::AComplexProjectile()
 	ProjectileMovement->bAutoActivate = false;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 
-
 }
 
 // Called when the game starts or when spawned

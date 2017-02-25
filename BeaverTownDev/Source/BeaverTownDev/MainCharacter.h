@@ -22,6 +22,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	void SetCollectedMinerals();
+
 private:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* PlayerCamera = nullptr;
@@ -55,16 +58,22 @@ private:
 	float MeleeDamage = 50.f;
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		bool IsInventoryVisible = false;
+	UPROPERTY(BlueprintReadOnly, Category = "CharacterStats", meta = (AllowPrivateAccess = true))
+		int32 CollectedMinerals = 0;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AProjectile> ProjectileBlueprint;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;
 
-	//Character Getters
+	//Character Getters/Setters
 	UFUNCTION(BlueprintCallable)
 		float GetHealthPercent() const;
 	UFUNCTION(BlueprintCallable)
 		float GetStaminaPercent() const;
+	UFUNCTION(BlueprintCallable)
+		int GetCollectedMinerals() const;
+	
+	
 
 };
