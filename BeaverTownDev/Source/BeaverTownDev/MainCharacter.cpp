@@ -42,6 +42,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Melee", IE_Pressed, this, &AMainCharacter::Melee);
 	InputComponent->BindAction("Shoot", IE_Pressed, this, &AMainCharacter::Shoot);
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+	InputComponent->BindAction("Inventory", IE_Pressed, this, &AMainCharacter::ShowInventory);
+	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
 }
 
 void AMainCharacter::MoveX(float value)
@@ -215,4 +217,14 @@ void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult)
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
 		FCollisionQueryParams(FName(TEXT("")), false, Cast<AActor>(this))
 		);
+}
+
+void AMainCharacter::ShowInventory()
+{
+	IsInventoryVisible = true;
+}
+
+void AMainCharacter::HideInventory()
+{
+	IsInventoryVisible = false;
 }

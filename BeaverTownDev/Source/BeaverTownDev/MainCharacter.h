@@ -37,6 +37,8 @@ private:
 	void Shoot();
 	void Interact();
 	void GetHitResultFromLineTrace(FHitResult &HitResult);
+	void ShowInventory();
+	void HideInventory();
 	//Character Variables
 
 	UPROPERTY(EditAnywhere)
@@ -51,6 +53,8 @@ private:
 	float MaxHealth = 100.f;
 	float StaminaRegeneration = 10.f;
 	float MeleeDamage = 50.f;
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+		bool IsInventoryVisible = false;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AProjectile> ProjectileBlueprint;

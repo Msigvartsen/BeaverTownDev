@@ -56,5 +56,4 @@ void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 		auto Enemy = Cast<AEnemyBase>(OtherActor);
 		Enemy->RemoveHealth(50);
 	}
-	Destroy();
 }
