@@ -2,7 +2,7 @@
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
 #include "Interact.h"
-#include "Enemy.h"
+#include "EnemyBase.h"
 #include "ComplexProjectile.h"
 #include "Projectile.h"
 
@@ -42,6 +42,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Melee", IE_Pressed, this, &AMainCharacter::Melee);
 	InputComponent->BindAction("Shoot", IE_Pressed, this, &AMainCharacter::Shoot);
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+	InputComponent->BindAction("Inventory", IE_Pressed, this, &AMainCharacter::ShowInventory);
+	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
 }
 
 void AMainCharacter::MoveX(float value)
@@ -73,13 +75,12 @@ void AMainCharacter::Melee()
 	StartTrace.Z = 25.f;
 	if (HitResult.GetActor())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
+		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
 
-			if (HitResult.GetActor()->IsA(AEnemy::StaticClass()))
+			if (HitResult.GetActor()->IsA(AEnemyBase::StaticClass()))
 			{
-				AEnemy* EnemyHit = Cast<AEnemy>(HitResult.GetActor());
-				EnemyHit->SetDamageTaken(MeleeDamage);
-				//EnemyHit->Destroy();
+				AEnemyBase* EnemyHit = Cast<AEnemyBase>(HitResult.GetActor());
+				EnemyHit->RemoveHealth(MeleeDamage);
 			}
 	}
 }
@@ -186,15 +187,7 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 
 }
 
-float AMainCharacter::GetHealthPercent() const
-{
-	return (Health / MaxHealth);
-}
 
-float AMainCharacter::GetStaminaPercent() const
-{
-	return (Stamina / MaxStamina);
-}
 
 void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult)
 {
@@ -215,4 +208,33 @@ void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult)
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
 		FCollisionQueryParams(FName(TEXT("")), false, Cast<AActor>(this))
 		);
+}
+
+void AMainCharacter::ShowInventory()
+{
+	IsInventoryVisible = true;
+}
+
+void AMainCharacter::HideInventory()
+{
+	IsInventoryVisible = false;
+}
+
+float AMainCharacter::GetHealthPercent() const
+{
+	return (Health / MaxHealth);
+}
+
+float AMainCharacter::GetStaminaPercent() const
+{
+	return (Stamina / MaxStamina);
+}
+
+void AMainCharacter::SetCollectedMinerals()
+{
+	CollectedMinerals++;
+}
+int AMainCharacter::GetCollectedMinerals() const
+{
+	return CollectedMinerals;
 }

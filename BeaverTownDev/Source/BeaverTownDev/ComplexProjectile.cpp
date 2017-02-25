@@ -24,7 +24,6 @@ AComplexProjectile::AComplexProjectile()
 	ProjectileMovement->bAutoActivate = false;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 
-
 }
 
 // Called when the game starts or when spawned
@@ -55,5 +54,7 @@ void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 		AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
 		Enemy->RemoveHealth(25);
 	}
+
 	//GetWorld()->DestroyActor(this); //crashes the editor
+
 }

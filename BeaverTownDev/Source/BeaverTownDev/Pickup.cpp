@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
+#include "MainCharacter.h"
 #include "Pickup.h"
 
 
@@ -37,6 +38,9 @@ void APickup::Tick(float DeltaTime)
 void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
 	// her kan vi legge objektet til inventory
+	AMainCharacter* CharacterPickup = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	if (!CharacterPickup) { return; }
+	CharacterPickup->SetCollectedMinerals();
 	PlaySoundWhenPickup.Broadcast();
 	Destroy();
 }
