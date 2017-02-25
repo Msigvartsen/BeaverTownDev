@@ -23,8 +23,6 @@ AComplexProjectile::AComplexProjectile()
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
 	ProjectileMovement->bAutoActivate = false;
 	ProjectileMovement->bRotationFollowsVelocity = true;
-	ProjectileMovement->bShouldBounce = true;
-	ProjectileMovement->ConstrainDirectionToPlane(FVector::UpVector);
 
 
 }
@@ -48,12 +46,17 @@ void AComplexProjectile::Shoot(float Speed)
 	ProjectileMovement->Activate();
 }
 
-void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
+void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor, UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Overlapped with"))
+
 	if (OtherActor->IsA(AEnemyBase::StaticClass()))
 	{
-		auto Enemy = Cast<AEnemyBase>(OtherActor);
-		Enemy->RemoveHealth(50);
+		AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
+		Enemy->RemoveHealth(25);
 	}
+<<<<<<< HEAD
+=======
+	//GetWorld()->DestroyActor(this); //crashes the editor
+>>>>>>> 701a26d32d54d8d5e12f249fc138caf6957cda31
 }
