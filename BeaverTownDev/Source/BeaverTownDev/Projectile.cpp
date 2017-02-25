@@ -3,7 +3,7 @@
 #include "BeaverTownDev.h"
 #include "Projectile.h"
 #include "EnemyBase.h"
-#include "Enemy.h"
+
 
 // Sets default values
 AProjectile::AProjectile()
@@ -57,10 +57,13 @@ void AProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor *Ot
 	bool bFromSweep, const FHitResult &SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Overlapped with: %s"), *OtherActor->GetName())
-	if(OtherActor->IsA(AEnemy::StaticClass()))
+
+	if(OtherActor->IsA(AEnemyBase::StaticClass()))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"))
-		OtherActor->Destroy();
+		AEnemyBase* EnemyHit = Cast<AEnemyBase>(OtherActor);
+		if (!EnemyHit) { return; }
+		EnemyHit->RemoveHealth(25);
 		Destroy();
 	}
 }

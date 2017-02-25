@@ -44,6 +44,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
 	InputComponent->BindAction("Inventory", IE_Pressed, this, &AMainCharacter::ShowInventory);
 	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
+	InputComponent->BindAction("WeaponOne", IE_Pressed, this, &AMainCharacter::WeaponOne);
+	InputComponent->BindAction("WeaponTwo", IE_Pressed, this, &AMainCharacter::WeaponTwo);
 }
 
 void AMainCharacter::MoveX(float value)
@@ -102,24 +104,26 @@ void AMainCharacter::Shoot()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Shooting!"));
 
-	//if (GetWorld())
-	//{
-	//	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
-	//	GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
-	//}
-
-	/// Alt Shooting
-	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
-	if (ComplexProjectileBlueprint)
+	switch (WeaponOfChoice)
 	{
-		AComplexProjectile* Projectile = GetWorld()->SpawnActor<AComplexProjectile>(ComplexProjectileBlueprint, SpawnLocation, GetActorRotation());
-		Projectile->Shoot(1000.f);
+	case 1:
+		ThrowNut();
+		break;
+	case 2:
+		ThrowRock();
+		break;
+	default:
+		UE_LOG(LogTemp,Warning,TEXT("Error choosing and shooting"))
+	}	
+}
 
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("No projectile found!"));
-	}
+void AMainCharacter::WeaponOne()
+{
+	WeaponOfChoice = 1;
+}
+void AMainCharacter::WeaponTwo()
+{
+	WeaponOfChoice = 2;
 }
 
 void AMainCharacter::Interact()
@@ -208,6 +212,31 @@ void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult)
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
 		FCollisionQueryParams(FName(TEXT("")), false, Cast<AActor>(this))
 		);
+}
+
+
+void AMainCharacter::ThrowRock()
+{
+	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
+	if (ComplexProjectileBlueprint)
+	{
+		AComplexProjectile* Projectile = GetWorld()->SpawnActor<AComplexProjectile>(ComplexProjectileBlueprint, SpawnLocation, GetActorRotation());
+		Projectile->Shoot(1000.f);
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No projectile found!"));
+	}
+}
+
+void AMainCharacter::ThrowNut()
+{
+	if (GetWorld())
+	{
+		FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
+		GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
+	}
 }
 
 void AMainCharacter::ShowInventory()
