@@ -2,6 +2,7 @@
 
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
+#include "ComplexProjectile.h"
 #include "EnemyBase.h"
 
 
@@ -92,8 +93,11 @@ void AEnemyBase::MoveLeft()
 	AddMovementInput(FVector::RightVector, -.5f);
 }
 
-void AEnemyBase::Shoot()
+void AEnemyBase::Attack()
 {
+	FVector SpawnLocation;
+	FVector SpawnRotation;
+	//get viewpoint
 	// TODO spawn projectile with player rotation
 }
 

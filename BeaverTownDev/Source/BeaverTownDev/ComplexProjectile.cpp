@@ -23,8 +23,6 @@ AComplexProjectile::AComplexProjectile()
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
 	ProjectileMovement->bAutoActivate = false;
 	ProjectileMovement->bRotationFollowsVelocity = true;
-	ProjectileMovement->bShouldBounce = true;
-	ProjectileMovement->ConstrainDirectionToPlane(FVector::UpVector);
 
 
 }
@@ -55,8 +53,7 @@ void AComplexProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	if (OtherActor->IsA(AEnemyBase::StaticClass()))
 	{
 		AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
-		Enemy->RemoveHealth(50);
-		ProjectileMovement->DestroyComponent();
-		Destroy();
+		Enemy->RemoveHealth(25);
 	}
+	//GetWorld()->DestroyActor(this); //crashes the editor
 }

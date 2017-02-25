@@ -6,6 +6,7 @@
 #include "EnemyBase.generated.h"
 
 class AMainCharacter;
+class AComplexProjectile;
 
 UCLASS()
 class BEAVERTOWNDEV_API AEnemyBase : public ACharacter
@@ -33,7 +34,7 @@ public:
 	void MoveRight();
 	void MoveLeft();
 	void MoveTowardPlayer();
-	void Shoot();
+	void Attack();
 	bool LinetraceTowardPlayer();
 	FVector GetVectorTowardPlayer();
 	void RemoveHealth(int32 Damage);
@@ -47,4 +48,6 @@ protected:
 		float AggroRange = 500.f;
 	int32 MaxHealth = 100;
 	int32 Health = MaxHealth;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AComplexProjectile> ComplexProjectileBlueprint;
 };
