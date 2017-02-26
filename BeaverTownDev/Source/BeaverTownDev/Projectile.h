@@ -31,10 +31,11 @@ public:
 		UStaticMeshComponent* ProjectileMesh = nullptr;
 	UPROPERTY(EditAnywhere)
 		UPrimitiveComponent* ProjectileCollision = nullptr;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "ProjectileSpecs")
 		float ProjectileSpeed = 1000.f;
-	UPROPERTY(EditAnywhere)
-		float ProjectileDamage = 35.f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "ProjectileSpecs")
+		float ProjectileDamage = 15.f;
+	UPROPERTY(EditAnywhere, Category = "ProjectileSpecs")
 		float DespawnTime = .7f;
+	
 };
