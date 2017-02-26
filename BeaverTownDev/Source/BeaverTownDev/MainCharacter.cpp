@@ -42,6 +42,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Melee", IE_Pressed, this, &AMainCharacter::Melee);
 	InputComponent->BindAction("Shoot", IE_Pressed, this, &AMainCharacter::Shoot);
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+	InputComponent->BindAction("Interact", IE_Released, this, &AMainCharacter::InteractReleased);
 	InputComponent->BindAction("Inventory", IE_Pressed, this, &AMainCharacter::ShowInventory);
 	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
 	InputComponent->BindAction("WeaponOne", IE_Pressed, this, &AMainCharacter::WeaponOne);
@@ -131,6 +132,8 @@ void AMainCharacter::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
 
+	bIsInteractActive = true;
+
 	FHitResult HitResult;
 	GetHitResultFromLineTrace(HitResult);
 	// Opens chest if hit
@@ -159,6 +162,12 @@ void AMainCharacter::Interact()
 			}
 		}
 	}
+}
+
+void AMainCharacter::InteractReleased()
+{
+	UE_LOG(LogTemp, Warning, TEXT("InteractReleased"))
+	bIsInteractActive = false;
 }
 
 // Find Viewport Center and mouse 2D position, then get rotation vector based on viewport center. 
@@ -266,4 +275,14 @@ void AMainCharacter::SetCollectedMinerals()
 int AMainCharacter::GetCollectedMinerals() const
 {
 	return CollectedMinerals;
+}
+
+void AMainCharacter::SetIsInteractActive(bool Status)
+{
+	bIsInteractActive = Status;
+}
+
+bool AMainCharacter::GetIsInteractActive()
+{
+	return bIsInteractActive;
 }

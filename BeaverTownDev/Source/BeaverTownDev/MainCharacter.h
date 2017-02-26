@@ -24,6 +24,8 @@ public:
 
 
 	void SetCollectedMinerals();
+	void SetIsInteractActive(bool Status);
+	bool GetIsInteractActive();
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -39,6 +41,7 @@ private:
 	void RotateToMousePosition(float DeltaTime);
 	void Shoot();
 	void Interact();
+	void InteractReleased();
 	void WeaponOne();
 	void WeaponTwo();
 	void GetHitResultFromLineTrace(FHitResult &HitResult);
@@ -67,6 +70,7 @@ private:
 		bool IsInventoryVisible = false;
 	UPROPERTY(BlueprintReadOnly, Category = "CharacterStats", meta = (AllowPrivateAccess = true))
 		int32 CollectedMinerals = 0;
+	bool bIsInteractActive = false;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AProjectile> ProjectileBlueprint;
@@ -80,7 +84,5 @@ private:
 		float GetStaminaPercent() const;
 	UFUNCTION(BlueprintCallable)
 		int GetCollectedMinerals() const;
-	
-	
 
 };
