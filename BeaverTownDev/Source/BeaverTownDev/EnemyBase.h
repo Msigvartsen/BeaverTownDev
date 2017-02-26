@@ -38,7 +38,9 @@ public:
 	bool LinetraceTowardPlayer();
 	FVector GetVectorTowardPlayer();
 	void RemoveHealth(int32 Damage);
-
+	
+	UFUNCTION(BlueprintCallable,Category="EnemyHealth")
+	float GetHealthPercent() const;
 
 protected:
 	AMainCharacter* PlayerCharacter = nullptr;
@@ -46,8 +48,8 @@ protected:
 	float TimeInterval = 0.5f;
 	UPROPERTY(EditAnywhere)
 		float AggroRange = 500.f;
-	int32 MaxHealth = 100;
-	int32 Health = MaxHealth;
+	float MaxHealth = 100.f;
+	float Health = MaxHealth;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AComplexProjectile> ComplexProjectileBlueprint;
 };

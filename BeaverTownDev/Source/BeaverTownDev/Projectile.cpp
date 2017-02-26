@@ -63,7 +63,7 @@ void AProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor *Ot
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"))
 		AEnemyBase* EnemyHit = Cast<AEnemyBase>(OtherActor);
 		if (!EnemyHit) { return; }
-		EnemyHit->RemoveHealth(25);
+		EnemyHit->RemoveHealth(ProjectileDamage);
 		Destroy();
 	}
 }
