@@ -30,6 +30,10 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	Attack(DeltaTime);
+
+
 	if (LinetraceTowardPlayer())
 	{
 		MoveTowardPlayer();
@@ -92,12 +96,35 @@ void AEnemyBase::MoveLeft()
 	AddMovementInput(FVector::RightVector, -.5f);
 }
 
-void AEnemyBase::Attack()
+void AEnemyBase::Attack(float DeltaTime)
 {
+	// TEMP ATTACK FUNCTION
 	FVector SpawnLocation;
 	FVector SpawnRotation;
 	//get viewpoint
 	// TODO spawn projectile with player rotation
+	FHitResult HitResult;
+	FVector StartTrace = GetActorLocation();
+	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * 75.f);
+
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, 1.f, 0, 10.f);
+
+	if (GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		StartTrace,
+		EndTrace,
+		ECollisionChannel::ECC_Visibility,
+		FCollisionQueryParams(FName(""), false, this)
+		))
+	{
+		AttackTime -= DeltaTime;
+		if (HitResult.GetActor()->IsA(AMainCharacter::StaticClass()) && AttackTime < 0)
+		{
+			AMainCharacter* CharacterHit = Cast<AMainCharacter>(HitResult.GetActor());
+			CharacterHit->SetHealth(15.f);
+			AttackTime = 1.f;
+		}
+	}
 }
 
 void AEnemyBase::MoveTowardPlayer()

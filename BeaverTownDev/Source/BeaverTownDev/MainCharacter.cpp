@@ -47,7 +47,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
 	InputComponent->BindAction("WeaponOne", IE_Pressed, this, &AMainCharacter::WeaponOne);
 	InputComponent->BindAction("WeaponTwo", IE_Pressed, this, &AMainCharacter::WeaponTwo);
-
+	InputComponent->BindAction("Heal", IE_Pressed, this, &AMainCharacter::Heal);
 }
 
 void AMainCharacter::MoveX(float value)
@@ -117,6 +117,11 @@ void AMainCharacter::Shoot()
 	default:
 		UE_LOG(LogTemp,Warning,TEXT("Error choosing and shooting"))
 	}	
+}
+
+void AMainCharacter::Heal()
+{
+	Health += HealingPotion;
 }
 
 void AMainCharacter::WeaponOne()
@@ -261,6 +266,11 @@ void AMainCharacter::HideInventory()
 float AMainCharacter::GetHealthPercent() const
 {
 	return (Health / MaxHealth);
+}
+
+void AMainCharacter::SetHealth(float DamageTaken)
+{
+	Health -= DamageTaken;
 }
 
 float AMainCharacter::GetStaminaPercent() const

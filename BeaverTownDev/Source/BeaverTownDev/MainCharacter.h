@@ -25,7 +25,7 @@ public:
 
 	void SetCollectedMinerals();
 	void SetIsInteractActive(bool Status);
-
+	void SetHealth(float DamageTaken);
 	
 
 private:
@@ -41,6 +41,7 @@ private:
 	void Dodge();
 	void RotateToMousePosition(float DeltaTime);
 	void Shoot();
+	void Heal();
 	void Interact();
 	void InteractReleased();
 	void WeaponOne();
@@ -67,6 +68,7 @@ private:
 	float MaxHealth = 100.f;
 	float StaminaRegeneration = 10.f;
 	float MeleeDamage = 50.f;
+	float HealingPotion = 35.f;
 		
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		bool IsInventoryVisible = false;

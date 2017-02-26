@@ -34,7 +34,7 @@ public:
 	void MoveRight();
 	void MoveLeft();
 	void MoveTowardPlayer();
-	void Attack();
+	void Attack(float DeltaTime);
 	bool LinetraceTowardPlayer();
 	FVector GetVectorTowardPlayer();
 	void RemoveHealth(int32 Damage);
@@ -50,6 +50,7 @@ protected:
 		float AggroRange = 500.f;
 	float MaxHealth = 100.f;
 	float Health = MaxHealth;
+	float AttackTime = 1.f;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AComplexProjectile> ComplexProjectileBlueprint;
 };
