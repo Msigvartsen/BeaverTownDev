@@ -133,7 +133,7 @@ void AMainCharacter::Interact()
 	UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
 
 	bIsInteractActive = true;
-
+	
 	FHitResult HitResult;
 	GetHitResultFromLineTrace(HitResult);
 	// Opens chest if hit
@@ -282,7 +282,7 @@ void AMainCharacter::SetIsInteractActive(bool Status)
 	bIsInteractActive = Status;
 }
 
-bool AMainCharacter::GetIsInteractActive()
+bool AMainCharacter::GetIsInteractActive() const
 {
 	return bIsInteractActive;
 }
