@@ -198,7 +198,7 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 	/// Rotates smoothly towards mouse cursor
 	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,400.f);
 	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
-
+	
 }
 
 
