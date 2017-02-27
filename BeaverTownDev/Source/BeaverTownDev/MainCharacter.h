@@ -25,7 +25,8 @@ public:
 
 	void SetCollectedMinerals();
 	void SetIsInteractActive(bool Status);
-	bool GetIsInteractActive();
+	void SetHealth(float DamageTaken);
+	
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -40,6 +41,7 @@ private:
 	void Dodge();
 	void RotateToMousePosition(float DeltaTime);
 	void Shoot();
+	void Heal();
 	void Interact();
 	void InteractReleased();
 	void WeaponOne();
@@ -66,6 +68,8 @@ private:
 	float MaxHealth = 100.f;
 	float StaminaRegeneration = 10.f;
 	float MeleeDamage = 50.f;
+	float HealingPotion = 35.f;
+		
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		bool IsInventoryVisible = false;
 	UPROPERTY(BlueprintReadOnly, Category = "CharacterStats", meta = (AllowPrivateAccess = true))
@@ -84,5 +88,7 @@ private:
 		float GetStaminaPercent() const;
 	UFUNCTION(BlueprintCallable)
 		int GetCollectedMinerals() const;
+	UFUNCTION(BlueprintCallable)
+		bool GetIsInteractActive() const;
 
 };

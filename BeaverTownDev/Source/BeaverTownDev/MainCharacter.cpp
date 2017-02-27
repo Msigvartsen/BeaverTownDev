@@ -47,7 +47,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
 	InputComponent->BindAction("WeaponOne", IE_Pressed, this, &AMainCharacter::WeaponOne);
 	InputComponent->BindAction("WeaponTwo", IE_Pressed, this, &AMainCharacter::WeaponTwo);
-
+	InputComponent->BindAction("Heal", IE_Pressed, this, &AMainCharacter::Heal);
 }
 
 void AMainCharacter::MoveX(float value)
@@ -119,6 +119,11 @@ void AMainCharacter::Shoot()
 	}	
 }
 
+void AMainCharacter::Heal()
+{
+	Health += HealingPotion;
+}
+
 void AMainCharacter::WeaponOne()
 {
 	WeaponOfChoice = 1;
@@ -133,7 +138,7 @@ void AMainCharacter::Interact()
 	UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
 
 	bIsInteractActive = true;
-
+	
 	FHitResult HitResult;
 	GetHitResultFromLineTrace(HitResult);
 	// Opens chest if hit
@@ -263,6 +268,11 @@ float AMainCharacter::GetHealthPercent() const
 	return (Health / MaxHealth);
 }
 
+void AMainCharacter::SetHealth(float DamageTaken)
+{
+	Health -= DamageTaken;
+}
+
 float AMainCharacter::GetStaminaPercent() const
 {
 	return (Stamina / MaxStamina);
@@ -282,7 +292,7 @@ void AMainCharacter::SetIsInteractActive(bool Status)
 	bIsInteractActive = Status;
 }
 
-bool AMainCharacter::GetIsInteractActive()
+bool AMainCharacter::GetIsInteractActive() const
 {
 	return bIsInteractActive;
 }
