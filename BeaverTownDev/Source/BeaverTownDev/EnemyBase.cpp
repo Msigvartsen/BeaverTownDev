@@ -79,22 +79,28 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void AEnemyBase::MoveForward()
 {
 	AddMovementInput(FVector::ForwardVector, .5f);
+	SetActorRotation(FVector::ForwardVector.Rotation());
 }
 
 void AEnemyBase::MoveBackwards()
 {
 	AddMovementInput(FVector::ForwardVector, -.5f);
+	SetActorRotation(FVector::ForwardVector.Rotation() * -1);
 }
 
 void AEnemyBase::MoveRight()
 {
 	AddMovementInput(FVector::RightVector, .5f);
+	SetActorRotation(FVector::RightVector.Rotation());
 }
+
 
 void AEnemyBase::MoveLeft()
 {
 	AddMovementInput(FVector::RightVector, -.5f);
+	SetActorRotation(FVector::RightVector.Rotation() * -1);
 }
+
 
 void AEnemyBase::Attack(float DeltaTime)
 {
@@ -131,6 +137,9 @@ void AEnemyBase::MoveTowardPlayer()
 {
 	FVector PlayerDirection = GetVectorTowardPlayer();
 	AddMovementInput(PlayerDirection.GetSafeNormal(), .5f);
+
+	FRotator PlayerRotation = GetVectorTowardPlayer().Rotation();
+	SetActorRotation(PlayerRotation);
 }
 
 bool AEnemyBase::LinetraceTowardPlayer()
@@ -151,6 +160,7 @@ bool AEnemyBase::LinetraceTowardPlayer()
 	{
 		if (HitResult.GetActor()->GetClass()->IsChildOf(AMainCharacter::StaticClass()))
 		{
+			UE_LOG(LogTemp,Warning,TEXT("CHARACTER FOUND."))
 			return true;
 		}
 	}

@@ -26,7 +26,6 @@ public:
 	void SetCollectedMinerals();
 	void SetIsInteractActive(bool Status);
 	void SetHealth(float DamageTaken);
-	
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -69,6 +68,7 @@ private:
 	float StaminaRegeneration = 10.f;
 	float MeleeDamage = 50.f;
 	float HealingPotion = 35.f;
+	
 		
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		bool IsInventoryVisible = false;
