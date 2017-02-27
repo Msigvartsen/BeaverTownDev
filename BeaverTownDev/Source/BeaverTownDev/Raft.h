@@ -50,5 +50,23 @@ private:
 
 	AMainCharacter* PlayerCharacter;
 
-	bool Forward = false;
+	bool bForward = false;
+	bool bBackward = false;
+	bool bLeft = false;
+	bool bRight = false;
+
+	void ResetTimer();
+	bool RightAngle(FName Name);
+	float AcceptedAngle = 45.f;
+
+	bool bTimerReady = true;
+	FTimerHandle TimerHandle;
+	FVector TargetLocation;
+	FVector CurrentLocation;
+
+	UPROPERTY(EditAnywhere)
+		float Timer = .3f;
+	UPROPERTY(EditAnywhere)
+		float Speed = 500.f;
+
 };
