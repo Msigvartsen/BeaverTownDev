@@ -47,36 +47,73 @@ void ARaft::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	TargetLocation = GetActorLocation();
 }
 
 // Called every frame
 void ARaft::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (Forward)
-	{
-		FVector TargetLocation = GetActorLocation();
-		TargetLocation.X += 10.f;
-		FVector NewLocation = FMath::VInterpTo(GetActorLocation(), TargetLocation, GetWorld()->GetDeltaSeconds(), 1.f);
-		SetActorLocation(TargetLocation);
 
+	// TODO add force movement instead of static
+
+	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && ForwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Forward")))
+	{
+		bTimerReady = false;
+		TargetLocation = GetActorLocation();
+		TargetLocation.X -= Speed;
+		CurrentLocation = GetActorLocation();
+
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
 
+	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && BackwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Backward")))
+	{
+		bTimerReady = false;
+		TargetLocation = GetActorLocation();
+		TargetLocation.X += Speed;
+		CurrentLocation = GetActorLocation();
+
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
+	}
+
+	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && LeftTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Left")))
+	{
+		bTimerReady = false;
+		TargetLocation = GetActorLocation();
+		TargetLocation.Y += Speed;
+		CurrentLocation = GetActorLocation();
+
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
+	}
+
+	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && RightTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Right")))
+	{	UE_LOG(LogTemp, Warning, TEXT("Forward"))
+
+		bTimerReady = false;
+		TargetLocation = GetActorLocation();
+		TargetLocation.Y -= Speed;
+		CurrentLocation = GetActorLocation();
+
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
+	}
+	FVector NewLocation = FMath::VInterpTo(GetActorLocation(), TargetLocation, DeltaTime, 1.f);
+	SetActorLocation(NewLocation);
 }
 
 void ARaft::OnForwardOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Forward"))
-		///Move raft Forward
-		//RaftMesh->SetSimulatePhysics(true);
-		//RaftMesh->WakeRigidBody();
-		//RaftMesh->SetEnableGravity(true);
+	///Move raft Forward
+	//RaftMesh->SetSimulatePhysics(true);
+	//RaftMesh->WakeRigidBody();
+	//RaftMesh->SetEnableGravity(true);
 
-		/*if (PlayerCharacter->GetIsInteractActive())
-		{
-			Forward = true;
-		}*/
+	/*if (PlayerCharacter->GetIsInteractActive())
+	{
 		Forward = true;
+	}*/
+	bForward = true;
 
 }
 
@@ -86,6 +123,8 @@ void ARaft::OnBackwardOverlap(UPrimitiveComponent* OverlappingComp, AActor* Othe
 
 	//Move raft Backward
 
+	bBackward = true;
+
 }
 
 void ARaft::OnRightOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
@@ -93,6 +132,8 @@ void ARaft::OnRightOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherAc
 	UE_LOG(LogTemp, Warning, TEXT("Right"))
 
 	//Move raft Right
+
+	bRight = true;
 
 }
 
@@ -102,5 +143,52 @@ void ARaft::OnLeftOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherAct
 
 	//Move raft Left
 
+	bLeft = true;
+
 }
 
+bool ARaft::RightAngle(FName Name)
+{
+	float PlayerYaw = PlayerCharacter->GetActorRotation().Yaw;
+	UE_LOG(LogTemp, Warning, TEXT("PlayerYaw: %f"), PlayerYaw)
+
+	if (Name == "Forward")
+	{
+		if (PlayerYaw > 0.f - AcceptedAngle && PlayerYaw < 0.f + AcceptedAngle)
+		{
+			return true;
+		}
+	}
+	else if (Name == "Backward")
+	{
+		if ((PlayerYaw < -180.f + AcceptedAngle && PlayerYaw > -180.f) || (PlayerYaw > 180.f - AcceptedAngle && PlayerYaw < 180.f))
+		{
+			return true;
+		}
+	}
+	else if (Name == "Left")
+	{
+		if (PlayerYaw < -45.f && PlayerYaw > -180.f + AcceptedAngle)
+		{
+			return true;
+		}
+	}
+	else if (Name == "Right")
+	{
+		if (PlayerYaw > 45.f && PlayerYaw < 180.f - AcceptedAngle)
+		{
+			return true;
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid Player Angle"))
+	}
+	return false;
+}
+
+void ARaft::ResetTimer()
+{
+	bTimerReady = true;
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+}

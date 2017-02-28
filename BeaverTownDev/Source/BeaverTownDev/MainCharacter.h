@@ -81,6 +81,7 @@ private:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;
 
+public:
 	//Character Getters/Setters
 	UFUNCTION(BlueprintCallable)
 		float GetHealthPercent() const;
