@@ -63,20 +63,11 @@ void AMainCharacter::MoveY(float value)
 void AMainCharacter::Melee()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Melee!"));
-	FHitResult HitResult;
-	
-	FVector StartTrace = GetActorLocation();
-	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * MeleeRange);
-	GetWorld()->LineTraceSingleByObjectType(
-		HitResult,
-		StartTrace,
-		EndTrace,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
-		FCollisionQueryParams(FName(TEXT("")), false, Cast<AActor>(this)));
 
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false, 1.f, 0.f,10.f);
-	EndTrace.Z = 25.f;
-	StartTrace.Z = 25.f;
+	FHitResult HitResult;
+
+	GetHitResultFromLineTrace(HitResult, MeleeRange);
+
 	if (HitResult.GetActor())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
@@ -140,7 +131,8 @@ void AMainCharacter::Interact()
 	bIsInteractActive = true;
 	
 	FHitResult HitResult;
-	GetHitResultFromLineTrace(HitResult);
+	GetHitResultFromLineTrace(HitResult, InteractReach);
+
 	// Opens chest if hit
 	if (HitResult.GetActor())
 	{
@@ -201,20 +193,18 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 	FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
 
 	/// Rotates smoothly towards mouse cursor
-	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,400.f);
+	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,300.f);
 	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
-	
 }
 
 
 
-void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult)
+void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult,float Reach)
 {
 	FVector StartTrace = GetActorLocation();
-	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * InteractReach);
+	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * Reach);
 	EndTrace.Z -= 25.f;
 	StartTrace.Z -= 25.f;
-	HitResult;
 
 	// Draws a red line that represents the line trace
 	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), true, -1.f, 0, 10.f);

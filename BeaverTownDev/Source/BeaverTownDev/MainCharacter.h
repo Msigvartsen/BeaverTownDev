@@ -22,7 +22,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 	void SetCollectedMinerals();
 	void SetIsInteractActive(bool Status);
 	void SetHealth(float DamageTaken);
@@ -45,10 +44,9 @@ private:
 	void InteractReleased();
 	void WeaponOne();
 	void WeaponTwo();
-	void GetHitResultFromLineTrace(FHitResult &HitResult);
+	void GetHitResultFromLineTrace(FHitResult &HitResult, float Reach);
 	void ShowInventory();
 	void HideInventory();
-
 	void ThrowRock();
 	void ThrowNut();
 
@@ -60,6 +58,7 @@ private:
 		float InteractReach = 100.f;
 	UPROPERTY(EditAnywhere)
 		float MeleeRange = 75.f;
+
 	int32 WeaponOfChoice = 1;
 	float Stamina = 100.f;
 	float MaxStamina = 100.f;
@@ -68,7 +67,6 @@ private:
 	float StaminaRegeneration = 10.f;
 	float MeleeDamage = 50.f;
 	float HealingPotion = 35.f;
-	
 		
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		bool IsInventoryVisible = false;
@@ -76,13 +74,14 @@ private:
 		int32 CollectedMinerals = 0;
 	bool bIsInteractActive = false;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,Category = "Projectiles")
 		TSubclassOf<class AProjectile> ProjectileBlueprint;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Projectiles")
 		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;
 
 public:
-	//Character Getters/Setters
+	//Character Getters
+
 	UFUNCTION(BlueprintCallable)
 		float GetHealthPercent() const;
 	UFUNCTION(BlueprintCallable)

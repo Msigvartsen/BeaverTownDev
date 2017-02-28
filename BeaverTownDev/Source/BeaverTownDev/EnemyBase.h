@@ -29,6 +29,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+
+	void RemoveHealth(int32 Damage);
+
+	UFUNCTION(BlueprintCallable,Category="EnemyHealth")
+		float GetHealthPercent() const;
+
+private:
 	void MoveForward();
 	void MoveBackwards();
 	void MoveRight();
@@ -36,13 +43,9 @@ public:
 	void MoveTowardPlayer();
 	void Attack(float DeltaTime);
 	bool LinetraceTowardPlayer();
-	FVector GetVectorTowardPlayer();
-	void RemoveHealth(int32 Damage);
-	
-	UFUNCTION(BlueprintCallable,Category="EnemyHealth")
-	float GetHealthPercent() const;
 
-protected:
+	FVector GetVectorTowardPlayer();
+
 	AMainCharacter* PlayerCharacter = nullptr;
 	float Time;
 	float TimeInterval = 0.5f;
@@ -53,4 +56,5 @@ protected:
 	float AttackTime = 1.f;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AComplexProjectile> ComplexProjectileBlueprint;
+	
 };
