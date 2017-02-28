@@ -24,16 +24,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-		void OnForwardOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
-	UFUNCTION()
-		void OnBackwardOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
-	UFUNCTION()
-		void OnRightOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
-	UFUNCTION()
-		void OnLeftOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
-
-
 private:
 	UPROPERTY(EditAnywhere)
 		USceneComponent* RaftRoot;
@@ -50,11 +40,6 @@ private:
 
 	AMainCharacter* PlayerCharacter;
 
-	bool bForward = false;
-	bool bBackward = false;
-	bool bLeft = false;
-	bool bRight = false;
-
 	void ResetTimer();
 	bool RightAngle(FName Name);
 	float AcceptedAngle = 45.f;
@@ -64,9 +49,9 @@ private:
 	FVector TargetLocation;
 	FVector CurrentLocation;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float Timer = .3f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float Speed = 500.f;
 
 };

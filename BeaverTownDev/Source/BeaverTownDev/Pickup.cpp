@@ -40,9 +40,13 @@ void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor
 	// her kan vi legge objektet til inventory
 	AMainCharacter* CharacterPickup = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	if (!CharacterPickup) { return; }
-	CharacterPickup->SetCollectedMinerals();
-	PlaySoundWhenPickup.Broadcast();
-	Destroy();
+
+	if (PickupBox->IsOverlappingActor(CharacterPickup))
+	{
+		CharacterPickup->SetCollectedMinerals();
+		PlaySoundWhenPickup.Broadcast();
+		Destroy();
+	}
 }
 
 

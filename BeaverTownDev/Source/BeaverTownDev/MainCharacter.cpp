@@ -67,7 +67,6 @@ void AMainCharacter::Melee()
 	FHitResult HitResult;
 
 	GetHitResultFromLineTrace(HitResult, MeleeRange);
-
 	if (HitResult.GetActor())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
@@ -146,7 +145,21 @@ void AMainCharacter::Interact()
 			float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
 			float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
 
-			if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
+			if (InteractObject->GetOnlyInteractFromAngle())
+			{
+				if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
+				{
+					if (InteractObject->GetIsOpenEvent())
+					{
+						InteractObject->CloseEvent();
+					}
+					else
+					{
+						InteractObject->OpenEvent();
+					}
+				}
+			}
+			else
 			{
 				if (InteractObject->GetIsOpenEvent())
 				{
@@ -207,7 +220,7 @@ void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult,float Reach
 	StartTrace.Z -= 25.f;
 
 	// Draws a red line that represents the line trace
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), true, -1.f, 0, 10.f);
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, .3f, 0, 10.f);
 
 	// Line trace from character mesh to get World Dynamic object
 	GetWorld()->LineTraceSingleByObjectType(
