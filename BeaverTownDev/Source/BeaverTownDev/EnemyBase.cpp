@@ -113,7 +113,7 @@ void AEnemyBase::Attack(float DeltaTime)
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * 75.f);
 
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, 1.f, 0, 10.f);
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false, .3f, 0, 10.f);
 
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitResult,
@@ -148,7 +148,7 @@ bool AEnemyBase::LinetraceTowardPlayer()
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * AggroRange);
 
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, 1.f, 0, 10.f);
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 0, 255), false, .1f, 0, 10.f);
 
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitResult,
