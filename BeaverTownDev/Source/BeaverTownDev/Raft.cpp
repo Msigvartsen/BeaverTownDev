@@ -42,13 +42,13 @@ void ARaft::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	TargetLocation = GetActorLocation();
+	TargetLocation = GetActorForwardVector();
 	RaftMesh->IgnoreActorWhenMoving(PlayerCharacter, true);
 
 	/// TODO add force movement instead of static
-	//RaftMesh->SetSimulatePhysics(true);
-	//RaftMesh->WakeRigidBody();
-	//RaftMesh->SetEnableGravity(false);
+	RaftMesh->SetSimulatePhysics(true);
+	RaftMesh->WakeRigidBody();
+	RaftMesh->SetEnableGravity(false);
 
 
 
@@ -63,34 +63,35 @@ void ARaft::Tick(float DeltaTime)
 	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && ForwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Forward")))
 	{
 		bTimerReady = false;
-		TargetLocation.X -= Speed;
+		TargetLocation -= GetActorForwardVector() * Speed;
 		CurrentLocation = GetActorLocation();
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
 	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && BackwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Backward")))
 	{
 		bTimerReady = false;
-		TargetLocation.X += Speed;
+		TargetLocation += GetActorForwardVector() * Speed;
 		CurrentLocation = GetActorLocation();
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
 	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && LeftTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Left")))
 	{
 		bTimerReady = false;
-		TargetLocation.Y += Speed;
+		TargetLocation += GetActorRightVector() * Speed;
 		CurrentLocation = GetActorLocation();
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
 	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && RightTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Right")))
 	{
 		bTimerReady = false;
-		TargetLocation.Y -= Speed;
+		TargetLocation -= GetActorRightVector() * Speed;;
 		CurrentLocation = GetActorLocation();
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
 
 	FVector NewLocation = FMath::VInterpTo(GetActorLocation(), TargetLocation, DeltaTime, 1.f);
 	SetActorLocation(NewLocation, true, &RaftHitResult);
+
 	if (RaftHitResult.GetActor())
 	{
 		TargetLocation = GetActorLocation();
