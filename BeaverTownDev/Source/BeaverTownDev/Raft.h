@@ -48,6 +48,7 @@ private:
 	FTimerHandle TimerHandle;
 	FVector TargetLocation;
 	FVector CurrentLocation;
+	FHitResult RaftHitResult;
 
 	UPROPERTY(EditDefaultsOnly)
 		float Timer = .3f;

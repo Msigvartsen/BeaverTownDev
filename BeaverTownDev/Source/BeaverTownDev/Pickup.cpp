@@ -26,6 +26,7 @@ void APickup::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	CharacterPickup = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
 // Called every frame
@@ -37,8 +38,7 @@ void APickup::Tick(float DeltaTime)
 
 void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
-	// her kan vi legge objektet til inventory
-	AMainCharacter* CharacterPickup = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	/// her kan vi legge objektet til inventory
 	if (!CharacterPickup) { return; }
 
 	if (PickupBox->IsOverlappingActor(CharacterPickup))

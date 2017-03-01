@@ -43,6 +43,15 @@ void ARaft::BeginPlay()
 
 	PlayerCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	TargetLocation = GetActorLocation();
+	RaftMesh->IgnoreActorWhenMoving(PlayerCharacter, true);
+
+	/// TODO add force movement instead of static
+	//RaftMesh->SetSimulatePhysics(true);
+	//RaftMesh->WakeRigidBody();
+	//RaftMesh->SetEnableGravity(false);
+
+
+
 }
 
 // Called every frame
@@ -50,54 +59,42 @@ void ARaft::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/// TODO add force movement instead of static
-	//RaftMesh->SetSimulatePhysics(true);
-	//RaftMesh->WakeRigidBody();
-	//RaftMesh->SetEnableGravity(true);
-
 
 	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && ForwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Forward")))
 	{
 		bTimerReady = false;
-		TargetLocation = GetActorLocation();
 		TargetLocation.X -= Speed;
 		CurrentLocation = GetActorLocation();
-
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
-
-	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && BackwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Backward")))
+	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && BackwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Backward")))
 	{
 		bTimerReady = false;
-		TargetLocation = GetActorLocation();
 		TargetLocation.X += Speed;
 		CurrentLocation = GetActorLocation();
-
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
-
-	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && LeftTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Left")))
+	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && LeftTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Left")))
 	{
 		bTimerReady = false;
-		TargetLocation = GetActorLocation();
 		TargetLocation.Y += Speed;
 		CurrentLocation = GetActorLocation();
-
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
-
-	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && RightTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Right")))
-	{	UE_LOG(LogTemp, Warning, TEXT("Forward"))
-
+	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && RightTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Right")))
+	{
 		bTimerReady = false;
-		TargetLocation = GetActorLocation();
 		TargetLocation.Y -= Speed;
 		CurrentLocation = GetActorLocation();
-
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
+
 	FVector NewLocation = FMath::VInterpTo(GetActorLocation(), TargetLocation, DeltaTime, 1.f);
-	SetActorLocation(NewLocation);
+	SetActorLocation(NewLocation, true, &RaftHitResult);
+	if (RaftHitResult.GetActor())
+	{
+		TargetLocation = GetActorLocation();
+	}
 }
 
 // Returns true if the Player has the correct angle to interact with raft

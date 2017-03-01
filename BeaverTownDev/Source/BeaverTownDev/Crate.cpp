@@ -6,6 +6,7 @@
 ACrate::ACrate()
 {
 	bOnlyInteractFromAngle = false;
+	bCanBeDamaged = true;
 }
 
 void ACrate::OpenEvent()

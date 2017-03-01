@@ -32,6 +32,7 @@ public:
 protected:
 	bool bIsOpenEvent = false;
 	bool bOnlyInteractFromAngle = false;
+	bool bCanBeDamaged = false;
 	UPROPERTY(EditAnywhere)
 		float MaxOpenAngle = 0;
 	UPROPERTY(EditAnywhere)
