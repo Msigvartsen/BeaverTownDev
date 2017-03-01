@@ -26,6 +26,7 @@ public:
 	virtual void CloseEvent();
 	bool GetIsOpenEvent();
 	bool GetOnlyInteractFromAngle();
+	bool GetCanBeDamaged();
 	float GetMaxOpenAngle();
 	float GetMinOpenAngle();
 

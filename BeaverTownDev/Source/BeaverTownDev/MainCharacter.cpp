@@ -71,11 +71,20 @@ void AMainCharacter::Melee()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
 
-			if (HitResult.GetActor()->IsA(AEnemyBase::StaticClass()))
+		if (HitResult.GetActor()->IsA(AEnemyBase::StaticClass()))
+		{
+			AEnemyBase* EnemyHit = Cast<AEnemyBase>(HitResult.GetActor());
+			EnemyHit->RemoveHealth(MeleeDamage);
+		}
+		else if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+		{
+			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+
+			if (InteractObject->GetCanBeDamaged())
 			{
-				AEnemyBase* EnemyHit = Cast<AEnemyBase>(HitResult.GetActor());
-				EnemyHit->RemoveHealth(MeleeDamage);
+				InteractObject->OpenEvent();
 			}
+		}
 	}
 }
 
@@ -159,7 +168,7 @@ void AMainCharacter::Interact()
 					}
 				}
 			}
-			else
+			else if(InteractObject->GetCanBeDamaged() == false)
 			{
 				if (InteractObject->GetIsOpenEvent())
 				{

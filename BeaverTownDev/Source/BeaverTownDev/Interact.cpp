@@ -60,3 +60,7 @@ float AInteract::GetMinOpenAngle()
 	return MinOpenAngle;
 }
 
+bool AInteract::GetCanBeDamaged()
+{
+	return bCanBeDamaged;
+}
