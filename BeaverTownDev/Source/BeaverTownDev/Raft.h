@@ -39,9 +39,11 @@ private:
 		UBoxComponent* LeftTrigger;
 
 	AMainCharacter* PlayerCharacter;
+	UPrimitiveComponent* RaftPrimitive;
 
 	void ResetTimer();
 	bool RightAngle(FName Name);
+	bool AngleTest(float PlayerYaw, float RaftYaw, float AcceptedAngle);
 	float AcceptedAngle = 45.f;
 
 	bool bTimerReady = true;
@@ -54,5 +56,7 @@ private:
 		float Timer = .3f;
 	UPROPERTY(EditDefaultsOnly)
 		float Speed = 500.f;
+	UPROPERTY(EditDefaultsOnly)
+		float Force = 5000.f;
 
 };
