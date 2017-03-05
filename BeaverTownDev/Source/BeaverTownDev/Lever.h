@@ -26,7 +26,4 @@ public:
 		FLeverTriggerEvent LeverOpen;
 	UPROPERTY(BlueprintAssignable)
 		FLeverTriggerEvent LeverClose;
-	UPROPERTY(EditAnywhere, Category = Setup)
-		TSubclassOf<AChest> SpawnBlueprint;
-	AChest* Spawn = nullptr;
 };

@@ -20,10 +20,6 @@ void ALever::OpenEvent()
 	{
 		bIsOpenEvent = true;
 		LeverOpen.Broadcast();
-
-		// spawn chest
-		auto SpawnLocation = FVector(FMath::RandRange(-400.f, -600.f), FMath::RandRange(-200.f, -100.f), 125.f);
-		Spawn = GetWorld()->SpawnActor<AChest>(SpawnBlueprint, SpawnLocation, FRotator::ZeroRotator);
 	}
 }
 
@@ -34,12 +30,6 @@ void ALever::CloseEvent()
 	{
 		bIsOpenEvent = false;
 		LeverClose.Broadcast();
-
-		// destroy chest
-		if (Spawn)
-		{
-			Spawn->Destroy();
-		}
 	}
 }
 

@@ -5,15 +5,19 @@
 #include "GameFramework/GameModeBase.h"
 #include "BeaverTownDevGameModeBase.generated.h"
 
-/**
- * 
- */
+class ARaft;
+
 UCLASS()
 class BEAVERTOWNDEV_API ABeaverTownDevGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+private:
+	ARaft* Raft = nullptr;
 	
-	
+public:
+	void SetRaft(ARaft* RaftToSet);
+	UFUNCTION(BlueprintCallable, Category = Getter)
+	ARaft* GetRaft();
 	
 };

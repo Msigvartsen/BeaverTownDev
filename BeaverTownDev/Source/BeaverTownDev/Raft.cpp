@@ -2,6 +2,7 @@
 
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
+#include "BeaverTownDevGameModeBase.h"
 #include "Raft.h"
 
 
@@ -42,18 +43,21 @@ void ARaft::BeginPlay()
 
 	PlayerCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	TargetLocation = GetActorForwardVector();
+	GameMode = Cast<ABeaverTownDevGameModeBase>(GetWorld()->GetAuthGameMode());
+	GameMode->SetRaft(this);
 
 	//RaftMesh->IgnoreActorWhenMoving(PlayerCharacter, true);
 	RaftMesh->SetSimulatePhysics(true);
 	RaftMesh->WakeRigidBody();
 	RaftMesh->SetEnableGravity(true);
 	RaftMesh->SetMassOverrideInKg(FName(""), 100.f, true);
-	RaftMesh->SetAngularDamping(0.f);
+	RaftMesh->SetAngularDamping(1.f);
 	RaftMesh->SetLinearDamping(1.f);
+	RaftMesh->SetConstraintMode(EDOFMode::XYPlane);
 
 	RaftPrimitive = Cast<UPrimitiveComponent>(GetRootComponent());
 
-	
+	// Add pointer to raft in gamemode
 }
 
 // Called every frame
@@ -61,78 +65,62 @@ void ARaft::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && ForwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Forward")))
+	if (bTimerReady && PlayerCharacter->GetIsInteractActive() && ForwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngleWithDotProduct(FName("Forward")))
 	{
 		bTimerReady = false;
-		//TargetLocation -= GetActorForwardVector() * Speed;
-		//CurrentLocation = GetActorLocation();
 
 		if (RaftPrimitive)
 		{
 			auto ForceApplied = GetActorForwardVector() * RaftMesh->GetMass() * -1.f * Force;
-			auto LocationApplied = ForwardTrigger->RelativeLocation;
+			auto LocationApplied = PlayerCharacter->GetActorLocation();
 			RaftPrimitive->AddForceAtLocation(ForceApplied, LocationApplied);
 			UE_LOG(LogTemp, Warning, TEXT("Forward Force Added"))
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
-	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && BackwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Backward")))
+	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && BackwardTrigger->IsOverlappingActor(PlayerCharacter) && RightAngleWithDotProduct(FName("Backward")))
 	{
 		bTimerReady = false;
-		//TargetLocation += GetActorForwardVector() * Speed;
-		//CurrentLocation = GetActorLocation();
 
 		if (RaftPrimitive)
 		{
 			auto ForceApplied = GetActorForwardVector() * RaftMesh->GetMass() * 1.f * Force;
-			auto LocationApplied = BackwardTrigger->RelativeLocation;
+			auto LocationApplied = PlayerCharacter->GetActorLocation();
 			RaftPrimitive->AddForceAtLocation(ForceApplied, LocationApplied);
 			UE_LOG(LogTemp, Warning, TEXT("Backward Force Added"))
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
-	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && LeftTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Left")))
+	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && LeftTrigger->IsOverlappingActor(PlayerCharacter) && RightAngleWithDotProduct(FName("Left")))
 	{
 		bTimerReady = false;
-		//TargetLocation += GetActorRightVector() * Speed;
-		//CurrentLocation = GetActorLocation();
 
 		if (RaftPrimitive)
 		{
 			auto ForceApplied = GetActorRightVector() * RaftMesh->GetMass() * 1.f * Force;
-			auto LocationApplied = LeftTrigger->RelativeLocation;
+			auto LocationApplied = PlayerCharacter->GetActorLocation();
 			RaftPrimitive->AddForceAtLocation(ForceApplied, LocationApplied);
 			UE_LOG(LogTemp, Warning, TEXT("Left Force Added"))
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
-	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && RightTrigger->IsOverlappingActor(PlayerCharacter) && RightAngle(FName("Right")))
+	else if (bTimerReady && PlayerCharacter->GetIsInteractActive() && RightTrigger->IsOverlappingActor(PlayerCharacter) && RightAngleWithDotProduct(FName("Right")))
 	{
 		bTimerReady = false;
-		//TargetLocation -= GetActorRightVector() * Speed;;
-		//CurrentLocation = GetActorLocation();
 
 		if (RaftPrimitive)
 		{
 			auto ForceApplied = GetActorRightVector() * RaftMesh->GetMass() * -1.f * Force;
-			auto LocationApplied = RightTrigger->RelativeLocation;
+			auto LocationApplied = PlayerCharacter->GetActorLocation();
 			RaftPrimitive->AddForceAtLocation(ForceApplied, LocationApplied);
 			UE_LOG(LogTemp, Warning, TEXT("Right Force Added"))
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, Timer, false);
 	}
-
-	//FVector NewLocation = FMath::VInterpTo(GetActorLocation(), TargetLocation, DeltaTime, 1.f);
-	//SetActorLocation(NewLocation, true, &RaftHitResult);
-
-	//if (RaftHitResult.GetActor())
-	//{
-	//	TargetLocation = GetActorLocation();
-	//}
 }
 
 // Returns true if the Player has the correct angle to interact with raft
@@ -215,8 +203,72 @@ bool ARaft::AngleTest(float PlayerYaw, float RaftYaw, float InAcceptedAngle)
 	return false;
 }
 
+bool ARaft::RightAngleWithDotProduct(FName Name)
+{
+	FVector PlayerVector = PlayerCharacter->GetActorForwardVector().GetSafeNormal();
+	FVector RaftVector;
+
+	if (Name == "Forward")
+	{
+		RaftVector = GetActorForwardVector().GetSafeNormal();
+		return DotProductTest(RaftVector, PlayerVector);
+	}
+	else if (Name == "Backward")
+	{
+		RaftVector = GetActorForwardVector().GetSafeNormal() * -1.f;
+		return DotProductTest(RaftVector, PlayerVector);
+	}
+	else if (Name == "Left")
+	{
+		RaftVector = GetActorRightVector().GetSafeNormal() * -1.f;
+		return DotProductTest(RaftVector, PlayerVector);
+	}
+	else if (Name == "Right")
+	{
+		RaftVector = GetActorRightVector().GetSafeNormal();
+		return DotProductTest(RaftVector, PlayerVector);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid Player Angle"))
+	}
+	return false;
+}
+
+bool ARaft::DotProductTest(FVector Vector1, FVector Vector2)
+{
+	float DotProduct = FVector::DotProduct(Vector1, Vector2);
+	float DegreeBetweenVectors = FMath::Abs(FMath::RadiansToDegrees(FMath::Acos(DotProduct)));
+	if (DegreeBetweenVectors < AcceptedAngle)
+	{
+		return true;
+	}
+	return false;
+}
+
 void ARaft::ResetTimer()
 {
 	bTimerReady = true;
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+}
+
+void ARaft::MoveRaftTowardPlayer()
+{
+	if (bTimerReady)
+	{
+		bTimerReady = false;
+
+		if (RaftPrimitive)
+		{
+			auto LocationApplied = RaftMesh->GetSocketLocation("ForceLocation");
+			auto VectorTowardPlayer = LocationApplied - (PlayerCharacter->GetActorLocation() + PlayerCharacter->GetActorForwardVector() * 500.f);
+			//VectorTowardPlayer = VectorTowardPlayer.GetSafeNormal();
+			auto ForceApplied = VectorTowardPlayer * RaftMesh->GetMass() * 100.f *-1.f;
+			RaftPrimitive->AddForceAtLocation(ForceApplied, LocationApplied);
+			UE_LOG(LogTemp, Warning, TEXT("Moving to player, VectorTowardPlayer: %s"), *VectorTowardPlayer.ToString())
+		}
+
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARaft::ResetTimer, 2.f, false);
+	}
+
 }

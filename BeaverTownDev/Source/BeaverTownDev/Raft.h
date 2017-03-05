@@ -6,6 +6,7 @@
 #include "Raft.generated.h"
 
 class AMainCharacter;
+class ABeaverTownDevGameModeBase;
 
 UCLASS()
 class BEAVERTOWNDEV_API ARaft : public AActor
@@ -24,6 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = Raft)
+		void MoveRaftTowardPlayer();
+
 private:
 	UPROPERTY(EditAnywhere)
 		USceneComponent* RaftRoot;
@@ -39,11 +43,14 @@ private:
 		UBoxComponent* LeftTrigger;
 
 	AMainCharacter* PlayerCharacter;
+	ABeaverTownDevGameModeBase* GameMode = nullptr;
 	UPrimitiveComponent* RaftPrimitive;
 
 	void ResetTimer();
 	bool RightAngle(FName Name);
 	bool AngleTest(float PlayerYaw, float RaftYaw, float AcceptedAngle);
+	bool RightAngleWithDotProduct(FName Name);
+	bool DotProductTest(FVector Vector1, FVector Vector2);
 	float AcceptedAngle = 45.f;
 
 	bool bTimerReady = true;
