@@ -26,7 +26,7 @@ void AMainCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	RotateToMousePosition(DeltaTime);
-
+	
 	if (Stamina < 100)
 	{
 		Stamina += StaminaRegeneration * DeltaTime;
@@ -309,3 +309,4 @@ bool AMainCharacter::GetIsInteractActive() const
 {
 	return bIsInteractActive;
 }
+
