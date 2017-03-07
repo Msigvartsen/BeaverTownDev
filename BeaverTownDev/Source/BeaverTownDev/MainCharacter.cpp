@@ -258,10 +258,11 @@ void AMainCharacter::ThrowRock()
 
 void AMainCharacter::ThrowNut()
 {
-	if (GetWorld())
+	if (GetWorld() && Ammo > 0)
 	{
 		FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
 		GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
+		Ammo--;
 	}
 }
 
