@@ -63,10 +63,10 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		int32 MaxAmmo = 50;
 	int32 WeaponOfChoice = 1;
-	float Stamina = MaxStamina;
 	float MaxStamina = 100.f;
-	float Health = MaxHealth;
+	float Stamina = MaxStamina;
 	float MaxHealth = 100.f;
+	float Health = MaxHealth;
 	float StaminaRegeneration = 10.f;
 	float MeleeDamage = 50.f;
 	float HealingPotion = 35.f;
