@@ -26,7 +26,7 @@ void AMainCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	RotateToMousePosition(DeltaTime);
-
+	
 	if (Stamina < 100)
 	{
 		Stamina += StaminaRegeneration * DeltaTime;
@@ -258,10 +258,11 @@ void AMainCharacter::ThrowRock()
 
 void AMainCharacter::ThrowNut()
 {
-	if (GetWorld())
+	if (GetWorld() && Ammo > 0)
 	{
 		FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
 		GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
+		Ammo--;
 	}
 }
 
@@ -308,3 +309,4 @@ bool AMainCharacter::GetIsInteractActive() const
 {
 	return bIsInteractActive;
 }
+
