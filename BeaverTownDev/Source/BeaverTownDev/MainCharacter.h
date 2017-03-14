@@ -36,7 +36,8 @@ private:
 	void MoveX(float value);
 	void MoveY(float value);
 	void Melee();
-	void Dodge();
+	void JumpPressed();
+	void JumpReleased();
 	void RotateToMousePosition(float DeltaTime);
 	void Shoot();
 	void Heal();
@@ -49,6 +50,8 @@ private:
 	void HideInventory();
 	void ThrowRock();
 	void ThrowNut();
+	virtual void Landed(const FHitResult & Hit) override;
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
 
 	//Character Variables
 
@@ -67,9 +70,12 @@ private:
 	float Stamina = MaxStamina;
 	float MaxHealth = 100.f;
 	float Health = MaxHealth;
-	float StaminaRegeneration = 10.f;
+	float StaminaRegeneration = 50.f;
 	float MeleeDamage = 50.f;
 	float HealingPotion = 35.f;
+	float StartJumpTime = 0;
+	float EndJumpTime = 0;
+	bool bCanJump;
 		
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		bool IsInventoryVisible = false;

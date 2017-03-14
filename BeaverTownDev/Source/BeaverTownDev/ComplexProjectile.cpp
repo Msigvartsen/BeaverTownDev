@@ -17,12 +17,14 @@ AComplexProjectile::AComplexProjectile()
 	ComplexProjectileCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
 	ComplexProjectileMesh->SetupAttachment(RootComponent);
 	ComplexProjectileCollision->SetupAttachment(RootComponent);
+	ComplexProjectileCollision->SetCollisionProfileName(FName("BlockAll"));
 	ComplexProjectileCollision->bGenerateOverlapEvents = true;
 	ComplexProjectileCollision->OnComponentBeginOverlap.AddDynamic(this, &AComplexProjectile::OnOverlap);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
 	ProjectileMovement->bAutoActivate = false;
 	ProjectileMovement->bRotationFollowsVelocity = true;
+	ProjectileMovement->bShouldBounce = true;
 
 }
 

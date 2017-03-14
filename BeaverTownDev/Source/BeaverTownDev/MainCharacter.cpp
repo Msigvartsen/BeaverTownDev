@@ -19,6 +19,7 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
+	bCanJump = true;
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -38,7 +39,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	InputComponent->BindAxis("MoveX", this, &AMainCharacter::MoveX);
 	InputComponent->BindAxis("MoveY", this, &AMainCharacter::MoveY);
-	InputComponent->BindAction("Dodge", IE_Pressed, this, &AMainCharacter::Dodge);
+	InputComponent->BindAction("Jump", IE_Pressed, this, &AMainCharacter::JumpPressed);
+	InputComponent->BindAction("Jump", IE_Released, this, &AMainCharacter::JumpReleased);
 	InputComponent->BindAction("Melee", IE_Pressed, this, &AMainCharacter::Melee);
 	InputComponent->BindAction("Shoot", IE_Pressed, this, &AMainCharacter::Shoot);
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
@@ -88,16 +90,46 @@ void AMainCharacter::Melee()
 	}
 }
 
-void AMainCharacter::Dodge()
+void AMainCharacter::JumpPressed()
 {
-	if (Stamina > 30)
+	if (Stamina > 30 && bCanJump)
 	{
-		FVector DodgeDirection(0, 0, 0);
-		DodgeDirection += FVector::ForwardVector * InputComponent->GetAxisValue("MoveX");
-		DodgeDirection += FVector::RightVector * InputComponent->GetAxisValue("MoveY");
-		DodgeDirection.Normalize();
-		LaunchCharacter((DodgeDirection*DodgeSpeed), true, false);
+		UE_LOG(LogTemp, Warning, TEXT("JUMPING! %d"), bCanJump);
+		bCanJump = false;
+		Jump();
 		Stamina -= 40.f;
+	}
+}
+
+void AMainCharacter::JumpReleased()
+{
+	StopJumping();
+}
+
+void AMainCharacter::Landed(const FHitResult & Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("LANDED!"));
+	bCanJump = true;
+	EndJumpTime = GetWorld()->GetTimeSeconds();
+	float SecondsInAir = EndJumpTime - StartJumpTime;
+	if (SecondsInAir > 1.f)
+	{
+		Health -= SecondsInAir * 10;
+		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), SecondsInAir);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NO FALLING DAMAGE!"));
+	}
+}
+
+void AMainCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+	if (GetCharacterMovement()->IsFalling())
+	{
+		StartJumpTime = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("FALLING!"));
 	}
 }
 
