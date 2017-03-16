@@ -5,6 +5,7 @@
 #include "EnemyBase.h"
 #include "ComplexProjectile.h"
 #include "Projectile.h"
+#include "MainGameInstance.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -115,6 +116,11 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 	if (SecondsInAir > 1.f)
 	{
 		Health -= SecondsInAir * 10;
+		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+		if (GameInstance)
+		{
+			GameInstance->SetDamageTaken(10);
+		}
 		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), SecondsInAir);
 	}
 	else

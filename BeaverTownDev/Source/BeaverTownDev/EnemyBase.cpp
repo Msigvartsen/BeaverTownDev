@@ -4,6 +4,7 @@
 #include "MainCharacter.h"
 #include "ComplexProjectile.h"
 #include "EnemyBase.h"
+#include "MainGameInstance.h"
 
 
 // Sets default values
@@ -126,8 +127,12 @@ void AEnemyBase::Attack(float DeltaTime)
 		AttackTime -= DeltaTime;
 		if (HitResult.GetActor()->IsA(AMainCharacter::StaticClass()) && AttackTime < 0)
 		{
-			AMainCharacter* CharacterHit = Cast<AMainCharacter>(HitResult.GetActor());
-			CharacterHit->SetHealth(15.f);
+				
+			auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+			if (GameInstance)
+			{
+				GameInstance->SetDamageTaken(15.f);
+			}
 			AttackTime = 1.f;
 		}
 	}

@@ -3,7 +3,7 @@
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
 #include "Pickup.h"
-
+#include "MainGameInstance.h"
 
 // Sets default values
 APickup::APickup()
@@ -43,9 +43,14 @@ void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor
 
 	if (PickupBox->IsOverlappingActor(CharacterPickup))
 	{
-		CharacterPickup->SetCollectedMinerals();
-		PlaySoundWhenPickup.Broadcast();
-		Destroy();
+		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+		if (GameInstance)
+		{
+			GameInstance->SetMinerals(1);
+			PlaySoundWhenPickup.Broadcast();
+			Destroy();
+		}
+		
 	}
 }
 
