@@ -6,6 +6,7 @@
 #include "ComplexProjectile.h"
 #include "Projectile.h"
 #include "MainGameInstance.h"
+#include "HealthPickups.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -187,7 +188,16 @@ void AMainCharacter::Interact()
 		if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 		{
 			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-
+			if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
+			{
+				AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
+				if (HealthPickup)
+				{
+					auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+					GameInstance->SetHealth(HealthPickup->HealTarget());
+	
+				}
+			}
 			float PlayerAngle = GetActorRotation().Yaw;
 			float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
 			float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();

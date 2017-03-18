@@ -24,3 +24,8 @@ int32 UMainGameInstance::GetMinerals()
 {
 	return Minerals;
 }
+
+void UMainGameInstance::SetHealth(float inHealth)
+{
+	Health += inHealth;
+}

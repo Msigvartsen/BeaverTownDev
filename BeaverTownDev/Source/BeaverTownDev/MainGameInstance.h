@@ -31,12 +31,18 @@ public:
 	//Player Function getter/setters
 
 	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
-	float GetHealthPercent();
+		float GetHealthPercent();
+
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-	void SetDamageTaken(float Damage);
+		void SetDamageTaken(float Damage);
+
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-	void SetMinerals(int32 PickedUpMinerals);
+		void SetMinerals(int32 PickedUpMinerals);
+
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-	int32 GetMinerals();
+		int32 GetMinerals();
+
+	UFUNCTION(Category = "PlayerStats")
+		void SetHealth(float inHealth);
 	
 };
