@@ -22,7 +22,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "PlayerStats")
 		float Minerals = 0;
 	
-	
+	bool WoodenKey = false;
 	
 	
 
@@ -45,4 +45,9 @@ public:
 	UFUNCTION(Category = "PlayerStats")
 		void SetHealth(float inHealth);
 	
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		bool GetWoodenKey();
+
+	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
+	void SetWoodenKey(bool KeyStatus);
 };

@@ -29,3 +29,13 @@ void UMainGameInstance::SetHealth(float inHealth)
 {
 	Health += inHealth;
 }
+
+bool UMainGameInstance::GetWoodenKey()
+{
+	return WoodenKey;
+}
+
+void UMainGameInstance::SetWoodenKey(bool KeyStatus)
+{
+	WoodenKey = KeyStatus;
+}

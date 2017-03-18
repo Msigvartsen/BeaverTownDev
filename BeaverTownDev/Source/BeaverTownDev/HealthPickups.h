@@ -16,16 +16,16 @@ class BEAVERTOWNDEV_API AHealthPickups : public AInteract
 public:
 	AHealthPickups();
 	float HealTarget();
+
 protected:
 		virtual void BeginPlay() override;
 
 private:
-	
 
 	UPROPERTY(EditAnywhere,Category="Healing")
 	float HealingApplied = 40.f;
 	
-	
+	bool CanHeal = true;
 	
 	
 };

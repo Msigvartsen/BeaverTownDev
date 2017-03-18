@@ -33,7 +33,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		EndTrace.Z -= 25.f;
 		StartTrace.Z -= 25.f;
 		if (!PhysicsHandle) { return; }
-		PhysicsHandle->SetTargetLocation(EndTrace);	
+		PhysicsHandle->SetTargetLocationAndRotation(EndTrace,GetOwner()->GetActorRotation());	
 	}
 }
 
@@ -46,10 +46,8 @@ void UGrabber::Grab()
 		AActor* ActorHit = HitResult.GetActor();
 		if (ActorHit)
 		{
-			//PhysicsHandle->GrabComponentAtLocation(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation());
 			FVector ComponentLocation = ComponentToGrab->GetOwner()->GetActorLocation();
 			FRotator ComponentRotation = ComponentToGrab->GetOwner()->GetActorRotation();
-			PhysicsHandle->GrabComponent(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), true);
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentLocation, ComponentRotation);
 		}
 	}
@@ -70,7 +68,7 @@ FHitResult UGrabber::LineTraceFromCharacter()
 	EndTrace.Z -= 25.f;
 	StartTrace.Z -= 25.f;
 
-	// Draws a red line that represents the line trace
+	// Draws a green line that represents the line trace
 	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, .3f, 0, 10.f);
 
 	 FCollisionQueryParams QueryParams(FName(TEXT("")), false, GetOwner());

@@ -16,6 +16,7 @@ void AHealthPickups::BeginPlay()
 
 float AHealthPickups::HealTarget()
 {
+	CanHeal = false;
 	return HealingApplied;
 }
 
