@@ -30,10 +30,6 @@ void AMainCharacter::Tick(float DeltaTime)
 
 	RotateToMousePosition(DeltaTime);
 	
-	if (Stamina < 100)
-	{
-		Stamina += StaminaRegeneration * DeltaTime;
-	}
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -44,14 +40,9 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AMainCharacter::JumpPressed);
 	InputComponent->BindAction("Jump", IE_Released, this, &AMainCharacter::JumpReleased);
 	InputComponent->BindAction("Melee", IE_Pressed, this, &AMainCharacter::Melee);
-	InputComponent->BindAction("Shoot", IE_Pressed, this, &AMainCharacter::Shoot);
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
 	InputComponent->BindAction("Interact", IE_Released, this, &AMainCharacter::InteractReleased);
-	InputComponent->BindAction("Inventory", IE_Pressed, this, &AMainCharacter::ShowInventory);
-	InputComponent->BindAction("Inventory", IE_Released, this, &AMainCharacter::HideInventory);
-	InputComponent->BindAction("WeaponOne", IE_Pressed, this, &AMainCharacter::WeaponOne);
-	InputComponent->BindAction("WeaponTwo", IE_Pressed, this, &AMainCharacter::WeaponTwo);
-	InputComponent->BindAction("Heal", IE_Pressed, this, &AMainCharacter::Heal);
+	
 }
 
 void AMainCharacter::MoveX(float value)
@@ -93,14 +84,10 @@ void AMainCharacter::Melee()
 }
 
 void AMainCharacter::JumpPressed()
-{
-	if (Stamina > 30 && bCanJump)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("JUMPING! %d"), bCanJump);
-		bCanJump = false;
-		Jump();
-		Stamina -= 40.f;
-	}
+{	
+	UE_LOG(LogTemp, Warning, TEXT("JUMPING! %d"), bCanJump);
+	bCanJump = false;
+	Jump();	
 }
 
 void AMainCharacter::JumpReleased()
@@ -116,11 +103,11 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 	float SecondsInAir = EndJumpTime - StartJumpTime;
 	if (SecondsInAir > 1.f)
 	{
-		Health -= SecondsInAir * 10;
+		float HealthLost = SecondsInAir * 10;
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 		if (GameInstance)
 		{
-			GameInstance->SetDamageTaken(10);
+			GameInstance->SetDamageTaken(HealthLost);
 		}
 		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), SecondsInAir);
 	}
@@ -138,37 +125,6 @@ void AMainCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8
 		StartJumpTime = GetWorld()->GetTimeSeconds();
 		UE_LOG(LogTemp, Warning, TEXT("FALLING!"));
 	}
-}
-
-void AMainCharacter::Shoot()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Shooting!"));
-
-	switch (WeaponOfChoice)
-	{
-	case 1:
-		ThrowNut();
-		break;
-	case 2:
-		ThrowRock();
-		break;
-	default:
-		UE_LOG(LogTemp,Warning,TEXT("Error choosing and shooting"))
-	}	
-}
-
-void AMainCharacter::Heal()
-{
-	Health += HealingPotion;
-}
-
-void AMainCharacter::WeaponOne()
-{
-	WeaponOfChoice = 1;
-}
-void AMainCharacter::WeaponTwo()
-{
-	WeaponOfChoice = 2;
 }
 
 void AMainCharacter::Interact()
@@ -289,64 +245,6 @@ void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult,float Reach
 		);
 }
 
-void AMainCharacter::ThrowRock()
-{
-	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
-	if (ComplexProjectileBlueprint)
-	{
-		AComplexProjectile* Projectile = GetWorld()->SpawnActor<AComplexProjectile>(ComplexProjectileBlueprint, SpawnLocation, GetActorRotation());
-		Projectile->Shoot(1000.f);
-
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("No projectile found!"));
-	}
-}
-
-void AMainCharacter::ThrowNut()
-{
-	if (GetWorld() && Ammo > 0)
-	{
-		FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
-		GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,SpawnLocation, GetActorRotation());
-		Ammo--;
-	}
-}
-
-void AMainCharacter::ShowInventory()
-{
-	IsInventoryVisible = true;
-}
-
-void AMainCharacter::HideInventory()
-{
-	IsInventoryVisible = false;
-}
-
-float AMainCharacter::GetHealthPercent() const
-{
-	return (Health / MaxHealth);
-}
-
-void AMainCharacter::SetHealth(float DamageTaken)
-{
-	Health -= DamageTaken;
-}
-
-float AMainCharacter::GetStaminaPercent() const
-{
-	return (Stamina / MaxStamina);
-}
-
-void AMainCharacter::SetCollectedMinerals()
-{
-	CollectedMinerals++;
-}
-int AMainCharacter::GetCollectedMinerals() const
-{
-	return CollectedMinerals;
-}
 
 void AMainCharacter::SetIsInteractActive(bool Status)
 {
