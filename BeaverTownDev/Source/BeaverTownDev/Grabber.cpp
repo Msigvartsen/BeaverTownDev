@@ -32,7 +32,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		FVector EndTrace = StartTrace + (GetOwner()->GetActorRotation().Vector() * Reach);
 		EndTrace.Z -= 25.f;
 		StartTrace.Z -= 25.f;
-		if (!PhysicsHandle) { return; }
 		PhysicsHandle->SetTargetLocationAndRotation(EndTrace,GetOwner()->GetActorRotation());	
 	}
 }
@@ -42,10 +41,11 @@ void UGrabber::Grab()
 	if (PhysicsHandle) 
 	{
 		FHitResult HitResult = LineTraceFromCharacter();
-		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+		ComponentToGrab = HitResult.GetComponent();
 		AActor* ActorHit = HitResult.GetActor();
 		if (ActorHit)
 		{
+			IsHeld = true;
 			FVector ComponentLocation = ComponentToGrab->GetOwner()->GetActorLocation();
 			FRotator ComponentRotation = ComponentToGrab->GetOwner()->GetActorRotation();
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentLocation, ComponentRotation);
@@ -58,6 +58,20 @@ void UGrabber::Release()
 	if (PhysicsHandle)
 	{
 		PhysicsHandle->ReleaseComponent();
+		IsHeld = false;
+	}
+}
+
+void UGrabber::Throw()
+{
+	if (PhysicsHandle && IsHeld)
+	{	
+		UE_LOG(LogTemp, Warning, TEXT("Trying to THROW Object"))	
+		PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
+		PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*2000.f, NAME_None, true);
+		PhysicsHandle->ReleaseComponent();	
+		IsHeld = false;
+			
 	}
 }
 
@@ -106,6 +120,7 @@ void UGrabber::FindInputComponent()
 	{
 		InputComponent->BindAction("Interact", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Shoot", IE_Pressed, this, &UGrabber::Release);
+		InputComponent->BindAction("Melee", IE_Pressed, this, &UGrabber::Throw);
 	}
 	else
 	{

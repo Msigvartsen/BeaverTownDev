@@ -24,14 +24,17 @@ public:
 
 private:
 	FHitResult LineTraceFromCharacter();
+	UPrimitiveComponent* ComponentToGrab = nullptr;
+
 
 	float Reach = 100.f;
-
+	bool IsHeld = false;
 	UInputComponent* InputComponent = nullptr;
 	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	void Grab();
 	void Release();
+	void Throw();
 	void FindPhysicsHandle();
 	void FindInputComponent();
 };
