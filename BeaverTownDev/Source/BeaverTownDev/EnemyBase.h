@@ -30,6 +30,7 @@ public:
 
 public:
 
+	UFUNCTION(BlueprintCallable, Category = "EnemyHealth")
 	void RemoveHealth(int32 Damage);
 
 	UFUNCTION(BlueprintCallable,Category="EnemyHealth")

@@ -9,7 +9,6 @@ AThrowableItems::AThrowableItems()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -29,4 +28,9 @@ void AThrowableItems::Tick(float DeltaTime)
 void AThrowableItems::ThrowItem()
 {
 	
+}
+
+void AThrowableItems::SetIgnorePlayerCollision()
+{
+	//BoxCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }

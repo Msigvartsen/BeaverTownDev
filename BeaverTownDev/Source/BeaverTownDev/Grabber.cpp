@@ -2,6 +2,7 @@
 #include "BeaverTownDev.h"
 #include "Grabber.h"
 #include "MainCharacter.h"
+#include "ThrowableItems.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 
@@ -32,12 +33,48 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		FVector EndTrace = StartTrace + (GetOwner()->GetActorRotation().Vector() * Reach);
 		EndTrace.Z -= 25.f;
 		StartTrace.Z -= 25.f;
-		PhysicsHandle->SetTargetLocationAndRotation(EndTrace,GetOwner()->GetActorRotation());	
+		PhysicsHandle->SetTargetLocationAndRotation(EndTrace, GetOwner()->GetActorRotation());	
 	}
 }
 
 void UGrabber::Grab()
 {
+	// ting jeg adda
+	///----------------------------------------------------------------------
+	auto CharacterCollision = GetOwner()->FindComponentByClass<UCapsuleComponent>();
+	TArray<AActor*> OverlappingActors;
+	AThrowableItems *ItemToThrow = nullptr;
+	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
+		UE_LOG(LogTemp, Warning, TEXT("TEST1"))
+
+	if (CharacterCollision)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TEST2"))
+		CharacterCollision->GetOverlappingActors(OverlappingActors);
+		for (AActor* Actor : OverlappingActors)
+		{
+			if (Actor->GetClass()->IsChildOf(AThrowableItems::StaticClass()))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("TEST3"))
+				ItemToThrow = Cast<AThrowableItems>(Actor);
+				UE_LOG(LogTemp, Warning, TEXT("FOUND: %s"), *ItemToThrow->GetName())
+			}
+		}
+		// TODO Make ItemToThrow able to hurt enemies
+		if (ItemToThrow)
+		{
+			IsHeld = true;
+			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
+			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
+			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
+
+			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
+			//PhysicsHandle->GrabComponent(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), true);
+			//PhysicsHandle->GrabComponent(ItemToThrow->GetRootPrimitiveComponent(), EName::NAME_None, GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * 100.f, true);
+		}
+	}
+	///----------------------------------------------------------------------
+
 	if (PhysicsHandle) 
 	{
 		FHitResult HitResult = LineTraceFromCharacter();
@@ -98,7 +135,7 @@ FHitResult UGrabber::LineTraceFromCharacter()
 
 	if (ActorHit)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *ActorHit->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *ActorHit->GetName());
 
 	}
 	return HitResult;

@@ -22,6 +22,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere)
+		UBoxComponent* BoxCollision = nullptr;
+	UPROPERTY(EditAnywhere)
+		USceneComponent* MyRoot = nullptr;
+
 	void ThrowItem();
+	void SetIgnorePlayerCollision();
 	
 };

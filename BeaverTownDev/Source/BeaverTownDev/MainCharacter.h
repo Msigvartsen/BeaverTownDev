@@ -56,8 +56,7 @@ private:
 
 	float StartJumpTime = 0;
 	float EndJumpTime = 0;
-	bool bCanJump;
-		
+	bool bCanJump;	
 	bool bIsInteractActive = false;
 
 	UPROPERTY(EditAnywhere,Category = "Projectiles")
