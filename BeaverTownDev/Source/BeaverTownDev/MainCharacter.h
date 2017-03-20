@@ -59,7 +59,7 @@ private:
 	bool bCanJump;	
 	bool bIsInteractActive = false;
 
-	UPROPERTY(EditAnywhere,Category = "Projectiles")
+	UPROPERTY(EditAnywhere, Category = "Projectiles")
 		TSubclassOf<class AProjectile> ProjectileBlueprint;
 	UPROPERTY(EditAnywhere, Category = "Projectiles")
 		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;

@@ -3,16 +3,16 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "ThrowableItems.generated.h"
+#include "Spawner.generated.h"
 
 UCLASS()
-class BEAVERTOWNDEV_API AThrowableItems : public AActor
+class BEAVERTOWNDEV_API ASpawner : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AThrowableItems();
+	ASpawner();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,12 +22,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* BoxCollision = nullptr;
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* MyMesh = nullptr;
+	void ResetTimer();
 
-	void ThrowItem();
-	void SetIgnorePlayerCollision(bool bTrue);
+private:
+	// Pointer to spawning class
+	FTimerHandle TimerHandle;
+	UPROPERTY(EditAnywhere)
+		float Time = 5.f;
+	bool bCanSpawn = true;
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		UClass* ObjectToSpawn = nullptr;
+	AActor *SpawnedActor = nullptr;
 	
+
 };

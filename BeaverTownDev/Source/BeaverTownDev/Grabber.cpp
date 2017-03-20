@@ -61,6 +61,7 @@ void UGrabber::Grab()
 			}
 		}
 		// TODO Make ItemToThrow able to hurt enemies
+
 		if (ItemToThrow)
 		{
 			IsHeld = true;
@@ -68,6 +69,7 @@ void UGrabber::Grab()
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
 
+			ItemToThrow->SetIgnorePlayerCollision(true);
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
 			//PhysicsHandle->GrabComponent(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), true);
 			//PhysicsHandle->GrabComponent(ItemToThrow->GetRootPrimitiveComponent(), EName::NAME_None, GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * 100.f, true);

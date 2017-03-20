@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
+#include "MainCharacter.h"
 #include "ThrowableItems.h"
 
 
@@ -30,7 +31,9 @@ void AThrowableItems::ThrowItem()
 	
 }
 
-void AThrowableItems::SetIgnorePlayerCollision()
+void AThrowableItems::SetIgnorePlayerCollision(bool bTrue)
 {
 	//BoxCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	//auto PlayerRef = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	//BoxCollision->IgnoreActorWhenMoving(PlayerRef, true);
 }
