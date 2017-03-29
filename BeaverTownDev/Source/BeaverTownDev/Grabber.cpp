@@ -35,6 +35,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		StartTrace.Z -= 25.f;
 		PhysicsHandle->SetTargetLocationAndRotation(EndTrace, GetOwner()->GetActorRotation());	
 	}
+	if (StartThrow && ThrowForce < 2500.f)
+	{
+		ThrowForce += 500 * DeltaTime;
+		UE_LOG(LogTemp, Warning, TEXT("ThrowForce adds up ? : %f"), ThrowForce)
+	}
 }
 
 void UGrabber::Grab()
@@ -101,15 +106,26 @@ void UGrabber::Release()
 	}
 }
 
+void UGrabber::ChargeThrow()
+{
+	if (PhysicsHandle && IsHeld)
+	{
+		StartThrow = true;
+	}
+	
+}
+
 void UGrabber::Throw()
 {
 	if (PhysicsHandle && IsHeld)
 	{	
 		UE_LOG(LogTemp, Warning, TEXT("Trying to THROW Object"))	
 		PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
-		PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*2000.f, NAME_None, true);
+		PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*ThrowForce, NAME_None, true);
 		PhysicsHandle->ReleaseComponent();	
 		IsHeld = false;
+		StartThrow = false;
+		ThrowForce = DefaultThrowForce;
 			
 	}
 }
@@ -159,10 +175,12 @@ void UGrabber::FindInputComponent()
 	{
 		InputComponent->BindAction("Interact", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Shoot", IE_Pressed, this, &UGrabber::Release);
-		InputComponent->BindAction("Melee", IE_Pressed, this, &UGrabber::Throw);
+		InputComponent->BindAction("Melee", IE_Released, this, &UGrabber::Throw);
+		InputComponent->BindAction("Melee", IE_Pressed, this, &UGrabber::ChargeThrow);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s missing InputComponent"), *GetOwner()->GetName())
 	}
 }
+

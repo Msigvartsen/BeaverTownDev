@@ -74,7 +74,7 @@ void AMainCharacter::Melee()
 		else if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 		{
 			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-
+			
 			if (InteractObject->GetCanBeDamaged())
 			{
 				InteractObject->OpenEvent();
@@ -219,7 +219,7 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 	FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
 
 	/// Rotates smoothly towards mouse cursor
-	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,300.f);
+	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,500.f);
 	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 }
 

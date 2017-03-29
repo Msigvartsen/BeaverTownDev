@@ -26,7 +26,9 @@ private:
 	FHitResult LineTraceFromCharacter();
 	UPrimitiveComponent* ComponentToGrab = nullptr;
 
-
+	bool StartThrow = false;
+	float DefaultThrowForce = 1000;
+	float ThrowForce = DefaultThrowForce;
 	float Reach = 100.f;
 	bool IsHeld = false;
 	UInputComponent* InputComponent = nullptr;
@@ -35,6 +37,7 @@ private:
 	void Grab();
 	void Release();
 	void Throw();
+	void ChargeThrow();
 	void FindPhysicsHandle();
 	void FindInputComponent();
 };
