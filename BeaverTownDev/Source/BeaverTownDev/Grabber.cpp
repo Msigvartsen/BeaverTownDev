@@ -138,7 +138,7 @@ FHitResult UGrabber::LineTraceFromCharacter()
 	StartTrace.Z -= 25.f;
 
 	// Draws a green line that represents the line trace
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, .3f, 0, 10.f);
+	//DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, .3f, 0, 10.f);
 
 	 FCollisionQueryParams QueryParams(FName(TEXT("")), false, GetOwner());
 	FHitResult HitResult;

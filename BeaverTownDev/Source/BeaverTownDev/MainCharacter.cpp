@@ -3,8 +3,6 @@
 #include "MainCharacter.h"
 #include "Interact.h"
 #include "EnemyBase.h"
-#include "ComplexProjectile.h"
-#include "Projectile.h"
 #include "MainGameInstance.h"
 #include "HealthPickups.h"
 
@@ -107,6 +105,7 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 		if (GameInstance)
 		{
+			//GameInstance keeps track of player stats
 			GameInstance->SetDamageTaken(HealthLost);
 		}
 		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), SecondsInAir);
