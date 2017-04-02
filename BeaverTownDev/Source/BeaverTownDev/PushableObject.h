@@ -22,28 +22,17 @@ protected:
 private:
 	USceneComponent* Root = nullptr;
 	UPROPERTY(EditDefaultsOnly)
-		UBoxComponent* ForwardTrigger = nullptr;
-
-	UPROPERTY(EditDefaultsOnly)
-		UBoxComponent* RightTrigger = nullptr;
+		UBoxComponent* BoxCollision = nullptr;
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* Mesh = nullptr;
 
 	bool CanMoveForward = false;
 	bool CanMoveRight = false;
+	bool IsCollisionActive = false;
 
 public:
-	UFUNCTION()
-	void OnForwardOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor,
-		UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex,
-		bool bFromSweep, const FHitResult &SweepResult);
 	
+
 	UFUNCTION()
-		void OnRightOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor,
-			UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex,
-			bool bFromSweep, const FHitResult &SweepResult);
-	
-	UFUNCTION()
-		void OnForwardEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	
-	UFUNCTION()
-		void OnRightEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void SetIgnorePlayerCollision(bool IsCollisionActive);
 };

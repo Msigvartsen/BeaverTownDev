@@ -75,5 +75,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
 	void SetIsPushingObject(bool IsPushing);
-	void SetMaxWalkSpeed(float WalkSpeed);
+	void SetMaxWalkSpeed(float MovementSpeed);
 };

@@ -197,8 +197,7 @@ void AMainCharacter::InteractReleased()
 // Character rotates towards mouse position.
 void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
-	if (!IsPushingObject)
-	{
+	
 
 		/// get viewport center
 		FVector2D ViewportSize;
@@ -222,7 +221,10 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 		FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
 
 		/// Rotates smoothly towards mouse cursor
+		
 		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, 500.f);
+	if (!IsPushingObject)
+	{
 		GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 	}
 }
@@ -263,10 +265,11 @@ bool AMainCharacter::GetIsInteractActive() const
 void AMainCharacter::SetIsPushingObject(bool IsPushing)
 {
 	IsPushingObject = IsPushing;
+	UE_LOG(LogTemp,Warning,TEXT("Locks camera rotation!"))
 }
 
 
-void AMainCharacter::SetMaxWalkSpeed(float WalkSpeed)
+void AMainCharacter::SetMaxWalkSpeed(float MovementSpeed)
 {
-	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
 }

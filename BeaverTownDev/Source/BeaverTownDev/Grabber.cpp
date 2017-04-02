@@ -92,9 +92,15 @@ void UGrabber::Grab()
 
 			//ObjectToPush->SetIgnorePlayerCollision(true);
 			AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
-			Char->SetIsPushingObject(true);
-			Char->SetMaxWalkSpeed(200.f);
-			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
+			if (Char)
+			{
+				ObjectToPush->SetIgnorePlayerCollision(true);
+				Char->SetIsPushingObject(true);
+				Char->SetMaxWalkSpeed(200.f);
+				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation());
+				//PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
+			}
+			
 		}
 
 	}

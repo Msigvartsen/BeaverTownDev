@@ -27,7 +27,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* MyMesh = nullptr;
 
-	void ThrowItem();
+
 	void SetIgnorePlayerCollision(bool bTrue);
 	
 };

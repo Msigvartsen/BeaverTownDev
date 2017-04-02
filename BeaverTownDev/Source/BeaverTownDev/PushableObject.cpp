@@ -10,18 +10,15 @@ APushableObject::APushableObject()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
-	RootComponent = Root;
-	ForwardTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("ForwardTrigger"));
-	ForwardTrigger->SetupAttachment(GetRootComponent());
-	ForwardTrigger->bGenerateOverlapEvents = true;
-	ForwardTrigger->OnComponentBeginOverlap.AddDynamic(this, &APushableObject::OnForwardOverlap);
-	ForwardTrigger->OnComponentEndOverlap.AddDynamic(this, &APushableObject::OnForwardEndOverlap);
+	//Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
+	/*Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	RootComponent = Mesh;
+	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("ForwardTrigger"));
+	BoxCollision->SetupAttachment(GetRootComponent());
+	BoxCollision->bGenerateOverlapEvents = true;*/
 
-	RightTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("RightTrigger"));
-	RightTrigger->SetupAttachment(GetRootComponent());
-	RightTrigger->OnComponentBeginOverlap.AddDynamic(this, &APushableObject::OnRightOverlap);
-	RightTrigger->OnComponentEndOverlap.AddDynamic(this, &APushableObject::OnRightEndOverlap);
+	//RootComponent = BoxCollision;
+	
 
 }
 
@@ -39,27 +36,10 @@ void APushableObject::Tick(float DeltaTime)
 
 }
 
-void APushableObject::OnForwardOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor,
-	UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex,
-	bool bFromSweep, const FHitResult &SweepResult)
+
+void APushableObject::SetIgnorePlayerCollision(bool IsCollisionActive)
 {
-	
-}
-
-void APushableObject::OnForwardEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-
-}
-
-
-void APushableObject::OnRightOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor,
-	UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex,
-	bool bFromSweep, const FHitResult &SweepResult)
-{
-	
-}
-
-void APushableObject::OnRightEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-
+	/*BoxCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	auto PlayerRef = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	BoxCollision->IgnoreActorWhenMoving(PlayerRef, IsCollisionActive);*/
 }

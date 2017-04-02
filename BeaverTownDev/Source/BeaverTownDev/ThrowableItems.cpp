@@ -26,10 +26,6 @@ void AThrowableItems::Tick(float DeltaTime)
 
 }
 
-void AThrowableItems::ThrowItem()
-{
-	
-}
 
 void AThrowableItems::SetIgnorePlayerCollision(bool bTrue)
 {
