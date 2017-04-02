@@ -2,7 +2,7 @@
 
 #include "BeaverTownDev.h"
 #include "PushableObject.h"
-
+#include "MainCharacter.h"
 
 // Sets default values
 APushableObject::APushableObject()
@@ -12,7 +12,6 @@ APushableObject::APushableObject()
 
 	Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
 	RootComponent = Root;
-
 	ForwardTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("ForwardTrigger"));
 	ForwardTrigger->SetupAttachment(GetRootComponent());
 	ForwardTrigger->bGenerateOverlapEvents = true;
@@ -44,7 +43,7 @@ void APushableObject::OnForwardOverlap(UPrimitiveComponent* OverlappedComponent,
 	UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult &SweepResult)
 {
-
+	
 }
 
 void APushableObject::OnForwardEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -57,7 +56,7 @@ void APushableObject::OnRightOverlap(UPrimitiveComponent* OverlappedComponent, A
 	UPrimitiveComponent *OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult &SweepResult)
 {
-
+	
 }
 
 void APushableObject::OnRightEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

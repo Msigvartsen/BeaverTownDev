@@ -27,6 +27,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		UBoxComponent* RightTrigger = nullptr;
 
+	bool CanMoveForward = false;
+	bool CanMoveRight = false;
+
 public:
 	UFUNCTION()
 	void OnForwardOverlap(UPrimitiveComponent* OverlappedComponent, AActor *OtherActor,

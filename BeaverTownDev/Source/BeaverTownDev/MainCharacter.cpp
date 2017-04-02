@@ -20,6 +20,7 @@ void AMainCharacter::BeginPlay()
 	Super::BeginPlay();
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
 	bCanJump = true;
+	SetMaxWalkSpeed(WalkSpeed);
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -196,30 +197,34 @@ void AMainCharacter::InteractReleased()
 // Character rotates towards mouse position.
 void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
-	/// get viewport center
-	FVector2D ViewportSize;
-	FVector2D  ViewportCenter;
-	GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
-	ViewportCenter = ViewportSize / 2;
+	if (!IsPushingObject)
+	{
 
-	/// get mouse position
-	float X, Y;
-	GetWorld()->GetFirstPlayerController()->GetMousePosition(X, Y);
-	FVector2D MousePosition = FVector2D(X, Y);
+		/// get viewport center
+		FVector2D ViewportSize;
+		FVector2D  ViewportCenter;
+		GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
+		ViewportCenter = ViewportSize / 2;
 
-	/// Get rotation vector
-	FVector2D MouseDirection = MousePosition - ViewportCenter;
-	MouseDirection.Normalize();
-	FVector MouseDirection3D = FVector(MouseDirection.X, MouseDirection.Y, 0);
+		/// get mouse position
+		float X, Y;
+		GetWorld()->GetFirstPlayerController()->GetMousePosition(X, Y);
+		FVector2D MousePosition = FVector2D(X, Y);
 
-	/// Fixes rotation offset
-	FRotator MyRotator = FRotator(0, 90, 0);
-	FRotationMatrix MyRotationMatrix(MyRotator);
-	FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
+		/// Get rotation vector
+		FVector2D MouseDirection = MousePosition - ViewportCenter;
+		MouseDirection.Normalize();
+		FVector MouseDirection3D = FVector(MouseDirection.X, MouseDirection.Y, 0);
 
-	/// Rotates smoothly towards mouse cursor
-	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(),DeltaTime,500.f);
-	GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
+		/// Fixes rotation offset
+		FRotator MyRotator = FRotator(0, 90, 0);
+		FRotationMatrix MyRotationMatrix(MyRotator);
+		FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
+
+		/// Rotates smoothly towards mouse cursor
+		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, 500.f);
+		GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
+	}
 }
 
 
@@ -255,3 +260,13 @@ bool AMainCharacter::GetIsInteractActive() const
 	return bIsInteractActive;
 }
 
+void AMainCharacter::SetIsPushingObject(bool IsPushing)
+{
+	IsPushingObject = IsPushing;
+}
+
+
+void AMainCharacter::SetMaxWalkSpeed(float WalkSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}

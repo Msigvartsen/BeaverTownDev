@@ -42,7 +42,8 @@ private:
 	void GetHitResultFromLineTrace(FHitResult &HitResult, float Reach);
 	virtual void Landed(const FHitResult & Hit) override;
 	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
-
+	
+	
 	//Character Variables
 
 	UPROPERTY(EditAnywhere,Category="CharacterStats")
@@ -58,6 +59,10 @@ private:
 	float EndJumpTime = 0;
 	bool bCanJump;	
 	bool bIsInteractActive = false;
+	bool IsPushingObject = false;
+
+	UPROPERTY(EditAnywhere)
+		float WalkSpeed = 500.f;
 
 	UPROPERTY(EditAnywhere, Category = "Projectiles")
 		TSubclassOf<class AProjectile> ProjectileBlueprint;
@@ -69,5 +74,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
-
+	void SetIsPushingObject(bool IsPushing);
+	void SetMaxWalkSpeed(float WalkSpeed);
 };

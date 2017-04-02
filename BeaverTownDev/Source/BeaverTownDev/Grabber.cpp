@@ -4,7 +4,7 @@
 #include "MainCharacter.h"
 #include "ThrowableItems.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
-
+#include "PushableObject.h"
 
 UGrabber::UGrabber()
 {
@@ -44,11 +44,12 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UGrabber::Grab()
 {
-	// ting jeg adda
-	///----------------------------------------------------------------------
+
 	auto CharacterCollision = GetOwner()->FindComponentByClass<UCapsuleComponent>();
 	TArray<AActor*> OverlappingActors;
 	AThrowableItems *ItemToThrow = nullptr;
+	APushableObject* ObjectToPush = nullptr;
+
 	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
 		UE_LOG(LogTemp, Warning, TEXT("TEST1"))
 
@@ -64,6 +65,10 @@ void UGrabber::Grab()
 				ItemToThrow = Cast<AThrowableItems>(Actor);
 				UE_LOG(LogTemp, Warning, TEXT("FOUND: %s"), *ItemToThrow->GetName())
 			}
+			if (Actor->IsA(APushableObject::StaticClass()))
+			{
+				ObjectToPush = Cast<APushableObject>(Actor);
+			}
 		}
 		// TODO Make ItemToThrow able to hurt enemies
 
@@ -76,11 +81,24 @@ void UGrabber::Grab()
 
 			ItemToThrow->SetIgnorePlayerCollision(true);
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
-			//PhysicsHandle->GrabComponent(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), true);
-			//PhysicsHandle->GrabComponent(ItemToThrow->GetRootPrimitiveComponent(), EName::NAME_None, GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * 100.f, true);
 		}
+
+		if (ObjectToPush)
+		{
+			IsHeld = true;
+			auto ItemToGrab = ObjectToPush->FindComponentByClass<UStaticMeshComponent>();
+			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
+			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
+
+			//ObjectToPush->SetIgnorePlayerCollision(true);
+			AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
+			Char->SetIsPushingObject(true);
+			Char->SetMaxWalkSpeed(200.f);
+			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
+		}
+
 	}
-	///----------------------------------------------------------------------
+
 
 	if (PhysicsHandle) 
 	{
@@ -103,6 +121,13 @@ void UGrabber::Release()
 	{
 		PhysicsHandle->ReleaseComponent();
 		IsHeld = false;
+		AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
+		if (Char)
+		{
+			Char->SetIsPushingObject(false);
+			Char->SetMaxWalkSpeed(600.f);
+		}
+		
 	}
 }
 
@@ -126,7 +151,13 @@ void UGrabber::Throw()
 		IsHeld = false;
 		StartThrow = false;
 		ThrowForce = DefaultThrowForce;
-			
+
+		AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
+		if (Char)
+		{
+			Char->SetIsPushingObject(false);
+			Char->SetMaxWalkSpeed(600.f);
+		}
 	}
 }
 
