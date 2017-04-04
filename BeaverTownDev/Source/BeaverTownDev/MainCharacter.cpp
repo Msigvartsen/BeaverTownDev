@@ -113,7 +113,7 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 	bNotFalling = true;
 	EndJumpTime = GetWorld()->GetTimeSeconds();
 	float SecondsInAir = EndJumpTime - StartJumpTime;
-	if (SecondsInAir > 0.5f && GetVelocity().Z < 0.f)
+	if (SecondsInAir > 0.7f && GetVelocity().Z < 0.f)
 	{
 		SecondsInAir++;
 		float HealthLost = FMath::Pow(SecondsInAir, 5.f);

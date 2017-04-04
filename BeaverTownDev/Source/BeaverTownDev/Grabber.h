@@ -5,6 +5,8 @@
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
 
+class AThrowableItems;
+class APushableObject;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BEAVERTOWNDEV_API UGrabber : public UActorComponent
@@ -25,6 +27,8 @@ public:
 private:
 	FHitResult LineTraceFromCharacter();
 	UPrimitiveComponent* ComponentToGrab = nullptr;
+	AThrowableItems *ItemToThrow = nullptr;
+	APushableObject* ObjectToPush = nullptr;
 
 	bool StartThrow = false;
 	float DefaultThrowForce = 1000;

@@ -47,8 +47,6 @@ void UGrabber::Grab()
 
 	auto CharacterCollision = GetOwner()->FindComponentByClass<UCapsuleComponent>();
 	TArray<AActor*> OverlappingActors;
-	AThrowableItems *ItemToThrow = nullptr;
-	APushableObject* ObjectToPush = nullptr;
 
 	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
 
@@ -97,12 +95,27 @@ void UGrabber::Grab()
 			}	
 		}
 	}
+	// Temp for grabbing nonclass meshes
+	if (PhysicsHandle)
+	{
+		FHitResult HitResult = LineTraceFromCharacter();
+		ComponentToGrab = HitResult.GetComponent();
+		AActor* ActorHit = HitResult.GetActor();
+		if (ActorHit)
+		{
+			IsHeld = true;
+			FVector ComponentLocation = ComponentToGrab->GetOwner()->GetActorLocation();
+			FRotator ComponentRotation = ComponentToGrab->GetOwner()->GetActorRotation();
+			PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentLocation, ComponentRotation);
+		}
+	}
 }
 
 void UGrabber::Release()
 {
 	if (PhysicsHandle)
 	{
+		ItemToThrow->SetActorEnableCollision(true);
 		PhysicsHandle->ReleaseComponent();
 		IsHeld = false;
 		AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
@@ -110,8 +123,7 @@ void UGrabber::Release()
 		{
 			Char->SetIsPushingObject(false);
 			Char->SetMaxWalkSpeed(600.f);
-		}
-		
+		}		
 	}
 }
 
