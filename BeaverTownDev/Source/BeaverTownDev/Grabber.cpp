@@ -73,7 +73,11 @@ void UGrabber::Grab()
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
 
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
+<<<<<<< HEAD
 			ItemToThrow->SetActorEnableCollision(false);
+=======
+			
+>>>>>>> 20d9e75bbd90a9ac7549af7f47d953356ccdee4e
 		}
 
 		if (ObjectToPush)
@@ -88,11 +92,18 @@ void UGrabber::Grab()
 			if (Char)
 			{
 				ObjectToPush->SetIgnorePlayerCollision(true);
+				
 				Char->SetIsPushingObject(true);
 				Char->SetMaxWalkSpeed(200.f);
+				
 				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation());
+<<<<<<< HEAD
 				//PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
 			}	
+=======
+			}
+			
+>>>>>>> 20d9e75bbd90a9ac7549af7f47d953356ccdee4e
 		}
 	}
 	// Temp for grabbing nonclass meshes

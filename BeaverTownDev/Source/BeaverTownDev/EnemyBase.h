@@ -54,7 +54,7 @@ private:
 		float AggroRange = 500.f;
 	float MaxHealth = 100.f;
 	float Health = MaxHealth;
-	float AttackTime = 1.f;
+	float AttackTime = .5f;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AComplexProjectile> ComplexProjectileBlueprint;
 	
