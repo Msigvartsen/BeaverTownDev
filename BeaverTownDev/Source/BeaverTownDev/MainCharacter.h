@@ -36,12 +36,12 @@ private:
 	void Melee();
 	void JumpPressed();
 	void JumpReleased();
+	void FallingDamage();
 	void RotateToMousePosition(float DeltaTime);
 	void Interact();
 	void InteractReleased();
 	void GetHitResultFromLineTrace(FHitResult &HitResult, float Reach);
 	virtual void Landed(const FHitResult & Hit) override;
-	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
 	
 	
 	//Character Variables
@@ -60,6 +60,7 @@ private:
 	bool bCanJump;	
 	bool bIsInteractActive = false;
 	bool IsPushingObject = false;
+	bool bNotFalling = true;
 
 	UPROPERTY(EditAnywhere)
 		float WalkSpeed = 500.f;

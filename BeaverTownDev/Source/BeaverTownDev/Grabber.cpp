@@ -47,45 +47,38 @@ void UGrabber::Grab()
 
 	auto CharacterCollision = GetOwner()->FindComponentByClass<UCapsuleComponent>();
 	TArray<AActor*> OverlappingActors;
-	AThrowableItems *ItemToThrow = nullptr;
-	APushableObject* ObjectToPush = nullptr;
 
 	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
-		UE_LOG(LogTemp, Warning, TEXT("TEST1"))
 
-	if (CharacterCollision)
+	if (CharacterCollision && IsHeld == false)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TEST2"))
 		CharacterCollision->GetOverlappingActors(OverlappingActors);
 		for (AActor* Actor : OverlappingActors)
 		{
 			if (Actor->GetClass()->IsChildOf(AThrowableItems::StaticClass()))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("TEST3"))
 				ItemToThrow = Cast<AThrowableItems>(Actor);
-				UE_LOG(LogTemp, Warning, TEXT("FOUND: %s"), *ItemToThrow->GetName())
 			}
 			if (Actor->IsA(APushableObject::StaticClass()))
 			{
 				ObjectToPush = Cast<APushableObject>(Actor);
 			}
 		}
-		// TODO Make ItemToThrow able to hurt enemies
 
 		if (ItemToThrow)
 		{
-			IsHeld = true;
 			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
 
-			ItemToThrow->SetIgnorePlayerCollision(true);
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
-			
+			ItemToThrow->SetActorEnableCollision(false);
+			IsHeld = true;
 		}
 
 		if (ObjectToPush)
 		{
+			ObjectToPush->SetActorEnableCollision(false);
 			IsHeld = true;
 			auto ItemToGrab = ObjectToPush->FindComponentByClass<UStaticMeshComponent>();
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
@@ -95,20 +88,16 @@ void UGrabber::Grab()
 			AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
 			if (Char)
 			{
-				ObjectToPush->SetIgnorePlayerCollision(true);
-				
 				Char->SetIsPushingObject(true);
 				Char->SetMaxWalkSpeed(200.f);
 				
 				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation());
-			}
-			
+				IsHeld = true;
+			}			
 		}
-
 	}
-
-
-	if (PhysicsHandle) 
+	// Temp for grabbing nonclass meshes
+	if (PhysicsHandle && IsHeld == false)
 	{
 		FHitResult HitResult = LineTraceFromCharacter();
 		ComponentToGrab = HitResult.GetComponent();
@@ -119,6 +108,7 @@ void UGrabber::Grab()
 			FVector ComponentLocation = ComponentToGrab->GetOwner()->GetActorLocation();
 			FRotator ComponentRotation = ComponentToGrab->GetOwner()->GetActorRotation();
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentLocation, ComponentRotation);
+			IsHeld = true;
 		}
 	}
 }
@@ -127,6 +117,16 @@ void UGrabber::Release()
 {
 	if (PhysicsHandle)
 	{
+		if (ItemToThrow)
+		{
+			ItemToThrow->SetActorEnableCollision(true);
+			ItemToThrow = nullptr;
+		}
+		if (ObjectToPush)
+		{
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush = nullptr;
+		}
 		PhysicsHandle->ReleaseComponent();
 		IsHeld = false;
 		AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
@@ -134,8 +134,7 @@ void UGrabber::Release()
 		{
 			Char->SetIsPushingObject(false);
 			Char->SetMaxWalkSpeed(600.f);
-		}
-		
+		}		
 	}
 }
 
@@ -143,6 +142,17 @@ void UGrabber::ChargeThrow()
 {
 	if (PhysicsHandle && IsHeld)
 	{
+		if (ItemToThrow)
+		{
+			ItemToThrow->SetActorEnableCollision(true);
+			ItemToThrow = nullptr;
+		}
+		if (ObjectToPush)
+		{
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush = nullptr;
+		}
 		StartThrow = true;
 	}
 	
@@ -152,6 +162,16 @@ void UGrabber::Throw()
 {
 	if (PhysicsHandle && IsHeld)
 	{	
+		if (ItemToThrow)
+		{
+			ItemToThrow->SetActorEnableCollision(true);
+			ItemToThrow = nullptr;
+		}
+		if (ObjectToPush)
+		{
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush = nullptr;
+		}
 		UE_LOG(LogTemp, Warning, TEXT("Trying to THROW Object"))	
 		PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
 		PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*ThrowForce, NAME_None, true);
