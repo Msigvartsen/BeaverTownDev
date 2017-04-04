@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
+#include "MainCharacter.h"
 #include "MainGameInstance.h"
+
 
 void UMainGameInstance::ResetStats()
 {
@@ -10,7 +12,6 @@ void UMainGameInstance::ResetStats()
 	Minerals = 0;
 	WoodenKey = false;
 }
-
 
 float UMainGameInstance::GetHealthPercent()
 {
@@ -25,7 +26,10 @@ void UMainGameInstance::SetMinerals(int32 PickedUpMinerals)
 
 void UMainGameInstance::SetDamageTaken(float Damage)
 {
+	AMainCharacter* PC = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	HurtSound = PC->GetHurtSound();
 	Health -= Damage;
+	UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
 	if (Health <= 0.f)
 	{
 		GetWorld()->GetFirstPlayerController()->GetCharacter()->Destroy();

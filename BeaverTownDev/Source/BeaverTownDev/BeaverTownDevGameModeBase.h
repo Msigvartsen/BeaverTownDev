@@ -14,7 +14,7 @@ class BEAVERTOWNDEV_API ABeaverTownDevGameModeBase : public AGameModeBase
 	
 private:
 	ARaft* Raft = nullptr;
-	
+
 public:
 	void SetRaft(ARaft* RaftToSet);
 	UFUNCTION(BlueprintCallable, Category = Getter)

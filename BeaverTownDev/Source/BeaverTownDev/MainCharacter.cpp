@@ -278,3 +278,8 @@ void AMainCharacter::SetMaxWalkSpeed(float MovementSpeed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
 }
+
+USoundBase* AMainCharacter::GetHurtSound()
+{
+	return HurtSound;
+}

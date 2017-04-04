@@ -182,6 +182,7 @@ FVector AEnemyBase::GetVectorTowardPlayer()
 void AEnemyBase::RemoveHealth(int32 Damage)
 {
 	Health -= Damage;
+	UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
 }
 
 float AEnemyBase::GetHealthPercent() const

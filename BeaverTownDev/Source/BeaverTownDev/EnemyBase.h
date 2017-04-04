@@ -31,7 +31,7 @@ public:
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "EnemyHealth")
-	void RemoveHealth(int32 Damage);
+		void RemoveHealth(int32 Damage);
 
 	UFUNCTION(BlueprintCallable,Category="EnemyHealth")
 		float GetHealthPercent() const;
@@ -57,5 +57,7 @@ private:
 	float AttackTime = .5f;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AComplexProjectile> ComplexProjectileBlueprint;
+	UPROPERTY(EditAnywhere)
+		USoundBase* HurtSound;
 	
 };

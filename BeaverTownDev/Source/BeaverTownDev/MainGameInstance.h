@@ -21,10 +21,9 @@ private:
 		float Health = MaxHealth;
 	UPROPERTY(EditAnywhere, Category = "PlayerStats")
 		float Minerals = 0;
-	
+	UPROPERTY(EditAnywhere)
+		USoundBase* HurtSound;
 	bool WoodenKey = false;
-	
-	
 
 public:
 

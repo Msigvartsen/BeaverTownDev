@@ -69,6 +69,9 @@ private:
 		TSubclassOf<class AProjectile> ProjectileBlueprint;
 	UPROPERTY(EditAnywhere, Category = "Projectiles")
 		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+		USoundBase* HurtSound;
+
 
 public:
 	//Character Getters
@@ -77,4 +80,5 @@ public:
 		bool GetIsInteractActive() const;
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
+	USoundBase* GetHurtSound();
 };
