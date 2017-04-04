@@ -3,6 +3,15 @@
 #include "BeaverTownDev.h"
 #include "MainGameInstance.h"
 
+void UMainGameInstance::ResetStats()
+{
+	MaxHealth = 100.f;
+	Health = MaxHealth;
+	Minerals = 0;
+	WoodenKey = false;
+}
+
+
 float UMainGameInstance::GetHealthPercent()
 {
 	return Health / MaxHealth;
@@ -17,6 +26,12 @@ void UMainGameInstance::SetMinerals(int32 PickedUpMinerals)
 void UMainGameInstance::SetDamageTaken(float Damage)
 {
 	Health -= Damage;
+	if (Health <= 0.f)
+	{
+		GetWorld()->GetFirstPlayerController()->GetCharacter()->Destroy();
+		ResetStats();
+		UGameplayStatics::OpenLevel(this, FName("MainMenu"));
+	}
 	UE_LOG(LogTemp, Warning, TEXT("TOOK DAMAGE IN GAME INSTANCE"))
 }
 

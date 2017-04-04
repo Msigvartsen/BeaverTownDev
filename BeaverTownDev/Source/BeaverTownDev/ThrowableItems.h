@@ -21,13 +21,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* BoxCollision = nullptr;
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* MyMesh = nullptr;
-
-
-	void SetIgnorePlayerCollision(bool bTrue);
-	
 };

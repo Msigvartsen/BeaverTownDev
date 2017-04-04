@@ -28,6 +28,8 @@ private:
 
 public:
 
+	void ResetStats();
+
 	//Player Function getter/setters
 
 	UFUNCTION(BlueprintCallable,Category = "PlayerStats")

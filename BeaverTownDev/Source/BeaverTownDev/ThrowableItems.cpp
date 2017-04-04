@@ -25,11 +25,3 @@ void AThrowableItems::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
-
-void AThrowableItems::SetIgnorePlayerCollision(bool bTrue)
-{
-	//BoxCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
-	//auto PlayerRef = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	//BoxCollision->IgnoreActorWhenMoving(PlayerRef, true);
-}

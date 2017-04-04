@@ -51,26 +51,21 @@ void UGrabber::Grab()
 	APushableObject* ObjectToPush = nullptr;
 
 	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
-		UE_LOG(LogTemp, Warning, TEXT("TEST1"))
 
 	if (CharacterCollision)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TEST2"))
 		CharacterCollision->GetOverlappingActors(OverlappingActors);
 		for (AActor* Actor : OverlappingActors)
 		{
 			if (Actor->GetClass()->IsChildOf(AThrowableItems::StaticClass()))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("TEST3"))
 				ItemToThrow = Cast<AThrowableItems>(Actor);
-				UE_LOG(LogTemp, Warning, TEXT("FOUND: %s"), *ItemToThrow->GetName())
 			}
 			if (Actor->IsA(APushableObject::StaticClass()))
 			{
 				ObjectToPush = Cast<APushableObject>(Actor);
 			}
 		}
-		// TODO Make ItemToThrow able to hurt enemies
 
 		if (ItemToThrow)
 		{
@@ -79,8 +74,8 @@ void UGrabber::Grab()
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
 
-			ItemToThrow->SetIgnorePlayerCollision(true);
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
+			ItemToThrow->SetActorEnableCollision(false);
 		}
 
 		if (ObjectToPush)
@@ -99,24 +94,7 @@ void UGrabber::Grab()
 				Char->SetMaxWalkSpeed(200.f);
 				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation());
 				//PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
-			}
-			
-		}
-
-	}
-
-
-	if (PhysicsHandle) 
-	{
-		FHitResult HitResult = LineTraceFromCharacter();
-		ComponentToGrab = HitResult.GetComponent();
-		AActor* ActorHit = HitResult.GetActor();
-		if (ActorHit)
-		{
-			IsHeld = true;
-			FVector ComponentLocation = ComponentToGrab->GetOwner()->GetActorLocation();
-			FRotator ComponentRotation = ComponentToGrab->GetOwner()->GetActorRotation();
-			PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentLocation, ComponentRotation);
+			}	
 		}
 	}
 }

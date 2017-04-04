@@ -21,6 +21,7 @@ void AMainCharacter::BeginPlay()
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
 	bCanJump = true;
 	SetMaxWalkSpeed(WalkSpeed);
+	GetCharacterMovement()->bNotifyApex = true;
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -28,6 +29,7 @@ void AMainCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	RotateToMousePosition(DeltaTime);
+	FallingDamage();
 	
 }
 
@@ -94,36 +96,39 @@ void AMainCharacter::JumpReleased()
 	StopJumping();
 }
 
+void AMainCharacter::FallingDamage()
+{
+	if (bNotFalling && GetCharacterMovement()->IsFalling() && GetVelocity().Z < 0.f)
+	{
+		StartJumpTime = GetWorld()->GetTimeSeconds();
+		bNotFalling = false;
+		UE_LOG(LogTemp, Warning, TEXT("STARTING TIMER!"));
+	}
+}
+
 void AMainCharacter::Landed(const FHitResult & Hit)
 {
 	UE_LOG(LogTemp, Warning, TEXT("LANDED!"));
 	bCanJump = true;
+	bNotFalling = true;
 	EndJumpTime = GetWorld()->GetTimeSeconds();
 	float SecondsInAir = EndJumpTime - StartJumpTime;
-	if (SecondsInAir > 1.f)
+	if (SecondsInAir > 0.5f && GetVelocity().Z < 0.f)
 	{
-		float HealthLost = SecondsInAir * 10;
+		SecondsInAir++;
+		float HealthLost = FMath::Pow(SecondsInAir, 5.f);
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 		if (GameInstance)
 		{
 			//GameInstance keeps track of player stats
 			GameInstance->SetDamageTaken(HealthLost);
 		}
-		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), SecondsInAir);
+		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), HealthLost);
+		UE_LOG(LogTemp, Warning, TEXT("SECONDS IN AIR: %f! , END JUMP TIME %f, START JUMP TIME: %f"), SecondsInAir, EndJumpTime, StartJumpTime);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("NO FALLING DAMAGE!"));
-	}
-}
-
-void AMainCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
-{
-	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
-	if (GetCharacterMovement()->IsFalling())
-	{
-		StartJumpTime = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("FALLING!"));
 	}
 }
 
@@ -222,7 +227,7 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 
 		/// Rotates smoothly towards mouse cursor
 		
-		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, 500.f);
+		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, 1000.f);
 	if (!IsPushingObject)
 	{
 		GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
