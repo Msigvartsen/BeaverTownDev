@@ -50,7 +50,7 @@ void UGrabber::Grab()
 
 	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
 
-	if (CharacterCollision)
+	if (CharacterCollision && IsHeld == false)
 	{
 		CharacterCollision->GetOverlappingActors(OverlappingActors);
 		for (AActor* Actor : OverlappingActors)
@@ -67,21 +67,18 @@ void UGrabber::Grab()
 
 		if (ItemToThrow)
 		{
-			IsHeld = true;
 			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
 
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
-<<<<<<< HEAD
 			ItemToThrow->SetActorEnableCollision(false);
-=======
-			
->>>>>>> 20d9e75bbd90a9ac7549af7f47d953356ccdee4e
+			IsHeld = true;
 		}
 
 		if (ObjectToPush)
 		{
+			ObjectToPush->SetActorEnableCollision(false);
 			IsHeld = true;
 			auto ItemToGrab = ObjectToPush->FindComponentByClass<UStaticMeshComponent>();
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
@@ -91,23 +88,16 @@ void UGrabber::Grab()
 			AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
 			if (Char)
 			{
-				ObjectToPush->SetIgnorePlayerCollision(true);
-				
 				Char->SetIsPushingObject(true);
 				Char->SetMaxWalkSpeed(200.f);
 				
 				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation());
-<<<<<<< HEAD
-				//PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
-			}	
-=======
-			}
-			
->>>>>>> 20d9e75bbd90a9ac7549af7f47d953356ccdee4e
+				IsHeld = true;
+			}			
 		}
 	}
 	// Temp for grabbing nonclass meshes
-	if (PhysicsHandle)
+	if (PhysicsHandle && IsHeld == false)
 	{
 		FHitResult HitResult = LineTraceFromCharacter();
 		ComponentToGrab = HitResult.GetComponent();
@@ -118,6 +108,7 @@ void UGrabber::Grab()
 			FVector ComponentLocation = ComponentToGrab->GetOwner()->GetActorLocation();
 			FRotator ComponentRotation = ComponentToGrab->GetOwner()->GetActorRotation();
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentLocation, ComponentRotation);
+			IsHeld = true;
 		}
 	}
 }
@@ -126,7 +117,16 @@ void UGrabber::Release()
 {
 	if (PhysicsHandle)
 	{
-		ItemToThrow->SetActorEnableCollision(true);
+		if (ItemToThrow)
+		{
+			ItemToThrow->SetActorEnableCollision(true);
+			ItemToThrow = nullptr;
+		}
+		if (ObjectToPush)
+		{
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush = nullptr;
+		}
 		PhysicsHandle->ReleaseComponent();
 		IsHeld = false;
 		AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
@@ -142,6 +142,17 @@ void UGrabber::ChargeThrow()
 {
 	if (PhysicsHandle && IsHeld)
 	{
+		if (ItemToThrow)
+		{
+			ItemToThrow->SetActorEnableCollision(true);
+			ItemToThrow = nullptr;
+		}
+		if (ObjectToPush)
+		{
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush = nullptr;
+		}
 		StartThrow = true;
 	}
 	
@@ -151,6 +162,16 @@ void UGrabber::Throw()
 {
 	if (PhysicsHandle && IsHeld)
 	{	
+		if (ItemToThrow)
+		{
+			ItemToThrow->SetActorEnableCollision(true);
+			ItemToThrow = nullptr;
+		}
+		if (ObjectToPush)
+		{
+			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush = nullptr;
+		}
 		UE_LOG(LogTemp, Warning, TEXT("Trying to THROW Object"))	
 		PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
 		PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*ThrowForce, NAME_None, true);
