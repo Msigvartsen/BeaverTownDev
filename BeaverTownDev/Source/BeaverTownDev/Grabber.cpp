@@ -84,7 +84,6 @@ void UGrabber::Grab()
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
 
-			//ObjectToPush->SetIgnorePlayerCollision(true);
 			AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
 			if (Char)
 			{
