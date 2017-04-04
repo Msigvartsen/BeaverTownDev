@@ -42,7 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		int32 GetMinerals();
 
-	UFUNCTION(Category = "PlayerStats")
+	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
 		void SetHealth(float inHealth);
 	
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
