@@ -96,7 +96,7 @@ void UGrabber::Grab()
 		}
 	}
 	// Temp for grabbing nonclass meshes
-	if (PhysicsHandle && IsHeld == false)
+	/*if (PhysicsHandle && IsHeld == false)
 	{
 		FHitResult HitResult = LineTraceFromCharacter();
 		ComponentToGrab = HitResult.GetComponent();
@@ -109,7 +109,7 @@ void UGrabber::Grab()
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, NAME_None, ComponentLocation, ComponentRotation);
 			IsHeld = true;
 		}
-	}
+	}*/
 }
 
 void UGrabber::Release()
