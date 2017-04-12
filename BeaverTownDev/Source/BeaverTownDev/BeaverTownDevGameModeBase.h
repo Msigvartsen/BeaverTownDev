@@ -15,9 +15,13 @@ class BEAVERTOWNDEV_API ABeaverTownDevGameModeBase : public AGameModeBase
 private:
 	ARaft* Raft = nullptr;
 
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* Music = nullptr;
 public:
 	void SetRaft(ARaft* RaftToSet);
 	UFUNCTION(BlueprintCallable, Category = Getter)
 	ARaft* GetRaft();
-	
+
 };

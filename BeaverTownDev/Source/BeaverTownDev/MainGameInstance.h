@@ -25,6 +25,9 @@ private:
 		USoundBase* HurtSound;
 	bool WoodenKey = false;
 
+	UPROPERTY(EditAnywhere)
+		USoundBase* Music;
+
 public:
 
 	void ResetStats();

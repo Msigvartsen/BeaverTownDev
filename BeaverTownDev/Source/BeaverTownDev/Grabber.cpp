@@ -149,7 +149,6 @@ void UGrabber::ChargeThrow()
 		if (ObjectToPush)
 		{
 			ObjectToPush->SetActorEnableCollision(true);
-			ObjectToPush->SetActorEnableCollision(true);
 			ObjectToPush = nullptr;
 		}
 		StartThrow = true;

@@ -5,6 +5,7 @@
 #include "MainGameInstance.h"
 
 
+
 void UMainGameInstance::ResetStats()
 {
 	MaxHealth = 100.f;
@@ -32,9 +33,9 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
 	if (Health <= 0.f)
 	{
-		GetWorld()->GetFirstPlayerController()->GetCharacter()->Destroy();
+		/*GetWorld()->GetFirstPlayerController()->GetCharacter()->Destroy();
 		ResetStats();
-		UGameplayStatics::OpenLevel(this, FName("MainMenu"));
+		UGameplayStatics::OpenLevel(this, FName("MainMenu"));*/
 	}
 	UE_LOG(LogTemp, Warning, TEXT("TOOK DAMAGE IN GAME INSTANCE"))
 }
