@@ -38,6 +38,9 @@ public:
 		float GetHealthPercent();
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		float GetMaxHealth() { return MaxHealth; }
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetDamageTaken(float Damage);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")

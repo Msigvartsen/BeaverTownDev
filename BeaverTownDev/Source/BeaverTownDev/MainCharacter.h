@@ -61,6 +61,7 @@ private:
 	bool bIsInteractActive = false;
 	bool IsPushingObject = false;
 	bool bNotFalling = true;
+	float TurnInterpolationSpeed = 1000.f;
 
 	UPROPERTY(EditAnywhere)
 		float WalkSpeed = 500.f;
@@ -80,5 +81,6 @@ public:
 		bool GetIsInteractActive() const;
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
+	
 	USoundBase* GetHurtSound();
 };
