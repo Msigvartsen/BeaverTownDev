@@ -203,7 +203,8 @@ void AMainCharacter::InteractReleased()
 void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
 	
-
+	if (!IsPushingObject)
+	{
 		/// get viewport center
 		FVector2D ViewportSize;
 		FVector2D  ViewportCenter;
@@ -227,9 +228,8 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 
 		/// Rotates smoothly towards mouse cursor
 		
-		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, 1000.f);
-	if (!IsPushingObject)
-	{
+		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, TurnInterpolationSpeed);
+	
 		GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 	}
 }
@@ -283,3 +283,4 @@ USoundBase* AMainCharacter::GetHurtSound()
 {
 	return HurtSound;
 }
+

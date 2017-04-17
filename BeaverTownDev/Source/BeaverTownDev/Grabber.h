@@ -33,7 +33,7 @@ private:
 	bool StartThrow = false;
 	float DefaultThrowForce = 1000;
 	float ThrowForce = DefaultThrowForce;
-	float Reach = 50.f;
+	float Reach = 20.f;
 	bool IsHeld = false;
 	UInputComponent* InputComponent = nullptr;
 	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
