@@ -30,5 +30,13 @@ public:
 
 private:
 	
+	float MaxHealth = 100.f;
+	float Health = MaxHealth;
+
+public:
+	//Getters
+
+	float GetHealthPercent() const { return Health / MaxHealth; }
+	
 	
 };

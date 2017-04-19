@@ -15,7 +15,7 @@ void UFindPlayerQueryContext::ProvideContext(FEnvQueryInstance& QueryInstance, F
 
 	if (AIController && AIController->GetSeeingPawn())
 	{
-		AIController->GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = 200.f;
+		AIController->GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = 500.f;
 		UEnvQueryItemType_Actor::SetContextHelper(ContextData, AIController->GetSeeingPawn());
 	}
 }
