@@ -2,6 +2,7 @@
 
 #include "BeaverTownDev.h"
 #include "Raft.h"
+#include "RollingDoor.h"
 #include "BeaverTownDevGameModeBase.h"
 
 void ABeaverTownDevGameModeBase::BeginPlay()
@@ -15,9 +16,19 @@ void ABeaverTownDevGameModeBase::SetRaft(ARaft* RaftToSet)
 	Raft = RaftToSet;
 }
 
+void ABeaverTownDevGameModeBase::SetDoor(ARollingDoor* DoorToSet)
+{
+	Door = DoorToSet;
+}
+
 ARaft* ABeaverTownDevGameModeBase::GetRaft()
 {
 	return Raft;
+}
+
+ARollingDoor* ABeaverTownDevGameModeBase::GetDoor()
+{
+	return Door;
 }
 
 
