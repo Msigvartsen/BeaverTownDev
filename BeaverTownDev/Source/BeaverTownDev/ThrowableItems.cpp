@@ -5,23 +5,27 @@
 #include "ThrowableItems.h"
 
 
-// Sets default values
 AThrowableItems::AThrowableItems()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-// Called when the game starts or when spawned
+
 void AThrowableItems::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
+
 void AThrowableItems::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AThrowableItems::SetIsThrown(bool IsThrow)
+{
+	IsThrown = IsThrow;
 }

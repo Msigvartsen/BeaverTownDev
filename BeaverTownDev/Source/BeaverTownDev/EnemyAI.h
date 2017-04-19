@@ -46,6 +46,7 @@ public:
 	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
 	float GetHealthPercent() const { return Health / MaxHealth; }
 	
+	UFUNCTION(BlueprintCallable,Category = "AI")
 	void SetTakeDamage(float Damage) { Health -= Damage; }
 
 	UFUNCTION()

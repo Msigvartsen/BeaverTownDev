@@ -5,6 +5,7 @@
 #include "ThrowableItems.h"
 #include "TorchPickup.h"
 #include "PushableObject.h"
+#include "ThrowableRock.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 UGrabber::UGrabber()
@@ -51,9 +52,10 @@ void UGrabber::Grab()
 		CharacterCollision->GetOverlappingActors(OverlappingActors);
 		for (AActor* Actor : OverlappingActors)
 		{
+			
 			if (Actor->GetClass()->IsChildOf(AThrowableItems::StaticClass()))
 			{
-				ItemToThrow = Cast<AThrowableItems>(Actor);
+				ItemToThrow = Cast<AThrowableItems>(Actor);	
 			}
 			if (Actor->IsA(APushableObject::StaticClass()))
 			{
@@ -143,6 +145,7 @@ void UGrabber::Throw()
 			PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
 			PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*DefaultThrowForce, NAME_None, true);
 			ItemToThrow->SetActorEnableCollision(true);
+			ItemToThrow->SetIsThrown(true);
 			ItemToThrow = nullptr; 
 		}
 		if (ObjectToPush)
