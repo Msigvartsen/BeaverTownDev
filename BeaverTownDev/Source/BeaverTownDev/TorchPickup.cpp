@@ -52,7 +52,7 @@ void ATorchPickup::Tick(float DeltaTime)
 	{
 		if (MeshRef)
 		{
-			MeshRef->SetSimulatePhysics(false);
+			this->DisableComponentsSimulatePhysics();
 			SetActorTransform(CharRef->GetMesh()->GetSocketTransform(FName("hand_r")));
 		}
 	}
