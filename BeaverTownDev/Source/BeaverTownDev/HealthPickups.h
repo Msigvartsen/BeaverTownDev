@@ -16,6 +16,8 @@ class BEAVERTOWNDEV_API AHealthPickups : public AInteract
 public:
 	AHealthPickups();
 	float HealTarget();
+	UFUNCTION(BlueprintCallable, Category = "HealingPickup")
+	bool GetCanHeal() const { return CanHeal; }
 
 protected:
 		virtual void BeginPlay() override;
