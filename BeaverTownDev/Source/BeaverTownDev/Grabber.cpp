@@ -3,8 +3,9 @@
 #include "Grabber.h"
 #include "MainCharacter.h"
 #include "ThrowableItems.h"
-#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "TorchPickup.h"
 #include "PushableObject.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 UGrabber::UGrabber()
 {
@@ -58,9 +59,15 @@ void UGrabber::Grab()
 			{
 				ObjectToPush = Cast<APushableObject>(Actor);
 			}
+			if (Actor->GetClass()->IsChildOf(ATorchPickup::StaticClass()))
+			{
+				TorchToHold = Cast<ATorchPickup>(Actor);
+				TorchToHold->PickUpTorch();
+				IsHeld = true;
+			}
 		}
 
-		if (ItemToThrow)
+		if (ItemToThrow && IsHeld == false)
 		{
 			IsHeld = true;
 			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
@@ -95,6 +102,12 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
+	// For Torch
+	if (IsHeld && TorchToHold)
+	{
+		TorchToHold->DropTorch();
+	}
+
 	if (PhysicsHandle)
 	{
 		if (ItemToThrow)

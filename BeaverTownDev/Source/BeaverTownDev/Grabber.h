@@ -7,6 +7,7 @@
 
 class AThrowableItems;
 class APushableObject;
+class ATorchPickup;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BEAVERTOWNDEV_API UGrabber : public UActorComponent
@@ -29,6 +30,7 @@ private:
 	UPrimitiveComponent* ComponentToGrab = nullptr;
 	AThrowableItems *ItemToThrow = nullptr;
 	APushableObject* ObjectToPush = nullptr;
+	ATorchPickup* TorchToHold = nullptr;
 
 	bool StartThrow = false;
 	float DefaultThrowForce = 2000;
