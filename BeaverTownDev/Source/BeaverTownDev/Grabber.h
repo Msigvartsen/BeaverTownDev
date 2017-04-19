@@ -31,8 +31,7 @@ private:
 	APushableObject* ObjectToPush = nullptr;
 
 	bool StartThrow = false;
-	float DefaultThrowForce = 1000;
-	float ThrowForce = DefaultThrowForce;
+	float DefaultThrowForce = 2000;
 	float Reach = 20.f;
 	bool IsHeld = false;
 	UInputComponent* InputComponent = nullptr;
@@ -41,7 +40,6 @@ private:
 	void Grab();
 	void Release();
 	void Throw();
-	void ChargeThrow();
 	void FindPhysicsHandle();
 	void FindInputComponent();
 };
