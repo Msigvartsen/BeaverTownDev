@@ -30,5 +30,19 @@ public:
 
 private:
 	
+	float MaxHealth = 100.f;
+	float Health = MaxHealth;
+
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "AI")
+		void AIAttack();
+
+
+public:
+	//Getters
+
+	float GetHealthPercent() const { return Health / MaxHealth; }
+	
 	
 };
