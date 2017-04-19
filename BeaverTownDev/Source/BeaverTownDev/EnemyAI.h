@@ -33,16 +33,21 @@ private:
 	float MaxHealth = 100.f;
 	float Health = MaxHealth;
 
+	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
+		int32 WaypointIndex = 0;
+	
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "AI")
 		void AIAttack();
 
-
 public:
 	//Getters
-
+	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
 	float GetHealthPercent() const { return Health / MaxHealth; }
 	
-	
+	void SetTakeDamage(float Damage) { Health -= Damage; }
+
+	UFUNCTION()
+	int32 GetWaypointIndex() const { return WaypointIndex; }
 };

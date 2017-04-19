@@ -16,5 +16,8 @@ class BEAVERTOWNDEV_API UTargetPointSelectionTask : public UBTTaskNode
 private:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
+	class ABotTargetPoint* BotWaypoint;
+	class AEnemyAI* EnemyWaypoint;
+	
 	
 };

@@ -14,6 +14,10 @@ class BEAVERTOWNDEV_API ABotTargetPoint : public ATargetPoint
 	GENERATED_BODY()
 	
 	
+public:
+	UPROPERTY(EditAnywhere,Category = "WaypointIndex")
+		int32 WaypointIndex = 0;
 	
-	
+	UFUNCTION()
+	 int32 GetWaypointIndex() const { return WaypointIndex; }
 };

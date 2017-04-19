@@ -36,4 +36,5 @@ void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemyAI::AIAttack()
 {
 	UE_LOG(LogTemp,Warning,TEXT("AI ATTACKING"))
+
 }
