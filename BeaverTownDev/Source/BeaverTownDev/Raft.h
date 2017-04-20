@@ -51,7 +51,8 @@ private:
 	bool AngleTest(float PlayerYaw, float RaftYaw, float AcceptedAngle);
 	bool RightAngleWithDotProduct(FName Name);
 	bool DotProductTest(FVector Vector1, FVector Vector2);
-	float AcceptedAngle = 45.f;
+	UPROPERTY(EditAnywhere)
+		float AcceptedAngle = 45.f;
 
 	bool bTimerReady = true;
 	FTimerHandle TimerHandle;
