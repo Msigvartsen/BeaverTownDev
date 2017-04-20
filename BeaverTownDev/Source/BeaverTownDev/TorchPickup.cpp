@@ -52,8 +52,8 @@ void ATorchPickup::Tick(float DeltaTime)
 	{
 		if (MeshRef)
 		{
-			this->DisableComponentsSimulatePhysics();
-			SetActorTransform(CharRef->GetMesh()->GetSocketTransform(FName("hand_r")));
+			SetActorLocation(CharRef->GetMesh()->GetSocketLocation(FName("hand_r")));
+			SetActorRotation(FRotator(0.f, 0.f, 0.f));
 		}
 	}
 }
