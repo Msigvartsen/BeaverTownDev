@@ -24,23 +24,31 @@ void ASpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bCanSpawn)
+	if (bRandomRange)
+	{
+		SpawnLocation = GetActorLocation() + (GetActorForwardVector() * FMath::FRandRange(MinX, MaxX));
+		//SpawnLocation.X += FMath::FRandRange(MinX, MaxX);
+	}
+	else
+	{
+		SpawnLocation = GetActorLocation();
+	}
+
+	if (bCanSpawn && GetWorld()->GetTimeSeconds() > StartTimeDelay)
 	{
 		bCanSpawn = false;
 		if (ObjectToSpawn)
 		{
-			FVector SpawnLocation = GetActorLocation();
-			FRotator SpawnRotation = GetActorRotation();
+			SpawnRotation = GetActorRotation();
 			SpawnedActor = GetWorld()->SpawnActor<AActor>(ObjectToSpawn, SpawnLocation, SpawnRotation);
+			SpawnedActor->SetLifeSpan(TimeUntilDestruction);
 		}
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASpawner::ResetTimer, Time, false);
 	}
-
 }
 
 void ASpawner::ResetTimer()
 {
-	SpawnedActor->Destroy();
 	bCanSpawn = true;
 }
 

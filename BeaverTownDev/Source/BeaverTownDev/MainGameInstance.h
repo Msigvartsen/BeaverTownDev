@@ -24,6 +24,12 @@ private:
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
 	bool WoodenKey = false;
+	bool CanPlaySound = true;
+	FTimerHandle TimerHandle;
+	UPROPERTY(EditAnywhere)
+		float SoundDelay = 1.f;
+	UPROPERTY(EditAnywhere)
+		USoundBase* Music;
 
 public:
 
@@ -33,6 +39,9 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
 		float GetHealthPercent();
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		float GetMaxHealth() { return MaxHealth; }
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetDamageTaken(float Damage);
@@ -49,6 +58,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		bool GetWoodenKey();
 
-	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
-	void SetWoodenKey(bool KeyStatus);
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void SetWoodenKey(bool KeyStatus);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerStats")
+		void LoadRestartGameUI();
+
+	void ResetCanPlaySound();
 };

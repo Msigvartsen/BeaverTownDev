@@ -7,6 +7,7 @@
 
 class AThrowableItems;
 class APushableObject;
+class ATorchPickup;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BEAVERTOWNDEV_API UGrabber : public UActorComponent
@@ -29,11 +30,11 @@ private:
 	UPrimitiveComponent* ComponentToGrab = nullptr;
 	AThrowableItems *ItemToThrow = nullptr;
 	APushableObject* ObjectToPush = nullptr;
+	ATorchPickup* TorchToHold = nullptr;
 
 	bool StartThrow = false;
-	float DefaultThrowForce = 1000;
-	float ThrowForce = DefaultThrowForce;
-	float Reach = 50.f;
+	float DefaultThrowForce = 2000;
+	float Reach = 20.f;
 	bool IsHeld = false;
 	UInputComponent* InputComponent = nullptr;
 	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
@@ -41,7 +42,6 @@ private:
 	void Grab();
 	void Release();
 	void Throw();
-	void ChargeThrow();
 	void FindPhysicsHandle();
 	void FindInputComponent();
 };

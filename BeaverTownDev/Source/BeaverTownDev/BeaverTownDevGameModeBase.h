@@ -6,6 +6,7 @@
 #include "BeaverTownDevGameModeBase.generated.h"
 
 class ARaft;
+class ARollingDoor;
 
 UCLASS()
 class BEAVERTOWNDEV_API ABeaverTownDevGameModeBase : public AGameModeBase
@@ -14,10 +15,19 @@ class BEAVERTOWNDEV_API ABeaverTownDevGameModeBase : public AGameModeBase
 	
 private:
 	ARaft* Raft = nullptr;
+	ARollingDoor* Door = nullptr;
 
+
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* Music = nullptr;
 public:
 	void SetRaft(ARaft* RaftToSet);
+	void SetDoor(ARollingDoor* DoorToSet);
 	UFUNCTION(BlueprintCallable, Category = Getter)
-	ARaft* GetRaft();
-	
+		ARollingDoor* GetDoor();
+	UFUNCTION(BlueprintCallable, Category = Getter)
+		ARaft* GetRaft();
+
 };

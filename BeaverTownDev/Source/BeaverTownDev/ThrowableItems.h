@@ -11,14 +11,23 @@ class BEAVERTOWNDEV_API AThrowableItems : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AThrowableItems();
 
+	virtual void Tick(float DeltaTime) override;
+
+	void SetIsThrown(bool IsThrow);
+
+	UFUNCTION()
+		bool GetIsThrown() const { return IsThrown; }
+	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:
+	bool IsThrown = false;
+
+
+	
+
+
 };

@@ -29,10 +29,23 @@ private:
 	FTimerHandle TimerHandle;
 	UPROPERTY(EditAnywhere)
 		float Time = 5.f;
-	bool bCanSpawn = true;
+	UPROPERTY(EditAnywhere)
+		float TimeUntilDestruction = 10.f;
+	UPROPERTY(EditAnywhere)
+		float StartTimeDelay = 0.f;
+	UPROPERTY(EditAnywhere)
+		bool bRandomRange = false;
+	UPROPERTY(EditAnywhere)
+		float MaxX = 50.f;
+	UPROPERTY(EditAnywhere)
+		float MinX = -50.f;
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		UClass* ObjectToSpawn = nullptr;
+
 	AActor *SpawnedActor = nullptr;
+	FVector SpawnLocation;
+	FRotator SpawnRotation;
+	bool bCanSpawn = true;
 	
 
 };

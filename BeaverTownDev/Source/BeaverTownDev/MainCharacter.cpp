@@ -4,6 +4,7 @@
 #include "Interact.h"
 #include "EnemyBase.h"
 #include "MainGameInstance.h"
+#include "EnemyAI.h"
 #include "HealthPickups.h"
 
 AMainCharacter::AMainCharacter()
@@ -67,6 +68,12 @@ void AMainCharacter::Melee()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
 
+	
+		if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
+		{
+			AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
+			EnemyAIHit->SetTakeDamage(50.f);
+		}
 		if (HitResult.GetActor()->IsA(AEnemyBase::StaticClass()))
 		{
 			AEnemyBase* EnemyHit = Cast<AEnemyBase>(HitResult.GetActor());
@@ -203,7 +210,8 @@ void AMainCharacter::InteractReleased()
 void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
 	
-
+	if (!IsPushingObject)
+	{
 		/// get viewport center
 		FVector2D ViewportSize;
 		FVector2D  ViewportCenter;
@@ -227,9 +235,8 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 
 		/// Rotates smoothly towards mouse cursor
 		
-		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, 1000.f);
-	if (!IsPushingObject)
-	{
+		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, TurnInterpolationSpeed);
+	
 		GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 	}
 }
@@ -283,3 +290,4 @@ USoundBase* AMainCharacter::GetHurtSound()
 {
 	return HurtSound;
 }
+

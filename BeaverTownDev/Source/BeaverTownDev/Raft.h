@@ -42,9 +42,9 @@ private:
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* LeftTrigger;
 
-	AMainCharacter* PlayerCharacter;
+	AMainCharacter* PlayerCharacter = nullptr;
 	ABeaverTownDevGameModeBase* GameMode = nullptr;
-	UPrimitiveComponent* RaftPrimitive;
+	UPrimitiveComponent* RaftPrimitive = nullptr;
 
 	void ResetTimer();
 	bool RightAngle(FName Name);
