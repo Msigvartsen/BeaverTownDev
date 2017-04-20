@@ -53,7 +53,7 @@ void ATorchPickup::Tick(float DeltaTime)
 		if (MeshRef)
 		{
 			SetActorLocation(CharRef->GetMesh()->GetSocketLocation(FName("hand_r")));
-			SetActorRotation(FRotator(0.f, 0.f, 0.f));
+			SetActorRotation(FRotator(0.f, CharRef->GetActorRotation().Yaw - 45.f, 20.f));
 		}
 	}
 }

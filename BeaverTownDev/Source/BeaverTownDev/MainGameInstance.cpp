@@ -30,12 +30,18 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	AMainCharacter* PC = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	HurtSound = PC->GetHurtSound();
 	Health -= Damage;
-	UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
+	if (CanPlaySound)
+	{
+		CanPlaySound = false;
+		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainGameInstance::ResetCanPlaySound, SoundDelay, false);
+	}
 	if (Health <= 0.f)
 	{
-		/*GetWorld()->GetFirstPlayerController()->GetCharacter()->Destroy();
-		ResetStats();
-		UGameplayStatics::OpenLevel(this, FName("MainMenu"));*/
+		//GetWorld()->GetFirstPlayerController()->GetCharacter()->Destroy();
+		//ResetStats();
+		LoadRestartGameUI();
+		//UGameplayStatics::OpenLevel(this, FName("MainMenu"));
 	}
 	UE_LOG(LogTemp, Warning, TEXT("TOOK DAMAGE IN GAME INSTANCE"))
 }
@@ -58,4 +64,9 @@ bool UMainGameInstance::GetWoodenKey()
 void UMainGameInstance::SetWoodenKey(bool KeyStatus)
 {
 	WoodenKey = KeyStatus;
+}
+
+void UMainGameInstance::ResetCanPlaySound()
+{
+	CanPlaySound = true;
 }
