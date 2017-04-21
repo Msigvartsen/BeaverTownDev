@@ -53,7 +53,7 @@ int32 UMainGameInstance::GetMinerals()
 
 void UMainGameInstance::SetHealth(float inHealth)
 {
-	Health += inHealth;
+	Health = inHealth;
 }
 
 bool UMainGameInstance::GetWoodenKey()
