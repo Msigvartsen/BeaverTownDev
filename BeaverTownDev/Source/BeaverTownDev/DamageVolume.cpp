@@ -37,14 +37,23 @@ void ADamageVolume::Tick(float DeltaTime)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("OVERLAPPING"))
 
-			if (bPeriodicDamage)
+			if (bPeriodicDamage && bActivate)
 			{
 				GameInstance->SetDamageTaken(DPS * DeltaTime);
 			}
-			else
+			else if(!bPeriodicDamage && bActivate)
 			{
 				GameInstance->SetDamageTaken(SingleDamage);
 			}
 	}
 }
 
+bool ADamageVolume::GetActivate()
+{
+	return bActivate;
+}
+
+void ADamageVolume::SetActivate(bool SetActivate)
+{
+	bActivate = SetActivate;
+}
