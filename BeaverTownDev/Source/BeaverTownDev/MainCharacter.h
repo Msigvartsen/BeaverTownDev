@@ -42,7 +42,7 @@ private:
 	void InteractReleased();
 	void GetHitResultFromLineTrace(FHitResult &HitResult, float Reach);
 	virtual void Landed(const FHitResult & Hit) override;
-	
+	void SetTextRotation(UTextRenderComponent* TextRenderComp);
 	
 	//Character Variables
 
@@ -62,18 +62,16 @@ private:
 	bool IsPushingObject = false;
 	bool bNotFalling = true;
 	float TurnInterpolationSpeed = 1000.f;
-
+	FText LootText;
 	UPROPERTY(EditAnywhere)
 		float WalkSpeed = 500.f;
 
-	UPROPERTY(EditAnywhere, Category = "Projectiles")
-		TSubclassOf<class AProjectile> ProjectileBlueprint;
-	UPROPERTY(EditAnywhere, Category = "Projectiles")
-		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;
+	class AChest* ChestRef = nullptr;
+
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundBase* HurtSound;
-
-
+	UPROPERTY(EditAnywhere, Category = "TextRender")
+		UTextRenderComponent* OverheadText;
 public:
 	//Character Getters
 
@@ -81,6 +79,6 @@ public:
 		bool GetIsInteractActive() const;
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
-	
+	void SetOverheadText();
 	USoundBase* GetHurtSound();
 };

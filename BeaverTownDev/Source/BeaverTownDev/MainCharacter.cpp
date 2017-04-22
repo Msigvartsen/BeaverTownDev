@@ -5,6 +5,7 @@
 #include "EnemyBase.h"
 #include "MainGameInstance.h"
 #include "EnemyAI.h"
+#include "Chest.h"
 #include "HealthPickups.h"
 
 AMainCharacter::AMainCharacter()
@@ -14,6 +15,11 @@ AMainCharacter::AMainCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	PlayerCamera->SetupAttachment(CameraBoom);
+
+	OverheadText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
+	OverheadText->SetupAttachment(GetRootComponent());
+	OverheadText->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+	
 }
 
 void AMainCharacter::BeginPlay()
@@ -23,6 +29,8 @@ void AMainCharacter::BeginPlay()
 	bCanJump = true;
 	SetMaxWalkSpeed(WalkSpeed);
 	GetCharacterMovement()->bNotifyApex = true;
+
+	OverheadText->SetVisibility(false);
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -31,6 +39,7 @@ void AMainCharacter::Tick(float DeltaTime)
 
 	RotateToMousePosition(DeltaTime);
 	FallingDamage();
+	SetTextRotation(OverheadText);
 	
 }
 
@@ -156,6 +165,7 @@ void AMainCharacter::Interact()
 		if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 		{
 			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+			ChestRef = Cast<AChest>(InteractObject);
 			if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
 			{
 				AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
@@ -180,6 +190,7 @@ void AMainCharacter::Interact()
 					}
 					else
 					{
+						SetOverheadText();
 						InteractObject->OpenEvent();
 					}
 				}
@@ -192,6 +203,7 @@ void AMainCharacter::Interact()
 				}
 				else
 				{
+					
 					InteractObject->OpenEvent();
 				}
 			}
@@ -291,3 +303,24 @@ USoundBase* AMainCharacter::GetHurtSound()
 	return HurtSound;
 }
 
+void AMainCharacter::SetOverheadText()
+{
+	LootText = ChestRef->GetLootText();
+	OverheadText->SetText(LootText);
+	OverheadText->SetVisibility(true);
+	UE_LOG(LogTemp,Warning,TEXT("Setting overhead Text!"))
+
+}
+
+void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)
+{
+	// rotates text so it will face the camera
+	FVector TextLocation = TextRenderComp->GetComponentLocation();
+	FVector CameraLocation = PlayerCamera->GetComponentLocation();
+	FVector End = CameraLocation - TextLocation;
+
+
+	FRotator Rotation = FRotationMatrix::MakeFromX(End).Rotator();
+	//UE_LOG(LogTemp, Warning, TEXT("Pitch::: %f  YAW:::: %f"), Rotation.Pitch, Rotation.Yaw)
+	TextRenderComp->SetWorldRotation(FRotator(Rotation.Pitch, Rotation.Yaw, 0));
+}

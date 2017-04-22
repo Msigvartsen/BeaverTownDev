@@ -12,6 +12,8 @@ class BEAVERTOWNDEV_API AChest : public AInteract
 {
 	GENERATED_BODY()
 
+private:
+	bool IsChestOpen = false;
 public:
 	//Constructor
 	AChest();
@@ -22,4 +24,11 @@ public:
 		FChestTriggerEvent ChestOpen;
 	UPROPERTY(BlueprintAssignable)
 		FChestTriggerEvent ChestClose;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FText LootTexts;
+
+	FText GetLootText() const { return LootTexts; }
+
+	bool GetIsChestOpen() const { return IsChestOpen; }
 };

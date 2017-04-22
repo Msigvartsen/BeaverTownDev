@@ -13,11 +13,15 @@ AChest::AChest()
 void AChest::OpenEvent()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Calling derived class OpenEvent"))
-	if (bIsOpenEvent == false)
-	{
-		bIsOpenEvent = true;
-		ChestOpen.Broadcast();
-	}
+		if (!IsChestOpen)
+		{
+			if (bIsOpenEvent == false)
+			{
+				bIsOpenEvent = true;
+				ChestOpen.Broadcast();
+				IsChestOpen = true;
+			}
+		}
 }
 
 void AChest::CloseEvent()
