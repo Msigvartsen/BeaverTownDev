@@ -308,8 +308,9 @@ void AMainCharacter::SetOverheadText()
 	LootText = ChestRef->GetLootText();
 	OverheadText->SetText(LootText);
 	OverheadText->SetVisibility(true);
-	UE_LOG(LogTemp,Warning,TEXT("Setting overhead Text!"))
-
+	IsTextVisible = true;
+	UE_LOG(LogTemp, Warning, TEXT("Setting overhead Text!"))
+		SetVisibilityOverheadText();
 }
 
 void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)
@@ -323,4 +324,28 @@ void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)
 	FRotator Rotation = FRotationMatrix::MakeFromX(End).Rotator();
 	//UE_LOG(LogTemp, Warning, TEXT("Pitch::: %f  YAW:::: %f"), Rotation.Pitch, Rotation.Yaw)
 	TextRenderComp->SetWorldRotation(FRotator(Rotation.Pitch, Rotation.Yaw, 0));
+}
+
+void AMainCharacter::SetVisibilityOverheadText()
+{
+	if (IsTextVisible)
+	{
+		
+		IsTextVisible = false;
+		if (GetWorld())
+		{
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMainCharacter::TimerEnd, OverheadTextDespawnTime);
+		}	
+	}
+}
+
+void AMainCharacter::TimerEnd()
+{
+	OverheadText->SetVisibility(false);
+	UE_LOG(LogTemp,Warning,TEXT("Timer ended for text!"))
+		if (GetWorld())
+		{
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		}
+	
 }
