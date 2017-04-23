@@ -141,15 +141,6 @@ void UGrabber::Release()
 
 void UGrabber::Throw()
 {
-	//// For Torch
-	//if (IsHeld && TorchToHold)
-	//{
-	//	TorchToHold->DropTorch();
-	//	TorchToHold = nullptr;
-	//	IsHeld = false;
-	//}
-
-	// For rest
 	if (PhysicsHandle && IsHeld && !TorchToHold)
 	{	
 		if (ItemToThrow)

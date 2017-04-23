@@ -27,7 +27,7 @@ private:
 	bool CanPlaySound = true;
 	FTimerHandle TimerHandle;
 	UPROPERTY(EditAnywhere)
-		float SoundDelay = 1.f;
+		float SoundDelay = 0.5f;
 	UPROPERTY(EditAnywhere)
 		USoundBase* Music;
 
