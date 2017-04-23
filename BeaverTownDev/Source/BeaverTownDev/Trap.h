@@ -6,7 +6,6 @@
 #include "Trap.generated.h"
 
 
-
 UCLASS()
 class BEAVERTOWNDEV_API ATrap : public AActor
 {
@@ -20,19 +19,14 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-
-	UPROPERTY(EditAnywhere)
-		USceneComponent* TrapRoot = nullptr;
+	
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* TrapTrigger = nullptr;
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* TrapMesh = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		UClass* ObjectToSpawn = nullptr;
 
 	bool TrapActive = true;
 
 	void TrapTriggered();
-
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<class AProjectile> ProjectileBlueprint;
 	
 };
