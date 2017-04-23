@@ -24,18 +24,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
-		bool bPeriodicDamage = false;
-	UPROPERTY(EditAnywhere)
-		float DPS = 10.f;
-	UPROPERTY(EditAnywhere)
-		float SingleDamage = 100.f;
-	UPROPERTY(EditAnywhere)
-		USceneComponent* Root = nullptr;
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* Box = nullptr;
+	UFUNCTION(BlueprintCallable, Category = "Damage")
+		bool GetActivate();
+	UFUNCTION(BlueprintCallable, Category = "Damage")
+		void SetActivate(bool SetActivate);
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		bool bPeriodicDamage = false;
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		bool bActivate = true;
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		float DPS = 10.f;
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		float SingleDamage = 100.f;
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		USceneComponent* Root = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		UBoxComponent* Box = nullptr;
+
 	UMainGameInstance* GameInstance = nullptr;
 		
 	

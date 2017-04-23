@@ -66,6 +66,7 @@ void UGrabber::Grab()
 				TorchToHold = Cast<ATorchPickup>(Actor);
 				TorchToHold->PickUpTorch();
 				IsHeld = true;
+				break;
 			}
 		}
 
@@ -108,8 +109,11 @@ void UGrabber::Release()
 	if (IsHeld && TorchToHold)
 	{
 		TorchToHold->DropTorch();
+		TorchToHold = nullptr;
+		IsHeld = false;
 	}
 
+	// For rest
 	if (PhysicsHandle)
 	{
 		if (ItemToThrow)
@@ -137,7 +141,16 @@ void UGrabber::Release()
 
 void UGrabber::Throw()
 {
-	if (PhysicsHandle && IsHeld)
+	//// For Torch
+	//if (IsHeld && TorchToHold)
+	//{
+	//	TorchToHold->DropTorch();
+	//	TorchToHold = nullptr;
+	//	IsHeld = false;
+	//}
+
+	// For rest
+	if (PhysicsHandle && IsHeld && !TorchToHold)
 	{	
 		if (ItemToThrow)
 		{
