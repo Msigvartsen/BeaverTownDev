@@ -33,7 +33,7 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	if (CanPlaySound)
 	{
 		CanPlaySound = false;
-		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
+		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 5.f, 1.f, 0.f);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainGameInstance::ResetCanPlaySound, SoundDelay, false);
 	}
 	if (Health <= 0.f)
