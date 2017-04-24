@@ -21,7 +21,7 @@ AEnemyAIController::AEnemyAIController()
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 
-	Sight->SightRadius = 100.f;
+	Sight->SightRadius = 1000.f;
 	Sight->LoseSightRadius = 1300.f;
 	Sight->PeripheralVisionAngleDegrees = 130.f;
 
