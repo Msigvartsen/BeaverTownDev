@@ -26,6 +26,7 @@ public:
 	//	void MoveCrate();
 	void MoveCrate(FVector Direction);
 	void MakeFall();
+	void StopFall();
 
 	UPROPERTY(EditAnywhere, Category = "Floating Crate Settings")
 		USceneComponent* FloatingCrateRoot = nullptr;

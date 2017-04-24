@@ -60,3 +60,8 @@ void AFloatingCrate::MakeFall()
 {
 	FloatingCrateMesh->SetConstraintMode(EDOFMode::None);
 }
+
+void AFloatingCrate::StopFall()
+{
+	FloatingCrateMesh->SetConstraintMode(EDOFMode::XYPlane);
+}

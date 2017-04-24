@@ -43,6 +43,10 @@ void AStreamCollision::Tick(float DeltaTime)
 			{
 				Crate->MakeFall();
 			}
+			if (bStopFall)
+			{
+				Crate->StopFall();
+			}
 		}
 	}
 	
