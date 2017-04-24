@@ -80,3 +80,8 @@ AActor* AEnemyAIController::GetSeeingPawn()
 
 	return object ? Cast<AActor>(object) : nullptr;
 }
+
+void AEnemyAIController::Attack()
+{
+	UE_LOG(LogTemp,Warning,TEXT("AI ATTACKING OWOW"))
+}
