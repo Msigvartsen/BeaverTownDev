@@ -30,4 +30,7 @@ public:
 		bool bHasLoot = false;
 
 	FText GetLootText() const { return LootTexts; }
+
+private:
+	bool CanBeOpened = true;
 };

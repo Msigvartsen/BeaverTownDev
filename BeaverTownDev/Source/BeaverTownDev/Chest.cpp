@@ -13,7 +13,7 @@ AChest::AChest()
 
 void AChest::OpenEvent()
 {
-	if (bIsOpenEvent == false)
+	if (bIsOpenEvent == false && CanBeOpened)
 	{
 		if (!bOpenOnce)
 		{
@@ -31,6 +31,7 @@ void AChest::OpenEvent()
 			GameInstance->SetWoodParts();
 			UE_LOG(LogTemp,Warning,TEXT("WoodParts::: %d"), GameInstance->GetWoodParts())
 		}
+		CanBeOpened = false;
 	}
 }
 
