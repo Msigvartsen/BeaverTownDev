@@ -175,7 +175,7 @@ void AMainCharacter::Interact()
 				if (HealthPickup)
 				{
 					auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-					GameInstance->SetHealth(HealthPickup->HealTarget());
+					GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
 	
 				}
 			}
