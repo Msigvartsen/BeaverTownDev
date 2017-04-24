@@ -2,6 +2,7 @@
 
 #include "BeaverTownDev.h"
 #include "MainGameInstance.h"
+#include "MainCharacter.h"
 #include "Chest.h"
 
 AChest::AChest()
@@ -28,6 +29,7 @@ void AChest::OpenEvent()
 		if (LootTexts.ToString() == TEXT("WoodPart"))
 		{
 			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
+			Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter())->SetOverheadText();
 			GameInstance->SetWoodParts();
 			UE_LOG(LogTemp,Warning,TEXT("WoodParts::: %d"), GameInstance->GetWoodParts())
 		}

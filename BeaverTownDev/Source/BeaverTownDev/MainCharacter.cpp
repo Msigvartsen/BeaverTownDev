@@ -193,7 +193,7 @@ void AMainCharacter::Interact()
 					}
 					else
 					{
-						SetOverheadText();
+						//SetOverheadText();
 						InteractObject->OpenEvent();
 					}
 				}
