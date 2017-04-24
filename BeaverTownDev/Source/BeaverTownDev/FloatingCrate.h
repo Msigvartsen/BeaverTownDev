@@ -25,14 +25,15 @@ public:
 	//UFUNCTION(BlueprintImplementableEvent, Category = "FloatingCrate")
 	//	void MoveCrate();
 	void MoveCrate(FVector Direction);
+	void MakeFall();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Floating Crate Settings")
 		USceneComponent* FloatingCrateRoot = nullptr;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Floating Crate Settings")
 		UStaticMeshComponent* FloatingCrateMesh = nullptr;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Floating Crate Settings")
 		UArrowComponent* FloatingCrateArrow = nullptr;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Floating Crate Settings")
 		float Force = 150.f;
 
 	UPrimitiveComponent* FloatingCratePrimitive = nullptr;

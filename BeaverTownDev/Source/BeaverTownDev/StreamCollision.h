@@ -28,10 +28,14 @@ public:
 		UBoxComponent* StreamCollision = nullptr;
 	UPROPERTY(EditAnywhere)
 		UArrowComponent* StreamArrow = nullptr;
-
+	UPROPERTY(EditAnywhere)
+		bool bMakeFall = false;
+	UPROPERTY(EditAnywhere)
+		bool bStopFall = false;
 
 private:
 	UBoxComponent* Collision = nullptr;
+	AFloatingCrate* Crate = nullptr;
 	
 	
 };
