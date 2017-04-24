@@ -26,6 +26,8 @@ public:
 		FText LootTexts;
 	UPROPERTY(EditAnywhere)
 		bool bOpenOnce = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bHasLoot = false;
 
 	FText GetLootText() const { return LootTexts; }
 };
