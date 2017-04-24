@@ -27,25 +27,30 @@ public:
 private:
 	// Pointer to spawning class
 	FTimerHandle TimerHandle;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		float Time = 5.f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		float TimeUntilDestruction = 10.f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		float StartTimeDelay = 0.f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		bool bRandomRange = false;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		float MaxX = 50.f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		float MinX = -50.f;
-	UPROPERTY(EditAnywhere, Category = "Spawning")
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		UClass* ObjectToSpawn = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
+		bool bLimitSpawning = false;
+	UPROPERTY(EditAnywhere, Category = "Spawning Options")
+		int SpawnLimit = 1;
 
 	AActor *SpawnedActor = nullptr;
 	FVector SpawnLocation;
 	FRotator SpawnRotation;
 	bool bCanSpawn = true;
+	int ActorsSpawned = 0;
 	
 
 };

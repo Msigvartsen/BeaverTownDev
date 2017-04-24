@@ -27,7 +27,6 @@ void ASpawner::Tick(float DeltaTime)
 	if (bRandomRange)
 	{
 		SpawnLocation = GetActorLocation() + (GetActorForwardVector() * FMath::FRandRange(MinX, MaxX));
-		//SpawnLocation.X += FMath::FRandRange(MinX, MaxX);
 	}
 	else
 	{
@@ -36,6 +35,15 @@ void ASpawner::Tick(float DeltaTime)
 
 	if (bCanSpawn && GetWorld()->GetTimeSeconds() > StartTimeDelay)
 	{
+		ActorsSpawned++;
+		if (bLimitSpawning)
+		{
+			if (ActorsSpawned >= SpawnLimit)
+			{
+				bCanSpawn = false;
+				return;
+			}
+		}
 		bCanSpawn = false;
 		if (ObjectToSpawn)
 		{
