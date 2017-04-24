@@ -65,7 +65,8 @@ private:
 	bool bCanJump;	
 	bool bIsInteractActive = false;
 	bool IsPushingObject = false;
-	bool bNotFalling = true;
+	bool bFalling = false;
+	bool bCanTakeFallingDamage = false;
 	float TurnInterpolationSpeed = 1000.f;
 	bool IsTextVisible = false;
 	FText LootText;

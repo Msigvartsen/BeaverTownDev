@@ -114,11 +114,12 @@ void AMainCharacter::JumpReleased()
 
 void AMainCharacter::FallingDamage()
 {
-	if (bNotFalling && GetCharacterMovement()->IsFalling() && GetVelocity().Z < 0.f)
+	if (!bFalling && GetCharacterMovement()->IsFalling() && GetVelocity().Z < 0.f)
 	{
+		bFalling = true;
+		bCanTakeFallingDamage = true;
 		StartJumpTime = GetWorld()->GetTimeSeconds();
-		bNotFalling = false;
-		UE_LOG(LogTemp, Warning, TEXT("STARTING TIMER!"));
+		UE_LOG(LogTemp, Warning, TEXT("STARTING TIMER AT: %f"), StartJumpTime);
 	}
 }
 
@@ -126,7 +127,7 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 {
 	UE_LOG(LogTemp, Warning, TEXT("LANDED!"));
 	bCanJump = true;
-	bNotFalling = true;
+	bFalling = false;
 	EndJumpTime = GetWorld()->GetTimeSeconds();
 	float SecondsInAir = EndJumpTime - StartJumpTime;
 	if (SecondsInAir > 0.7f && GetVelocity().Z < 0.f)
@@ -134,10 +135,11 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 		SecondsInAir++;
 		float HealthLost = FMath::Pow(SecondsInAir, 5.f);
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-		if (GameInstance)
+		if (GameInstance && bCanTakeFallingDamage)
 		{
 			//GameInstance keeps track of player stats
 			GameInstance->SetDamageTaken(HealthLost);
+			bCanTakeFallingDamage = false;
 		}
 		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), HealthLost);
 		UE_LOG(LogTemp, Warning, TEXT("SECONDS IN AIR: %f! , END JUMP TIME %f, START JUMP TIME: %f"), SecondsInAir, EndJumpTime, StartJumpTime);
@@ -145,6 +147,7 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("NO FALLING DAMAGE!"));
+		bCanTakeFallingDamage = false;
 	}
 }
 
