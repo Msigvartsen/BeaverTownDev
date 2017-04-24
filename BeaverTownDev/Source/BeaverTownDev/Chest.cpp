@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
+#include "MainGameInstance.h"
 #include "Chest.h"
 
 AChest::AChest()
@@ -19,6 +20,17 @@ void AChest::OpenEvent()
 			bIsOpenEvent = true;
 		}
 		ChestOpen.Broadcast();
+		if (LootTexts.ToString() == TEXT("WoodenKey"))
+		{
+			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
+			GameInstance->SetWoodenKey(true);
+		}
+		if (LootTexts.ToString() == TEXT("WoodPart"))
+		{
+			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
+			GameInstance->SetWoodParts();
+			UE_LOG(LogTemp,Warning,TEXT("WoodParts::: %d"), GameInstance->GetWoodParts())
+		}
 	}
 }
 

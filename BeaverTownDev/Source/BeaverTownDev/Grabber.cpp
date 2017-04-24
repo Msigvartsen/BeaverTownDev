@@ -95,7 +95,7 @@ void UGrabber::Grab()
 			if (Char)
 			{
 				Char->SetIsPushingObject(true);
-				Char->SetMaxWalkSpeed(150.f);
+				Char->SetMaxWalkSpeed(250.f);
 				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation() + FVector(0,0,-50.f));
 				IsHeld = true;
 			}			

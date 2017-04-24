@@ -30,6 +30,10 @@ private:
 		float SoundDelay = 0.5f;
 	UPROPERTY(EditAnywhere)
 		USoundBase* Music;
+	//Used for building a bridge in level2
+	UPROPERTY(EditAnywhere)
+		int32 WoodParts;
+
 
 public:
 
@@ -44,6 +48,12 @@ public:
 		float GetMaxHealth() { return MaxHealth; }
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void ResetHealth(float inHealth);
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void SetHealthIncrease(float inHealth);
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetDamageTaken(float Damage);
 
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
@@ -53,8 +63,11 @@ public:
 		int32 GetMinerals();
 
 	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
-		void SetHealth(float inHealth);
-	
+		int32 GetWoodParts() { return WoodParts; }
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void SetWoodParts() { WoodParts++; };
+
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		bool GetWoodenKey();
 

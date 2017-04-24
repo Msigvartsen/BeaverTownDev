@@ -51,7 +51,12 @@ int32 UMainGameInstance::GetMinerals()
 	return Minerals;
 }
 
-void UMainGameInstance::SetHealth(float inHealth)
+void UMainGameInstance::SetHealthIncrease(float inHealth)
+{
+	Health += inHealth;
+}
+
+void UMainGameInstance::ResetHealth(float inHealth)
 {
 	Health = inHealth;
 }
