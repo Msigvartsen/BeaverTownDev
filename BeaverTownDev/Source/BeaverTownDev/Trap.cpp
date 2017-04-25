@@ -35,6 +35,7 @@ void ATrap::TrapTriggered()
 	{	
 		UE_LOG(LogTemp,Warning,TEXT("Trap triggered!"))
 		GetWorld()->SpawnActor<AActor>(ObjectToSpawn, GetActorLocation() + GetActorForwardVector() *100.f, GetActorRotation());
+		UGameplayStatics::PlaySound2D(GetWorld(), TriggerSound, 1.f, 1.f, 0.f);	
 		TrapActive = false;
 	}
 }

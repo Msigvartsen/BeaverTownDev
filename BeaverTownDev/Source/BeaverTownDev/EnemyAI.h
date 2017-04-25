@@ -11,35 +11,39 @@ class BEAVERTOWNDEV_API AEnemyAI : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	
 	AEnemyAI();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
+protected:
+	
+	virtual void BeginPlay() override;
+
+
 private:
 	
+	UPROPERTY(EditAnywhere,Category = "AI")
 	float MaxHealth = 100.f;
 	float Health = MaxHealth;
-
+	UPROPERTY(EditAnywhere, Category = "AI")
+		float AIDamage = 30.f;
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
+	bool CanAttack = false;
 
-protected:
-	UFUNCTION(BlueprintCallable, Category = "AI")
-		void AIAttack();
+	UPROPERTY(EditDefaultsOnly)
+	USphereComponent* AttackRange = nullptr;
+
+	class AMainCharacter* Player = nullptr;
+
 
 public:
 	//Getters
@@ -51,4 +55,10 @@ public:
 
 	UFUNCTION()
 	int32 GetWaypointIndex() const { return WaypointIndex; }
+
+	UFUNCTION()
+		float GetAIDamage() const { return AIDamage; }
+
+	UFUNCTION()
+		bool GetCanAttack() const { return CanAttack; }
 };
