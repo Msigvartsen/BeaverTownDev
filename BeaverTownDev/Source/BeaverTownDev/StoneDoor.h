@@ -22,9 +22,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "RollingDoor")
-		void OpenDoor();
-	UFUNCTION(BlueprintImplementableEvent, Category = "RollingDoor")
-		void CloseDoor();
+	//UFUNCTION(BlueprintImplementableEvent, Category = "RollingDoor")
+	//	void OpenDoor();
+	//UFUNCTION(BlueprintImplementableEvent, Category = "RollingDoor")
+	//	void CloseDoor();
 	
 };
