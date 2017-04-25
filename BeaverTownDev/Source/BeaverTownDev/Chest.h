@@ -22,6 +22,7 @@ public:
 		FChestTriggerEvent ChestOpen;
 	UPROPERTY(BlueprintAssignable)
 		FChestTriggerEvent ChestClose;
+	// "WoodPart" 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 		FText LootTexts;
 	UPROPERTY(EditAnywhere)

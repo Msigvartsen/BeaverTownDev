@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
+#include "MainCharacter.h"
 #include "Spawner.h"
 
 
@@ -45,6 +46,8 @@ void ASpawner::Tick(float DeltaTime)
 			}
 		}
 		bCanSpawn = false;
+		
+			
 		if (ObjectToSpawn)
 		{
 			SpawnRotation = GetActorRotation();
@@ -59,4 +62,3 @@ void ASpawner::ResetTimer()
 {
 	bCanSpawn = true;
 }
-

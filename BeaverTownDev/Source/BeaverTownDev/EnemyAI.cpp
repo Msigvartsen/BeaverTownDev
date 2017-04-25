@@ -16,6 +16,7 @@ AEnemyAI::AEnemyAI()
 void AEnemyAI::BeginPlay()
 {
 	Super::BeginPlay();
+	Health = MaxHealth;
 	Player = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
@@ -35,6 +36,7 @@ void AEnemyAI::Tick(float DeltaTime)
 
 	if (Health <= 0)
 	{	
+		IsAlive = false;
 		Destroy();
 	}
 

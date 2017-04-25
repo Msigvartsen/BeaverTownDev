@@ -34,8 +34,9 @@ void ATrap::TrapTriggered()
 	if (TrapTrigger->IsOverlappingActor(MainCharacter))
 	{	
 		UE_LOG(LogTemp,Warning,TEXT("Trap triggered!"))
-		GetWorld()->SpawnActor<AActor>(ObjectToSpawn, GetActorLocation() + GetActorForwardVector() *100.f, GetActorRotation());
-		UGameplayStatics::PlaySound2D(GetWorld(), TriggerSound, 1.f, 1.f, 0.f);	
+		AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ObjectToSpawn, GetActorLocation() + GetActorForwardVector() *100.f, GetActorRotation());
+		SpawnedActor->SetLifeSpan(Lifetime);
+		UGameplayStatics::PlaySound2D(GetWorld(), TriggerSound, 1.f, 1.f, 0.f);
 		TrapActive = false;
 	}
 }

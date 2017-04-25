@@ -14,7 +14,7 @@ void ACrate::OpenEvent()
 	UE_LOG(LogTemp, Warning, TEXT("Calling Crate OpenEvent"))
 
 	// Takes damage
-	Health -= 25;
+	Health -= 50;
 	if (Health <= 0)
 	{
 		bIsBroken = true;
