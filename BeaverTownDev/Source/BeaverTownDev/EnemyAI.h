@@ -32,7 +32,7 @@ private:
 	
 	float MaxHealth = 100.f;
 	float Health = MaxHealth;
-
+	
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
@@ -51,4 +51,5 @@ public:
 
 	UFUNCTION()
 	int32 GetWaypointIndex() const { return WaypointIndex; }
+
 };

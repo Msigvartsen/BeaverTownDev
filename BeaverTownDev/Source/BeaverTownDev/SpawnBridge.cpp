@@ -26,7 +26,7 @@ void ASpawnBridge::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	PlayerCollectedWood = Cast<UMainGameInstance>(GetGameInstance())->GetWoodParts();
-	if (PlayerCollectedWood == BridgeIndex)
+	if (PlayerCollectedWood >= BridgeIndex)
 	{
 		BuildBridge();
 	}

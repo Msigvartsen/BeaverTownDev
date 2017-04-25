@@ -6,9 +6,7 @@
 
 AEnemyAI::AEnemyAI()
 {
- 
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AEnemyAI::BeginPlay()
@@ -22,8 +20,8 @@ void AEnemyAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Health < 0)
-	{
+	if (Health <= 0)
+	{	
 		Destroy();
 	}
 
