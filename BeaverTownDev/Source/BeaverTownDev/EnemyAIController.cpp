@@ -21,10 +21,10 @@ AEnemyAIController::AEnemyAIController()
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-
-	Sight->SightRadius = 1000.f;
-	Sight->LoseSightRadius = 1300.f;
-	Sight->PeripheralVisionAngleDegrees = 130.f;
+	
+	Sight->SightRadius = 900.f;
+	Sight->LoseSightRadius = 1200.f;
+	Sight->PeripheralVisionAngleDegrees = 120.F;
 
 	//Setting Sight sense to detect anything
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
@@ -49,6 +49,7 @@ void AEnemyAIController::Possess(APawn* Pawn)
 		if (EnemyAI->BehaviorTree->BlackboardAsset)
 		{
 			BlackboardComp->InitializeBlackboard(*(EnemyAI->BehaviorTree->BlackboardAsset));
+			
 		}
 
 		//Finds all actors of set class, and puts them into an Array (BotTargetPoints) 
@@ -89,11 +90,11 @@ void AEnemyAIController::Attack()
 	if (GameInstance)
 	{
 		
-			if (EnemyAI->GetCanAttack())
-			{
-				GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
-				UE_LOG(LogTemp, Warning, TEXT("AI Dealing damage"))
-			}
+		if (EnemyAI->GetCanAttack())
+		{
+			GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
+			UE_LOG(LogTemp, Warning, TEXT("AI Dealing damage"))
+		}
 		
 	}
 }

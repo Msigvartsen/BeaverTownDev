@@ -46,7 +46,6 @@ private:
 	//Sight sense config for AI
 	UAISenseConfig_Sight* Sight;
 
-	
 
 public:
 

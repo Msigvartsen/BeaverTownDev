@@ -46,4 +46,9 @@ void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void AEnemyAI::SetTakeDamage(float Damage)
+{
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HurtSound,GetActorLocation(),1.f,1.f,0.f);
+	Health -= Damage;
+}
 

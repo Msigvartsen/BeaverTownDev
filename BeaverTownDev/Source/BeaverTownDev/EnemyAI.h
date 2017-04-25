@@ -37,6 +37,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
+
 	bool CanAttack = false;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -44,14 +45,18 @@ private:
 
 	class AMainCharacter* Player = nullptr;
 
+	UPROPERTY(EditAnywhere)
+		USoundBase* HurtSound;
 
 public:
+
 	//Getters
+
 	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
 	float GetHealthPercent() const { return Health / MaxHealth; }
 	
-	UFUNCTION(BlueprintCallable,Category = "AI")
-	void SetTakeDamage(float Damage) { Health -= Damage; }
+	UFUNCTION(BlueprintCallable, Category = "AI")
+		void SetTakeDamage(float Damage);
 
 	UFUNCTION()
 	int32 GetWaypointIndex() const { return WaypointIndex; }
