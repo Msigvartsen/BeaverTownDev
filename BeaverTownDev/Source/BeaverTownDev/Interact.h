@@ -31,13 +31,17 @@ public:
 	float GetMinOpenAngle();
 
 protected:
-	bool bIsOpenEvent = false;
-	bool bOnlyInteractFromAngle = false;
-	bool bCanBeDamaged = false;
+	UPROPERTY(BlueprintReadWrite)
+		bool bIsOpenEvent = false;
+	UPROPERTY(BlueprintReadWrite)
+		bool bOnlyInteractFromAngle = false;
 	UPROPERTY(EditAnywhere)
 		float MaxOpenAngle = 0;
 	UPROPERTY(EditAnywhere)
 		float MinOpenAngle = 0;
+
+	bool bCanBeDamaged = false;
+
 private:
 	UPROPERTY(EditAnywhere)
 		USceneComponent * MainRoot = nullptr;

@@ -41,10 +41,7 @@ EBTNodeResult::Type UTargetPointSelectionTask::ExecuteTask(UBehaviorTreeComponen
 
 
 		} while (CurrentPoint == NextTargetPoint);
-		
-			//Update value of blackboard key
-			//BlackboardComp->SetValueAsObject("LocationToGo", NextTargetPoint);
-
+	
 			//return Successfull task
 			AIController->GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = 150.f;
 			return EBTNodeResult::Succeeded;

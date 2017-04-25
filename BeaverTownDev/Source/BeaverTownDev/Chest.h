@@ -22,4 +22,16 @@ public:
 		FChestTriggerEvent ChestOpen;
 	UPROPERTY(BlueprintAssignable)
 		FChestTriggerEvent ChestClose;
+	// "WoodPart" 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+		FText LootTexts;
+	UPROPERTY(EditAnywhere)
+		bool bOpenOnce = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bHasLoot = false;
+
+	FText GetLootText() const { return LootTexts; }
+
+private:
+	bool CanBeOpened = true;
 };

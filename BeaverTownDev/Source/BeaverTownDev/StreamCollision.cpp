@@ -37,8 +37,16 @@ void AStreamCollision::Tick(float DeltaTime)
 	{
 		if (Actor->GetClass()->IsChildOf(AFloatingCrate::StaticClass()))
 		{
-			auto Crate = Cast<AFloatingCrate>(Actor);
+			Crate = Cast<AFloatingCrate>(Actor);
 			Crate->MoveCrate(GetActorForwardVector());
+			if (bMakeFall)
+			{
+				Crate->MakeFall();
+			}
+			if (bStopFall)
+			{
+				Crate->StopFall();
+			}
 		}
 	}
 	

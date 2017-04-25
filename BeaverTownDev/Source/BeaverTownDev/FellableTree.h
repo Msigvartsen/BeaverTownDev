@@ -18,9 +18,13 @@ public:
 
 	virtual void OpenEvent() override;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "Tree")
 		FFellTree TreeOpen;
+	UPROPERTY(EditAnywhere, Category = "Tree")
+		int32 Health = 100;
+	UFUNCTION(BlueprintImplementableEvent, Category = "Tree")
+		void PlayChopSound();
 
-	UPROPERTY(EditAnywhere)
-		int32 Health = 100;	
+private:
+	bool bCanFall = true;
 };

@@ -32,7 +32,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName LocationToGoKey;
 	
-		
+	AEnemyAI* EnemyAI = nullptr;
 
 	TArray<AActor*> BotTargetPoints;
 
@@ -42,10 +42,10 @@ private:
 	UFUNCTION()
 		void OnPerceptionUpdated(TArray<AActor*> UpdatedActors);
 
+	
 	//Sight sense config for AI
 	UAISenseConfig_Sight* Sight;
 
-	
 
 public:
 
@@ -56,6 +56,7 @@ public:
 
 	AActor* GetSeeingPawn();
 
-	
+	UFUNCTION()
+		void Attack();
 	
 };

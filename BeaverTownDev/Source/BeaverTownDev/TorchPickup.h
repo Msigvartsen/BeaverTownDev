@@ -34,20 +34,6 @@ public:
 		bool IsHeld = false;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		bool IsLit;
-
-	//UPROPERTY(EditAnywhere, Category = "TorchSetup")
-	//	USceneComponent* TorchRoot = nullptr;
-	//UPROPERTY(EditAnywhere, Category = "TorchSetup")
-	//	UStaticMeshComponent* TorchMesh = nullptr;
-	//UPROPERTY(EditAnywhere, Category = "TorchSetup")
-	//	UPointLightComponent* TorchLight = nullptr;
-	//UPROPERTY(EditAnywhere, Category = "TorchSetup")
-	//	UBoxComponent* TorchOverlap = nullptr;
-	//UPROPERTY(EditAnywhere, Category = "TorchSetup")
-	//	UCapsuleComponent* TorchCollision = nullptr;
-	//UPROPERTY(EditAnywhere, Category = "TorchSetup")
-	//	USphereComponent* TorchIgniteOverlap = nullptr;
-
 	UFUNCTION(BlueprintImplementableEvent, Category = "Torch")
 		void PickUpTorch();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Torch")

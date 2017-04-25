@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
+#include "MainGameInstance.h"
+#include "MainCharacter.h"
 #include "Chest.h"
 
 AChest::AChest()
@@ -12,17 +14,33 @@ AChest::AChest()
 
 void AChest::OpenEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Calling derived class OpenEvent"))
-	if (bIsOpenEvent == false)
+	if (bIsOpenEvent == false && CanBeOpened)
 	{
-		bIsOpenEvent = true;
+		if (!bOpenOnce)
+		{
+			bIsOpenEvent = true;
+		}
 		ChestOpen.Broadcast();
+		if (LootTexts.ToString() == TEXT("WoodKey"))
+		{
+			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
+			Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter())->SetOverheadText();
+			GameInstance->SetWoodenKey(true);
+			UE_LOG(LogTemp, Warning, TEXT("wOODKEY"))
+		}
+		if (LootTexts.ToString() == TEXT("WoodPart"))
+		{
+			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
+			Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter())->SetOverheadText();
+			GameInstance->SetWoodParts();
+			UE_LOG(LogTemp,Warning,TEXT("WoodParts::: %d"), GameInstance->GetWoodParts())
+		}
+		CanBeOpened = false;
 	}
 }
 
 void AChest::CloseEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Calling derived class CloseEvent"))
 	if (bIsOpenEvent == true)
 	{
 		bIsOpenEvent = false;

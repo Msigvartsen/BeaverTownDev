@@ -45,9 +45,6 @@ void AFloatingCrate::Tick(float DeltaTime)
 
 void AFloatingCrate::MoveCrate(FVector Direction)
 {
-	//FVector ForceApplied = Direction * Force;
-	//FVector ForceApplied = FVector(900.f, 900.f, 900.f);
-
 	FVector ForceApplied = Direction * FloatingCrateMesh->GetMass() * Force;
 	FVector Location = FloatingCrateMesh->GetSocketLocation(FName("SpawnLocation"));
 
@@ -57,4 +54,14 @@ void AFloatingCrate::MoveCrate(FVector Direction)
 		FloatingCratePrimitive->AddForceAtLocation(ForceApplied, Location);
 	}
 	
+}
+
+void AFloatingCrate::MakeFall()
+{
+	FloatingCrateMesh->SetConstraintMode(EDOFMode::None);
+}
+
+void AFloatingCrate::StopFall()
+{
+	FloatingCrateMesh->SetConstraintMode(EDOFMode::XYPlane);
 }

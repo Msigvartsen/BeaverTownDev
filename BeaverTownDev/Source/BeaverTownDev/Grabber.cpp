@@ -66,6 +66,7 @@ void UGrabber::Grab()
 				TorchToHold = Cast<ATorchPickup>(Actor);
 				TorchToHold->PickUpTorch();
 				IsHeld = true;
+				break;
 			}
 		}
 
@@ -94,7 +95,7 @@ void UGrabber::Grab()
 			if (Char)
 			{
 				Char->SetIsPushingObject(true);
-				Char->SetMaxWalkSpeed(150.f);
+				Char->SetMaxWalkSpeed(250.f);
 				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation() + FVector(0,0,-50.f));
 				IsHeld = true;
 			}			
@@ -108,8 +109,11 @@ void UGrabber::Release()
 	if (IsHeld && TorchToHold)
 	{
 		TorchToHold->DropTorch();
+		TorchToHold = nullptr;
+		IsHeld = false;
 	}
 
+	// For rest
 	if (PhysicsHandle)
 	{
 		if (ItemToThrow)
@@ -137,7 +141,7 @@ void UGrabber::Release()
 
 void UGrabber::Throw()
 {
-	if (PhysicsHandle && IsHeld)
+	if (PhysicsHandle && IsHeld && !TorchToHold)
 	{	
 		if (ItemToThrow)
 		{

@@ -1,22 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
+#include "MainCharacter.h"
+#include "MainGameInstance.h"
 #include "EnemyAI.h"
 
 
-// Sets default values
 AEnemyAI::AEnemyAI()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	AttackRange = CreateDefaultSubobject<USphereComponent>(TEXT("AttackRange"));
+	AttackRange->SetupAttachment(GetRootComponent());
 }
 
-// Called when the game starts or when spawned
 void AEnemyAI::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Health = MaxHealth;
+	Player = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
 // Called every frame
@@ -24,17 +25,32 @@ void AEnemyAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (AttackRange->IsOverlappingActor(Player))
+	{
+		CanAttack = true;
+	}
+	else
+	{
+		CanAttack = false;
+	}
+
+	if (Health <= 0)
+	{	
+		IsAlive = false;
+		Destroy();
+	}
+
 }
 
-// Called to bind functionality to input
 void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
 
-void AEnemyAI::AIAttack()
+void AEnemyAI::SetTakeDamage(float Damage)
 {
-	UE_LOG(LogTemp,Warning,TEXT("AI ATTACKING"))
-
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HurtSound,GetActorLocation(),1.f,1.f,0.f);
+	Health -= Damage;
 }
+

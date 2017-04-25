@@ -42,8 +42,9 @@ private:
 	void InteractReleased();
 	void GetHitResultFromLineTrace(FHitResult &HitResult, float Reach);
 	virtual void Landed(const FHitResult & Hit) override;
-	
-	
+	void SetTextRotation(UTextRenderComponent* TextRenderComp);
+	void SetVisibilityOverheadText();
+	void TimerEnd();
 	//Character Variables
 
 	UPROPERTY(EditAnywhere,Category="CharacterStats")
@@ -54,26 +55,31 @@ private:
 		float MeleeRange = 75.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float MeleeDamage = 50.f;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+		float OverheadTextDespawnTime = 2.f;
+
+	FTimerHandle TimerHandle;
 
 	float StartJumpTime = 0;
 	float EndJumpTime = 0;
 	bool bCanJump;	
 	bool bIsInteractActive = false;
 	bool IsPushingObject = false;
-	bool bNotFalling = true;
+	bool bFalling = false;
+	bool bCanTakeFallingDamage = false;
 	float TurnInterpolationSpeed = 1000.f;
-
+	bool IsTextVisible = false;
+	FText LootText;
+	
 	UPROPERTY(EditAnywhere)
 		float WalkSpeed = 500.f;
 
-	UPROPERTY(EditAnywhere, Category = "Projectiles")
-		TSubclassOf<class AProjectile> ProjectileBlueprint;
-	UPROPERTY(EditAnywhere, Category = "Projectiles")
-		TSubclassOf<class AComplexProjectile> ComplexProjectileBlueprint;
+	class AChest* ChestRef = nullptr;
+
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundBase* HurtSound;
-
-
+	UPROPERTY(EditAnywhere, Category = "TextRender")
+		UTextRenderComponent* OverheadText;
 public:
 	//Character Getters
 
@@ -81,6 +87,7 @@ public:
 		bool GetIsInteractActive() const;
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
-	
+	void SetOverheadText();
 	USoundBase* GetHurtSound();
+
 };

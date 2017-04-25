@@ -46,7 +46,7 @@ void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 		if (GameInstance)
 		{
-			GameInstance->SetMinerals(1);
+			GameInstance->SetHealthIncrease(10);
 			PlaySoundWhenPickup.Broadcast();
 			Destroy();
 		}

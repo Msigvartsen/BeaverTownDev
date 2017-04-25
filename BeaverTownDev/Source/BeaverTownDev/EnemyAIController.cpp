@@ -7,6 +7,7 @@
 #include "BotTargetPoint.h"
 #include "EnemyAI.h"
 #include "MainCharacter.h"
+#include "MainGameInstance.h"
 #include "EnemyAIController.h"
 
 
@@ -20,10 +21,10 @@ AEnemyAIController::AEnemyAIController()
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-
-	Sight->SightRadius = 100.f;
-	Sight->LoseSightRadius = 1300.f;
-	Sight->PeripheralVisionAngleDegrees = 130.f;
+	
+	Sight->SightRadius = 900.f;
+	Sight->LoseSightRadius = 1200.f;
+	Sight->PeripheralVisionAngleDegrees = 120.F;
 
 	//Setting Sight sense to detect anything
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
@@ -40,7 +41,7 @@ void AEnemyAIController::Possess(APawn* Pawn)
 {
 	Super::Possess(Pawn);
 
-	AEnemyAI* EnemyAI = Cast<AEnemyAI>(Pawn);
+	EnemyAI = Cast<AEnemyAI>(Pawn);
 
 	if (EnemyAI)
 	{
@@ -48,6 +49,7 @@ void AEnemyAIController::Possess(APawn* Pawn)
 		if (EnemyAI->BehaviorTree->BlackboardAsset)
 		{
 			BlackboardComp->InitializeBlackboard(*(EnemyAI->BehaviorTree->BlackboardAsset));
+			
 		}
 
 		//Finds all actors of set class, and puts them into an Array (BotTargetPoints) 
@@ -79,4 +81,20 @@ AActor* AEnemyAIController::GetSeeingPawn()
 	UObject* object = BlackboardComp->GetValueAsObject(BlackboardPlayerKey);
 
 	return object ? Cast<AActor>(object) : nullptr;
+}
+
+void AEnemyAIController::Attack()
+{
+	UE_LOG(LogTemp,Warning,TEXT("AI ATTACKING OWOW"))
+	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
+		
+		if (EnemyAI->GetCanAttack())
+		{
+			GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
+			UE_LOG(LogTemp, Warning, TEXT("AI Dealing damage"))
+		}
+		
+	}
 }

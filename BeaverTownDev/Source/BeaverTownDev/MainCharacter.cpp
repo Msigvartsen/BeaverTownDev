@@ -5,6 +5,7 @@
 #include "EnemyBase.h"
 #include "MainGameInstance.h"
 #include "EnemyAI.h"
+#include "Chest.h"
 #include "HealthPickups.h"
 
 AMainCharacter::AMainCharacter()
@@ -14,6 +15,11 @@ AMainCharacter::AMainCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	PlayerCamera->SetupAttachment(CameraBoom);
+
+	OverheadText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
+	OverheadText->SetupAttachment(GetRootComponent());
+	OverheadText->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+	
 }
 
 void AMainCharacter::BeginPlay()
@@ -23,6 +29,8 @@ void AMainCharacter::BeginPlay()
 	bCanJump = true;
 	SetMaxWalkSpeed(WalkSpeed);
 	GetCharacterMovement()->bNotifyApex = true;
+
+	OverheadText->SetVisibility(false);
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -31,6 +39,7 @@ void AMainCharacter::Tick(float DeltaTime)
 
 	RotateToMousePosition(DeltaTime);
 	FallingDamage();
+	SetTextRotation(OverheadText);
 	
 }
 
@@ -105,11 +114,12 @@ void AMainCharacter::JumpReleased()
 
 void AMainCharacter::FallingDamage()
 {
-	if (bNotFalling && GetCharacterMovement()->IsFalling() && GetVelocity().Z < 0.f)
+	if (!bFalling && GetCharacterMovement()->IsFalling() && GetVelocity().Z < 0.f)
 	{
+		bFalling = true;
+		bCanTakeFallingDamage = true;
 		StartJumpTime = GetWorld()->GetTimeSeconds();
-		bNotFalling = false;
-		UE_LOG(LogTemp, Warning, TEXT("STARTING TIMER!"));
+		UE_LOG(LogTemp, Warning, TEXT("STARTING TIMER AT: %f"), StartJumpTime);
 	}
 }
 
@@ -117,7 +127,7 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 {
 	UE_LOG(LogTemp, Warning, TEXT("LANDED!"));
 	bCanJump = true;
-	bNotFalling = true;
+	bFalling = false;
 	EndJumpTime = GetWorld()->GetTimeSeconds();
 	float SecondsInAir = EndJumpTime - StartJumpTime;
 	if (SecondsInAir > 0.7f && GetVelocity().Z < 0.f)
@@ -125,10 +135,11 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 		SecondsInAir++;
 		float HealthLost = FMath::Pow(SecondsInAir, 5.f);
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-		if (GameInstance)
+		if (GameInstance && bCanTakeFallingDamage)
 		{
 			//GameInstance keeps track of player stats
 			GameInstance->SetDamageTaken(HealthLost);
+			bCanTakeFallingDamage = false;
 		}
 		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), HealthLost);
 		UE_LOG(LogTemp, Warning, TEXT("SECONDS IN AIR: %f! , END JUMP TIME %f, START JUMP TIME: %f"), SecondsInAir, EndJumpTime, StartJumpTime);
@@ -136,6 +147,7 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("NO FALLING DAMAGE!"));
+		bCanTakeFallingDamage = false;
 	}
 }
 
@@ -156,13 +168,14 @@ void AMainCharacter::Interact()
 		if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 		{
 			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+			ChestRef = Cast<AChest>(InteractObject);
 			if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
 			{
 				AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
 				if (HealthPickup)
 				{
 					auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-					GameInstance->SetHealth(HealthPickup->HealTarget());
+					GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
 	
 				}
 			}
@@ -180,6 +193,7 @@ void AMainCharacter::Interact()
 					}
 					else
 					{
+						//SetOverheadText();
 						InteractObject->OpenEvent();
 					}
 				}
@@ -192,6 +206,7 @@ void AMainCharacter::Interact()
 				}
 				else
 				{
+					
 					InteractObject->OpenEvent();
 				}
 			}
@@ -291,3 +306,49 @@ USoundBase* AMainCharacter::GetHurtSound()
 	return HurtSound;
 }
 
+void AMainCharacter::SetOverheadText()
+{
+	LootText = ChestRef->GetLootText();
+	OverheadText->SetText(LootText);
+	OverheadText->SetVisibility(true);
+	IsTextVisible = true;
+	UE_LOG(LogTemp, Warning, TEXT("Setting overhead Text!"))
+	SetVisibilityOverheadText();
+}
+
+void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)
+{
+	// rotates text so it will face the camera
+	FVector TextLocation = TextRenderComp->GetComponentLocation();
+	FVector CameraLocation = PlayerCamera->GetComponentLocation();
+	FVector End = CameraLocation - TextLocation;
+
+
+	FRotator Rotation = FRotationMatrix::MakeFromX(End).Rotator();
+	//UE_LOG(LogTemp, Warning, TEXT("Pitch::: %f  YAW:::: %f"), Rotation.Pitch, Rotation.Yaw)
+	TextRenderComp->SetWorldRotation(FRotator(Rotation.Pitch, Rotation.Yaw, 0));
+}
+
+void AMainCharacter::SetVisibilityOverheadText()
+{
+	if (IsTextVisible)
+	{
+		
+		IsTextVisible = false;
+		if (GetWorld())
+		{
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMainCharacter::TimerEnd, OverheadTextDespawnTime);
+		}	
+	}
+}
+
+void AMainCharacter::TimerEnd()
+{
+	OverheadText->SetVisibility(false);
+	UE_LOG(LogTemp,Warning,TEXT("Timer ended for text!"))
+		if (GetWorld())
+		{
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		}
+	
+}
