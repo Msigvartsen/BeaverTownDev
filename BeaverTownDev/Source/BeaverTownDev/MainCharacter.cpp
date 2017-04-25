@@ -313,7 +313,7 @@ void AMainCharacter::SetOverheadText()
 	OverheadText->SetVisibility(true);
 	IsTextVisible = true;
 	UE_LOG(LogTemp, Warning, TEXT("Setting overhead Text!"))
-		SetVisibilityOverheadText();
+	SetVisibilityOverheadText();
 }
 
 void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)

@@ -7,6 +7,7 @@
 #include "BotTargetPoint.h"
 #include "EnemyAI.h"
 #include "MainCharacter.h"
+#include "MainGameInstance.h"
 #include "EnemyAIController.h"
 
 
@@ -40,7 +41,7 @@ void AEnemyAIController::Possess(APawn* Pawn)
 {
 	Super::Possess(Pawn);
 
-	AEnemyAI* EnemyAI = Cast<AEnemyAI>(Pawn);
+	EnemyAI = Cast<AEnemyAI>(Pawn);
 
 	if (EnemyAI)
 	{
@@ -84,4 +85,15 @@ AActor* AEnemyAIController::GetSeeingPawn()
 void AEnemyAIController::Attack()
 {
 	UE_LOG(LogTemp,Warning,TEXT("AI ATTACKING OWOW"))
+	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
+		
+			if (EnemyAI->GetCanAttack())
+			{
+				GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
+				UE_LOG(LogTemp, Warning, TEXT("AI Dealing damage"))
+			}
+		
+	}
 }

@@ -32,7 +32,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName LocationToGoKey;
 	
-		
+	AEnemyAI* EnemyAI = nullptr;
 
 	TArray<AActor*> BotTargetPoints;
 

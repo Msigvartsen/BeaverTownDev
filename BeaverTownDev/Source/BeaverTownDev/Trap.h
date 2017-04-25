@@ -19,13 +19,13 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	
+	UPROPERTY(EditAnywhere, Category = "Sound")
+		USoundBase* TriggerSound;
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* TrapTrigger = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		UClass* ObjectToSpawn = nullptr;
-	UPROPERTY(EditAnywhere)
-		float Lifetime = 0;
+
 	bool TrapActive = true;
 
 	void TrapTriggered();
