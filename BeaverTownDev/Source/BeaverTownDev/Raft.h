@@ -25,8 +25,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category = Raft)
+	UFUNCTION(BlueprintCallable, Category = "Raft")
 		void MoveRaftTowardPlayer();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Raft")
+		void PlaySplashSound();
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -51,8 +53,8 @@ private:
 	bool AngleTest(float PlayerYaw, float RaftYaw, float AcceptedAngle);
 	bool RightAngleWithDotProduct(FName Name);
 	bool DotProductTest(FVector Vector1, FVector Vector2);
-	UPROPERTY(EditAnywhere)
-		float AcceptedAngle = 45.f;
+	UPROPERTY(EditAnywhere, Category = "Raft Settings")
+		float AcceptedAngle = 90.f;
 
 	bool bTimerReady = true;
 	FTimerHandle TimerHandle;
@@ -60,11 +62,11 @@ private:
 	FVector CurrentLocation;
 	FHitResult RaftHitResult;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, Category = "Raft Settings")
 		float Timer = .3f;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, Category = "Raft Settings")
 		float Speed = 500.f;
-	UPROPERTY(EditDefaultsOnly)
-		float Force = 5000.f;
+	UPROPERTY(EditAnywhere, Category = "Raft Settings")
+		float Force = 2500.f;
 
 };
