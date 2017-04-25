@@ -25,9 +25,10 @@ public:
 		ATriggerVolume* TrapTrigger = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		UClass* ObjectToSpawn = nullptr;
-
+	UPROPERTY(EditAnywhere)
+		float Lifetime = 0;
 	bool TrapActive = true;
-
+	
 	void TrapTriggered();
 	
 };

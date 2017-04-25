@@ -21,10 +21,12 @@ void AChest::OpenEvent()
 			bIsOpenEvent = true;
 		}
 		ChestOpen.Broadcast();
-		if (LootTexts.ToString() == TEXT("WoodenKey"))
+		if (LootTexts.ToString() == TEXT("WoodKey"))
 		{
 			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
+			Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter())->SetOverheadText();
 			GameInstance->SetWoodenKey(true);
+			UE_LOG(LogTemp, Warning, TEXT("wOODKEY"))
 		}
 		if (LootTexts.ToString() == TEXT("WoodPart"))
 		{

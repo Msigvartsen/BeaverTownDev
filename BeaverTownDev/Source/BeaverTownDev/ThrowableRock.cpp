@@ -26,7 +26,7 @@ void AThrowableRock::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 		if (OtherActor->GetClass()->IsChildOf(AEnemyAI::StaticClass()))
 		{
 			AEnemyAI* EnemyRef = Cast<AEnemyAI>(OtherActor);
-			EnemyRef->SetTakeDamage(50.f);
+			EnemyRef->SetTakeDamage(RockDamage);
 			SetIsThrown(false);
 		}
 		//Lag timer for å sette IsThrown tilbake til false hvis den ikke treffer noen.

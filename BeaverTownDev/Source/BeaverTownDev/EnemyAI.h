@@ -31,13 +31,13 @@ private:
 	
 	UPROPERTY(EditAnywhere,Category = "AI")
 	float MaxHealth = 100.f;
-	float Health = MaxHealth;
+	float Health;
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float AIDamage = 30.f;
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
-
+	bool IsAlive = true;
 	bool CanAttack = false;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -53,8 +53,13 @@ public:
 	//Getters
 
 	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
+		bool GetIsAlive() const { return IsAlive; }
+	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
 	float GetHealthPercent() const { return Health / MaxHealth; }
 	
+	UFUNCTION(BlueprintCallable, Category = "EnemyAI")
+		float GetHealth() const { return Health; }
+
 	UFUNCTION(BlueprintCallable, Category = "AI")
 		void SetTakeDamage(float Damage);
 

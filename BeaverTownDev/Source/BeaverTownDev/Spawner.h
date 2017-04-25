@@ -45,12 +45,13 @@ private:
 		bool bLimitSpawning = false;
 	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		int SpawnLimit = 1;
-
+	
 	AActor *SpawnedActor = nullptr;
 	FVector SpawnLocation;
 	FRotator SpawnRotation;
 	bool bCanSpawn = true;
+	
 	int ActorsSpawned = 0;
 	
-
+	
 };
