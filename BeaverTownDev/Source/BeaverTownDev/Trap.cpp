@@ -15,6 +15,7 @@ ATrap::ATrap()
 void ATrap::BeginPlay()
 {
 	Super::BeginPlay();
+	TrapActive = true;
 }
 
 // Called every frame

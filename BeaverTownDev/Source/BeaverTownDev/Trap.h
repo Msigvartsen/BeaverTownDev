@@ -27,7 +27,7 @@ public:
 		UClass* ObjectToSpawn = nullptr;
 	UPROPERTY(EditAnywhere)
 		float Lifetime = 0;
-	bool TrapActive = true;
+	bool TrapActive;
 	
 	void TrapTriggered();
 	
