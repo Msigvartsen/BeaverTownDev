@@ -12,21 +12,25 @@ class BEAVERTOWNDEV_API ATrap : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ATrap();
 
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Sound")
+	//SoundFX when the trap is triggered
+	UPROPERTY(EditAnywhere, Category = "Trap")
 		USoundBase* TriggerSound;
-	UPROPERTY(EditAnywhere)
+	//TriggerVolume in editor
+	UPROPERTY(EditAnywhere,Category = "Trap")
 		ATriggerVolume* TrapTrigger = nullptr;
-	UPROPERTY(EditAnywhere, Category = "Spawning")
+	//Choose object to spawn
+	UPROPERTY(EditAnywhere, Category = "Trap")
 		UClass* ObjectToSpawn = nullptr;
+	//How lifetime of actor before destroyed
 	UPROPERTY(EditAnywhere)
 		float Lifetime = 0;
+
 	bool TrapActive = true;
 	
 	void TrapTriggered();

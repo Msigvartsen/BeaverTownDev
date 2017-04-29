@@ -35,13 +35,17 @@ void ASpawnBridge::Tick(float DeltaTime)
 
 void ASpawnBridge::BuildBridge()
 {
-	if (!BridgeTrigger) { return; }
-	AMainCharacter* MainCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	
-	if (BridgeTrigger->IsOverlappingActor(MainCharacter))
+	//Checks for trigger volume in editor
+	if (BridgeTrigger)
 	{
-		BridgeMesh->SetVisibility(true, true);
-		this->SetActorEnableCollision(true);
-		
+		AMainCharacter* MainCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+
+		if (BridgeTrigger->IsOverlappingActor(MainCharacter))
+		{
+			BridgeMesh->SetVisibility(true, true);
+			this->SetActorEnableCollision(true);
+
+		}
 	}
+	
 }

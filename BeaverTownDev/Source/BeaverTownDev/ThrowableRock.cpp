@@ -19,7 +19,6 @@ void AThrowableRock::BeginPlay()
 
 void AThrowableRock::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	//bool Check = 
 	
 	if (GetIsThrown())
 	{

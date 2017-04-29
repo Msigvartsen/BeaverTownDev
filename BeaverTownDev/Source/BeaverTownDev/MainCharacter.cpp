@@ -37,8 +37,12 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//Rotates character mesh towards the mouse cursor
 	RotateToMousePosition(DeltaTime);
+	
 	FallingDamage();
+
+	//Rotates Overhead text towards camera
 	SetTextRotation(OverheadText);
 	
 }
@@ -73,27 +77,20 @@ void AMainCharacter::Melee()
 	{
 		CanMelee = false;
 		GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, 1.f);
-		UE_LOG(LogTemp, Warning, TEXT("Melee!"));
 
 		FHitResult HitResult;
 
 		GetHitResultFromLineTrace(HitResult, MeleeRange);
 		if (HitResult.GetActor())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
 
-
-				if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
-				{
-					AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
-					EnemyAIHit->SetTakeDamage(50.f);
-				}
-			if (HitResult.GetActor()->IsA(AEnemyBase::StaticClass()))
+			if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
 			{
-				AEnemyBase* EnemyHit = Cast<AEnemyBase>(HitResult.GetActor());
-				EnemyHit->RemoveHealth(MeleeDamage);
+				AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
+				EnemyAIHit->SetTakeDamage(MeleeDamage);
 			}
-			else if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+
+			if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 			{
 				AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
 
@@ -108,7 +105,6 @@ void AMainCharacter::Melee()
 
 void AMainCharacter::JumpPressed()
 {	
-	UE_LOG(LogTemp, Warning, TEXT("JUMPING! %d"), bCanJump);
 	bCanJump = false;
 	Jump();	
 }
@@ -125,13 +121,11 @@ void AMainCharacter::FallingDamage()
 		bFalling = true;
 		bCanTakeFallingDamage = true;
 		StartJumpTime = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("STARTING TIMER AT: %f"), StartJumpTime);
 	}
 }
 
 void AMainCharacter::Landed(const FHitResult & Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("LANDED!"));
 	bCanJump = true;
 	bFalling = false;
 	EndJumpTime = GetWorld()->GetTimeSeconds();

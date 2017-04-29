@@ -14,18 +14,19 @@ EBTNodeResult::Type UTargetPointSelectionTask::ExecuteTask(UBehaviorTreeComponen
 	
 	if (AIController)
 	{
-
+		//Matching waypoint index on EnemyAI and BotTargetPoints decides where the AI Will patrol.
 		int32 EnemyWaypointIndex = Cast<AEnemyAI>(AIController->GetCharacter())->GetWaypointIndex();
 
 		UBlackboardComponent* BlackboardComp = AIController->GetBlackboardComp();
 
 		ABotTargetPoint* CurrentPoint = Cast<ABotTargetPoint>(BlackboardComp->GetValueAsObject("LocationToGo"));
 
+		//Finds all BotTargetPoints via EnemyAIController. Stored in an array to recieve random waypoint for the bot to use via Behavior tree.
 		TArray<AActor*> AvailableTargetPoints = AIController->GetAvailableTargetPoints();
 
 		int32 RandomIndex;
 
-		//Store next possible target point
+		//Stores the next possible waypoint for bots
 		ABotTargetPoint* NextTargetPoint = nullptr;
 		
 			do {
@@ -34,16 +35,16 @@ EBTNodeResult::Type UTargetPointSelectionTask::ExecuteTask(UBehaviorTreeComponen
 
 				if (NextTargetPoint->GetWaypointIndex() == EnemyWaypointIndex)
 				{
-					UE_LOG(LogTemp,Warning,TEXT("EnemyWP: &d, Botpoint: &d"), EnemyWaypointIndex, NextTargetPoint->GetWaypointIndex())
+					//Updates blackboard value with the next waypoint for AI.
 					BlackboardComp->SetValueAsObject("LocationToGo", NextTargetPoint);
-					//break;
 				}
 
 
 		} while (CurrentPoint == NextTargetPoint);
 	
-			//return Successfull task
+			//While patrolling, the AI has lower movespeed.
 			AIController->GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = 150.f;
+			//return Successfull task
 			return EBTNodeResult::Succeeded;
 		
 	}

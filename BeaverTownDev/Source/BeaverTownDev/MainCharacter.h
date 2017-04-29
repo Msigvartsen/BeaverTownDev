@@ -48,8 +48,7 @@ private:
 	void MeleeDelayEnd();
 	//Character Variables
 
-	UPROPERTY(EditAnywhere,Category="CharacterStats")
-		float DodgeSpeed = 2000.f;
+	
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float InteractReach = 100.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
@@ -75,7 +74,7 @@ private:
 	FText LootText;
 	
 	UPROPERTY(EditAnywhere)
-		float WalkSpeed = 500.f;
+		float WalkSpeed = 400.f;
 
 	class AChest* ChestRef = nullptr;
 
