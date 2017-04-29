@@ -38,12 +38,8 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	}
 	if (Health <= 0.f)
 	{
-		//GetWorld()->GetFirstPlayerController()->GetCharacter()->Destroy();
-		//ResetStats();
 		LoadRestartGameUI();
-		//UGameplayStatics::OpenLevel(this, FName("MainMenu"));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("TOOK DAMAGE IN GAME INSTANCE"))
 }
 
 int32 UMainGameInstance::GetMinerals()
@@ -54,6 +50,10 @@ int32 UMainGameInstance::GetMinerals()
 void UMainGameInstance::SetHealthIncrease(float inHealth)
 {
 	Health += inHealth;
+	if (Health >= MaxHealth)
+	{
+		Health = MaxHealth;
+	}
 }
 
 void UMainGameInstance::ResetHealth(float inHealth)

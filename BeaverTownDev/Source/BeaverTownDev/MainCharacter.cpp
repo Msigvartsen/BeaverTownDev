@@ -68,33 +68,39 @@ void AMainCharacter::MoveY(float value)
 
 void AMainCharacter::Melee()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Melee!"));
-
-	FHitResult HitResult;
-
-	GetHitResultFromLineTrace(HitResult, MeleeRange);
-	if (HitResult.GetActor())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
-
 	
-		if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
+	if (CanMelee)
+	{
+		CanMelee = false;
+		GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, 1.f);
+		UE_LOG(LogTemp, Warning, TEXT("Melee!"));
+
+		FHitResult HitResult;
+
+		GetHitResultFromLineTrace(HitResult, MeleeRange);
+		if (HitResult.GetActor())
 		{
-			AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
-			EnemyAIHit->SetTakeDamage(50.f);
-		}
-		if (HitResult.GetActor()->IsA(AEnemyBase::StaticClass()))
-		{
-			AEnemyBase* EnemyHit = Cast<AEnemyBase>(HitResult.GetActor());
-			EnemyHit->RemoveHealth(MeleeDamage);
-		}
-		else if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
-		{
-			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-			
-			if (InteractObject->GetCanBeDamaged())
+			UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetClass()->GetName())
+
+
+				if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
+				{
+					AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
+					EnemyAIHit->SetTakeDamage(50.f);
+				}
+			if (HitResult.GetActor()->IsA(AEnemyBase::StaticClass()))
 			{
-				InteractObject->OpenEvent();
+				AEnemyBase* EnemyHit = Cast<AEnemyBase>(HitResult.GetActor());
+				EnemyHit->RemoveHealth(MeleeDamage);
+			}
+			else if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+			{
+				AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+
+				if (InteractObject->GetCanBeDamaged())
+				{
+					InteractObject->OpenEvent();
+				}
 			}
 		}
 	}
@@ -193,7 +199,7 @@ void AMainCharacter::Interact()
 					}
 					else
 					{
-						//SetOverheadText();
+						
 						InteractObject->OpenEvent();
 					}
 				}
@@ -325,7 +331,6 @@ void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)
 
 
 	FRotator Rotation = FRotationMatrix::MakeFromX(End).Rotator();
-	//UE_LOG(LogTemp, Warning, TEXT("Pitch::: %f  YAW:::: %f"), Rotation.Pitch, Rotation.Yaw)
 	TextRenderComp->SetWorldRotation(FRotator(Rotation.Pitch, Rotation.Yaw, 0));
 }
 
@@ -351,4 +356,13 @@ void AMainCharacter::TimerEnd()
 			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		}
 	
+}
+
+void AMainCharacter::MeleeDelayEnd()
+{
+	if (GetWorld())
+	{
+		CanMelee = true;
+		GetWorld()->GetTimerManager().ClearTimer(MeleeTimerHandle);
+	}
 }

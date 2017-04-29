@@ -45,6 +45,7 @@ private:
 	void SetTextRotation(UTextRenderComponent* TextRenderComp);
 	void SetVisibilityOverheadText();
 	void TimerEnd();
+	void MeleeDelayEnd();
 	//Character Variables
 
 	UPROPERTY(EditAnywhere,Category="CharacterStats")
@@ -59,6 +60,7 @@ private:
 		float OverheadTextDespawnTime = 2.f;
 
 	FTimerHandle TimerHandle;
+	FTimerHandle MeleeTimerHandle;
 
 	float StartJumpTime = 0;
 	float EndJumpTime = 0;
@@ -69,6 +71,7 @@ private:
 	bool bCanTakeFallingDamage = false;
 	float TurnInterpolationSpeed = 1000.f;
 	bool IsTextVisible = false;
+	bool CanMelee = true;
 	FText LootText;
 	
 	UPROPERTY(EditAnywhere)
