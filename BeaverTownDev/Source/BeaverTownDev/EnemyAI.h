@@ -30,15 +30,19 @@ protected:
 private:
 	
 	UPROPERTY(EditAnywhere,Category = "AI")
-	float MaxHealth = 100.f;
+		float MaxHealth = 100.f;
+
 	float Health;
+
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float AIDamage = 30.f;
+
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
 	bool IsAlive = true;
 	bool CanAttack = false;
+	bool IsAggro = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	USphereComponent* AttackRange = nullptr;
@@ -48,9 +52,13 @@ private:
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
 
+	void LineTraceToPlayer();
+	FVector GetVectorTowardPlayer();
+	
+
 public:
 
-	//Getters
+	//Getters // Setters
 
 	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
 		bool GetIsAlive() const { return IsAlive; }
@@ -71,4 +79,7 @@ public:
 
 	UFUNCTION()
 		bool GetCanAttack() const { return CanAttack; }
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsAggro() const { return IsAggro; }
 };

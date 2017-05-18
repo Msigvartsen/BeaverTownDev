@@ -57,6 +57,10 @@ private:
 		float MeleeDamage = 50.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float OverheadTextDespawnTime = 2.f;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+		float AttackDelay = 0.5f;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+		float WalkSpeed = 400.f;
 
 	FTimerHandle TimerHandle;
 	FTimerHandle MeleeTimerHandle;
@@ -73,8 +77,7 @@ private:
 	bool CanMelee = true;
 	FText LootText;
 	
-	UPROPERTY(EditAnywhere)
-		float WalkSpeed = 400.f;
+	
 
 	class AChest* ChestRef = nullptr;
 
@@ -87,6 +90,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
+	UFUNCTION()
+		float GetWalkSpeed() const { return WalkSpeed; }
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();

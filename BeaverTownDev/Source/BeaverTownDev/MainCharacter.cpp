@@ -87,7 +87,9 @@ void AMainCharacter::Melee()
 			if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
 			{
 				AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
-				if ((EnemyAIHit->GetActorLocation - GetActorLocation()) < MeleeRange)
+				FVector DistanceBetween = EnemyAIHit->GetActorLocation() - GetActorLocation();
+				//MÅ FIKSES-
+				if (DistanceBetween.Size() < MeleeRange)
 				{
 					EnemyAIHit->SetTakeDamage(MeleeDamage);
 				}

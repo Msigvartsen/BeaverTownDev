@@ -38,23 +38,12 @@ private:
 
 	virtual void Possess(APawn* Pawn) override;
 
-	//Function fires when AI perception gets updated
-	UFUNCTION()
-		void OnPerceptionUpdated(TArray<AActor*> UpdatedActors);
-
-	
-	//Sight sense config for AI
-	UAISenseConfig_Sight* Sight;
-
-
 public:
 
 	AEnemyAIController();
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 	FORCEINLINE TArray<AActor*> GetAvailableTargetPoints() const { return BotTargetPoints; }
-
-	AActor* GetSeeingPawn();
 
 	UFUNCTION()
 		void Attack();

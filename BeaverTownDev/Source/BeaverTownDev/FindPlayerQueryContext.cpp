@@ -13,11 +13,7 @@ void UFindPlayerQueryContext::ProvideContext(FEnvQueryInstance& QueryInstance, F
 
 	AEnemyAIController* AIController = Cast<AEnemyAIController>((Cast<AActor>((QueryInstance.Owner).Get())->GetInstigatorController()));
 
-	if (AIController && AIController->GetSeeingPawn())
-	{
-		AIController->GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = 450.f;
-		UEnvQueryItemType_Actor::SetContextHelper(ContextData, AIController->GetSeeingPawn());
-	}
+
 }
 
 
