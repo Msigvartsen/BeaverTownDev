@@ -92,9 +92,12 @@ public:
 		bool GetIsInteractActive() const;
 	UFUNCTION()
 		float GetWalkSpeed() const { return WalkSpeed; }
+	UFUNCTION(BlueprintCallable)
+		bool GetCanMelee() const { return CanMelee; }
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();
 	USoundBase* GetHurtSound();
+
 
 };

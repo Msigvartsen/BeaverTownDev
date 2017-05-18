@@ -77,7 +77,7 @@ public:
 	UFUNCTION()
 		float GetAIDamage() const { return AIDamage; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		bool GetCanAttack() const { return CanAttack; }
 
 	UFUNCTION(BlueprintCallable)
