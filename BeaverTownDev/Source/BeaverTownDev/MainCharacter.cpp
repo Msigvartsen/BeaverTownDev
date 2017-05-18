@@ -76,7 +76,7 @@ void AMainCharacter::Melee()
 	if (CanMelee)
 	{
 		CanMelee = false;
-		GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, 1.f);
+		GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, AttackDelay);
 
 		FHitResult HitResult;
 
@@ -87,13 +87,7 @@ void AMainCharacter::Melee()
 			if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
 			{
 				AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
-				FVector DistanceBetween = EnemyAIHit->GetActorLocation() - GetActorLocation();
-				//MÅ FIKSES-
-				if (DistanceBetween.Size() < MeleeRange)
-				{
-					EnemyAIHit->SetTakeDamage(MeleeDamage);
-				}
-				
+				EnemyAIHit->SetTakeDamage(MeleeDamage);
 			}
 
 			if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
@@ -180,8 +174,13 @@ void AMainCharacter::Interact()
 				AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
 				if (HealthPickup)
 				{
-					auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-					GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
+					if (HealthPickup->GetCanHeal())
+					{
+						auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+						GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
+						HealthPickup->SetHealUsed();
+					}
+					
 	
 				}
 			}

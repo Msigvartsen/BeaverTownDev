@@ -18,7 +18,7 @@ public:
 	float HealTarget();
 	UFUNCTION(BlueprintCallable, Category = "HealingPickup")
 	bool GetCanHeal() const { return CanHeal; }
-
+	void SetHealUsed() { CanHeal = false; }
 protected:
 		virtual void BeginPlay() override;
 
