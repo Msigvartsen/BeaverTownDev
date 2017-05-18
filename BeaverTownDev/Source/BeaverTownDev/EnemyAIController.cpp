@@ -85,7 +85,7 @@ AActor* AEnemyAIController::GetSeeingPawn()
 
 void AEnemyAIController::Attack()
 {
-	UE_LOG(LogTemp,Warning,TEXT("AI ATTACKING OWOW"))
+	
 	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 	if (GameInstance)
 	{

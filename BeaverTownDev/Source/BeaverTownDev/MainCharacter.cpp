@@ -87,7 +87,11 @@ void AMainCharacter::Melee()
 			if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
 			{
 				AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
-				EnemyAIHit->SetTakeDamage(MeleeDamage);
+				if ((EnemyAIHit->GetActorLocation - GetActorLocation()) < MeleeRange)
+				{
+					EnemyAIHit->SetTakeDamage(MeleeDamage);
+				}
+				
 			}
 
 			if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
