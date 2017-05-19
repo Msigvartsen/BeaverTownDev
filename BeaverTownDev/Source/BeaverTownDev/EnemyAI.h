@@ -39,7 +39,10 @@ private:
 	//Despawn timer after death
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float DespawnTimer = 3.f;
-	
+	UPROPERTY(EditAnywhere, Category = "AI")
+		float PatrolSpeed = 150.f;
+	UPROPERTY(EditAnywhere, Category = "AI")
+		float ChaseSpeed = 400.f;
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	

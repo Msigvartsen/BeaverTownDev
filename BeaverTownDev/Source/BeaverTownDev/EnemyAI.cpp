@@ -21,6 +21,7 @@ void AEnemyAI::BeginPlay()
 	Player = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	AIController = Cast<AEnemyAIController>(this->GetController());
 	AIController->SetIsAlive(IsAlive);
+	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 }
 
 // Called every frame
@@ -84,10 +85,12 @@ void AEnemyAI::LineTraceToPlayer()
 		if (HitResult.GetActor()->IsA(AMainCharacter::StaticClass()))
 		{
 			IsAggro = true;
+			GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
 		}
 		else
 		{
 			IsAggro = false;
+			GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 		}
 	}
 }
