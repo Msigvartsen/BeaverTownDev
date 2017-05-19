@@ -27,5 +27,6 @@ public:
 		void PlayRockHitSound();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Rock")
 		void BreakRock();
-
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* DestroyParticle = nullptr;
 };

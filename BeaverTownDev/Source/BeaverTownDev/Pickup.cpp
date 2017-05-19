@@ -48,6 +48,11 @@ void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor
 		{
 			GameInstance->SetHealthIncrease(10);
 			PlaySoundWhenPickup.Broadcast();
+			if (HealthParticle)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, CharacterPickup->GetTransform(), true);
+			}
+			
 			Destroy();
 		}
 		

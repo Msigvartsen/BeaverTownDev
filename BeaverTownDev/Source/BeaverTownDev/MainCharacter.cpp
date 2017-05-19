@@ -19,7 +19,6 @@ AMainCharacter::AMainCharacter()
 	OverheadText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
 	OverheadText->SetupAttachment(GetRootComponent());
 	OverheadText->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
-	
 }
 
 void AMainCharacter::BeginPlay()
@@ -88,6 +87,7 @@ void AMainCharacter::Melee()
 			{
 				AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
 				EnemyAIHit->SetTakeDamage(MeleeDamage);
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeleeParticle, GetTransform(), true);
 			}
 
 			if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
@@ -97,6 +97,7 @@ void AMainCharacter::Melee()
 				if (InteractObject->GetCanBeDamaged())
 				{
 					InteractObject->OpenEvent();
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeleeParticle, GetTransform(), true);
 				}
 			}
 		}
@@ -179,6 +180,10 @@ void AMainCharacter::Interact()
 						auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 						GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
 						HealthPickup->SetHealUsed();
+						if (HealthParticle)
+						{
+							UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
+						}
 					}
 					
 	

@@ -61,6 +61,11 @@ private:
 		float AttackDelay = 0.5f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float WalkSpeed = 400.f;
+	UPROPERTY(EditAnywhere,Category = "CharacterStats")
+	class UParticleSystem* HealthParticle = nullptr;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+	class UParticleSystem* MeleeParticle = nullptr;
+	
 
 	FTimerHandle TimerHandle;
 	FTimerHandle MeleeTimerHandle;
