@@ -28,11 +28,11 @@ private:
 
 	//Blackboard Keys
 	const FName BlackboardPlayerKey = FName("Player");
-
+	const FName BlackboardIsAliveKey = FName("AIAlive?");
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName LocationToGoKey;
 	
-	AEnemyAI* EnemyAI = nullptr;
+	class AEnemyAI* EnemyAI = nullptr;
 
 	TArray<AActor*> BotTargetPoints;
 
@@ -47,5 +47,6 @@ public:
 
 	UFUNCTION()
 		void Attack();
-	
+	UFUNCTION()
+		void SetIsAlive(bool IsAlive);
 };

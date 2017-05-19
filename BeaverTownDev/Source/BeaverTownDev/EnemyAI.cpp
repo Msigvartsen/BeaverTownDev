@@ -3,6 +3,7 @@
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
 #include "MainGameInstance.h"
+#include "EnemyAIController.h"
 #include "EnemyAI.h"
 
 
@@ -18,6 +19,8 @@ void AEnemyAI::BeginPlay()
 	Super::BeginPlay();
 	Health = MaxHealth;
 	Player = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	AIController = Cast<AEnemyAIController>(this->GetController());
+	AIController->SetIsAlive(IsAlive);
 }
 
 // Called every frame
@@ -38,10 +41,13 @@ void AEnemyAI::Tick(float DeltaTime)
 		UE_LOG(LogTemp, Warning, TEXT("Cannot attack"))
 	}
 
-	if (Health <= 0)
+	if (Health <= 0 && IsAlive)
 	{	
 		IsAlive = false;
-		Destroy();
+		AIController->SetIsAlive(IsAlive);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
+		UE_LOG(LogTemp, Warning, TEXT("Sets despawn timer 2sec"))
+		
 	}
 	
 }
@@ -65,7 +71,7 @@ void AEnemyAI::LineTraceToPlayer()
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * 1000.f);
 
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 0, 255),true, .1f, 0, 10.f);
+	//DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 0, 255),true, .1f, 0, 10.f);
 
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitResult,
@@ -91,4 +97,14 @@ FVector AEnemyAI::GetVectorTowardPlayer()
 	FVector PlayerLocation = Player->GetActorLocation();
 	FVector EnemyLocation = GetActorLocation();
 	return PlayerLocation - EnemyLocation;
+}
+
+void AEnemyAI::Despawn()
+{
+	if (GetWorld())
+	{
+		Destroy();
+		UE_LOG(LogTemp,Warning,TEXT("Despawn timer up!"))
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);	
+	}
 }

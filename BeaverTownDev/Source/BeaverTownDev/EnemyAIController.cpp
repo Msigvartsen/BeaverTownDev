@@ -58,3 +58,9 @@ void AEnemyAIController::Attack()
 		}	
 	}
 }
+
+void AEnemyAIController::SetIsAlive(bool IsAlive)
+{
+	BlackboardComp->SetValueAsBool(BlackboardIsAliveKey, IsAlive);
+}
+

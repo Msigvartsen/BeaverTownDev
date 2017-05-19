@@ -36,16 +36,22 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float AIDamage = 30.f;
-
+	//Despawn timer after death
+	UPROPERTY(EditAnywhere, Category = "AI")
+		float DespawnTimer = 3.f;
+	
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
+	FTimerHandle TimerHandle;
 	bool IsAlive = true;
 	bool CanAttack = false;
 	bool IsAggro = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	USphereComponent* AttackRange = nullptr;
+
+	class AEnemyAIController* AIController = nullptr;
 
 	class AMainCharacter* Player = nullptr;
 
@@ -54,7 +60,7 @@ private:
 
 	void LineTraceToPlayer();
 	FVector GetVectorTowardPlayer();
-	
+	void Despawn();
 
 public:
 
