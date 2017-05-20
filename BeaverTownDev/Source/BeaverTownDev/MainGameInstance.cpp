@@ -38,6 +38,7 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	}
 	if (Health <= 0.f)
 	{
+		PC->SetIsPlayerAlive(false);
 		LoadRestartGameUI();
 	}
 }

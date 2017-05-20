@@ -80,6 +80,7 @@ private:
 	float TurnInterpolationSpeed = 1000.f;
 	bool IsTextVisible = false;
 	bool CanMelee = true;
+	bool IsPlayerAlive = true;
 	FText LootText;
 	
 	
@@ -91,7 +92,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "TextRender")
 		UTextRenderComponent* OverheadText;
 public:
-	//Character Getters
+	//Character Getters // Setters
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
@@ -102,6 +103,10 @@ public:
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();
+	UFUNCTION(BlueprintCallable)
+		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
+	UFUNCTION(BlueprintCallable)
+		bool GetIsPlayerAlive() { return IsPlayerAlive; }
 	USoundBase* GetHurtSound();
 
 

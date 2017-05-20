@@ -61,43 +61,54 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMainCharacter::MoveX(float value)
 {
-	AddMovementInput(FVector::ForwardVector, value);
+	if (IsPlayerAlive)
+	{
+		AddMovementInput(FVector::ForwardVector, value);
+	}
+	
 }
 
 void AMainCharacter::MoveY(float value)
 {
-	AddMovementInput(FVector::RightVector, value);
+	if (IsPlayerAlive)
+	{
+		AddMovementInput(FVector::RightVector, value);
+	}
+	
 }
 
 void AMainCharacter::Melee()
 {
-	
-	if (CanMelee)
+	if (IsPlayerAlive)
 	{
-		CanMelee = false;
-		GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, AttackDelay);
 
-		FHitResult HitResult;
-
-		GetHitResultFromLineTrace(HitResult, MeleeRange);
-		if (HitResult.GetActor())
+		if (CanMelee)
 		{
+			CanMelee = false;
+			GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, AttackDelay);
 
-			if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
+			FHitResult HitResult;
+
+			GetHitResultFromLineTrace(HitResult, MeleeRange);
+			if (HitResult.GetActor())
 			{
-				AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
-				EnemyAIHit->SetTakeDamage(MeleeDamage);
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeleeParticle, GetTransform(), true);
-			}
 
-			if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
-			{
-				AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-
-				if (InteractObject->GetCanBeDamaged())
+				if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
 				{
-					InteractObject->OpenEvent();
+					AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
+					EnemyAIHit->SetTakeDamage(MeleeDamage);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeleeParticle, GetTransform(), true);
+				}
+
+				if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+				{
+					AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+
+					if (InteractObject->GetCanBeDamaged())
+					{
+						InteractObject->OpenEvent();
+						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeleeParticle, GetTransform(), true);
+					}
 				}
 			}
 		}
@@ -106,8 +117,12 @@ void AMainCharacter::Melee()
 
 void AMainCharacter::JumpPressed()
 {	
-	bCanJump = false;
-	Jump();	
+	if (IsPlayerAlive)
+	{
+		bCanJump = false;
+		Jump();
+	}
+	
 }
 
 void AMainCharacter::JumpReleased()
@@ -154,72 +169,76 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 
 void AMainCharacter::Interact()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
-
-	bIsInteractActive = true;
-	
-	FHitResult HitResult;
-	GetHitResultFromLineTrace(HitResult, InteractReach);
-
-	// Opens chest if hit
-	if (HitResult.GetActor())
+	if (IsPlayerAlive)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
 
-		if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+		UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
+
+		bIsInteractActive = true;
+
+		FHitResult HitResult;
+		GetHitResultFromLineTrace(HitResult, InteractReach);
+
+		// Opens chest if hit
+		if (HitResult.GetActor())
 		{
-			AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-			ChestRef = Cast<AChest>(InteractObject);
-			if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
-			{
-				AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
-				if (HealthPickup)
+			UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
+
+				if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 				{
-					if (HealthPickup->GetCanHeal())
+					AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+					ChestRef = Cast<AChest>(InteractObject);
+					if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
 					{
-						auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-						GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
-						HealthPickup->SetHealUsed();
-						if (HealthParticle)
+						AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
+						if (HealthPickup)
 						{
-							UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
+							if (HealthPickup->GetCanHeal())
+							{
+								auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+								GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
+								HealthPickup->SetHealUsed();
+								if (HealthParticle)
+								{
+									UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
+								}
+							}
+
+
 						}
 					}
-					
-	
-				}
-			}
-			float PlayerAngle = GetActorRotation().Yaw;
-			float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
-			float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
+					float PlayerAngle = GetActorRotation().Yaw;
+					float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
+					float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
 
-			if (InteractObject->GetOnlyInteractFromAngle())
-			{
-				if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
-				{
-					if (InteractObject->GetIsOpenEvent())
+					if (InteractObject->GetOnlyInteractFromAngle())
 					{
-						InteractObject->CloseEvent();
+						if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
+						{
+							if (InteractObject->GetIsOpenEvent())
+							{
+								InteractObject->CloseEvent();
+							}
+							else
+							{
+
+								InteractObject->OpenEvent();
+							}
+						}
 					}
-					else
+					else if (InteractObject->GetCanBeDamaged() == false)
 					{
-						
-						InteractObject->OpenEvent();
+						if (InteractObject->GetIsOpenEvent())
+						{
+							InteractObject->CloseEvent();
+						}
+						else
+						{
+
+							InteractObject->OpenEvent();
+						}
 					}
 				}
-			}
-			else if(InteractObject->GetCanBeDamaged() == false)
-			{
-				if (InteractObject->GetIsOpenEvent())
-				{
-					InteractObject->CloseEvent();
-				}
-				else
-				{
-					
-					InteractObject->OpenEvent();
-				}
-			}
 		}
 	}
 }
@@ -234,35 +253,38 @@ void AMainCharacter::InteractReleased()
 // Character rotates towards mouse position.
 void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
-	
-	if (!IsPushingObject)
+	if (IsPlayerAlive)
 	{
-		/// get viewport center
-		FVector2D ViewportSize;
-		FVector2D  ViewportCenter;
-		GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
-		ViewportCenter = ViewportSize / 2;
 
-		/// get mouse position
-		float X, Y;
-		GetWorld()->GetFirstPlayerController()->GetMousePosition(X, Y);
-		FVector2D MousePosition = FVector2D(X, Y);
+		if (!IsPushingObject)
+		{
+			/// get viewport center
+			FVector2D ViewportSize;
+			FVector2D  ViewportCenter;
+			GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
+			ViewportCenter = ViewportSize / 2;
 
-		/// Get rotation vector
-		FVector2D MouseDirection = MousePosition - ViewportCenter;
-		MouseDirection.Normalize();
-		FVector MouseDirection3D = FVector(MouseDirection.X, MouseDirection.Y, 0);
+			/// get mouse position
+			float X, Y;
+			GetWorld()->GetFirstPlayerController()->GetMousePosition(X, Y);
+			FVector2D MousePosition = FVector2D(X, Y);
 
-		/// Fixes rotation offset
-		FRotator MyRotator = FRotator(0, 90, 0);
-		FRotationMatrix MyRotationMatrix(MyRotator);
-		FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
+			/// Get rotation vector
+			FVector2D MouseDirection = MousePosition - ViewportCenter;
+			MouseDirection.Normalize();
+			FVector MouseDirection3D = FVector(MouseDirection.X, MouseDirection.Y, 0);
 
-		/// Rotates smoothly towards mouse cursor
-		
-		FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, TurnInterpolationSpeed);
-	
-		GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
+			/// Fixes rotation offset
+			FRotator MyRotator = FRotator(0, 90, 0);
+			FRotationMatrix MyRotationMatrix(MyRotator);
+			FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
+
+			/// Rotates smoothly towards mouse cursor
+
+			FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, TurnInterpolationSpeed);
+
+			GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
+		}
 	}
 }
 
