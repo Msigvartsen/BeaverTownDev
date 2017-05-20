@@ -70,9 +70,8 @@ void AEnemyAI::LineTraceToPlayer()
 	UE_LOG(LogTemp,Warning,TEXT("LineTracing!"))
 	FHitResult HitResult;
 	FVector StartTrace = GetActorLocation();
-	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * 1000.f);
+	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * AggroRange);
 
-	//DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 0, 255),true, .1f, 0, 10.f);
 
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitResult,

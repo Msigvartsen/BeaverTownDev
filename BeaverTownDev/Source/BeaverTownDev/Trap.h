@@ -28,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Trap")
 		UClass* ObjectToSpawn = nullptr;
 	//How lifetime of actor before destroyed
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Trap")
 		float Lifetime = 0;
 
 	bool TrapActive = true;

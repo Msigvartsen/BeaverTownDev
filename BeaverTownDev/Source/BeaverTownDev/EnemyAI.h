@@ -43,8 +43,11 @@ private:
 		float PatrolSpeed = 150.f;
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float ChaseSpeed = 400.f;
+	UPROPERTY(EditAnywhere, Category = "AI")
+		float AggroRange = 1000.f;
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
+
 	
 	FTimerHandle TimerHandle;
 	bool IsAlive = true;
