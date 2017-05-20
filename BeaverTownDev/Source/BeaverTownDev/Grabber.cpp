@@ -47,7 +47,7 @@ void UGrabber::Grab()
 
 	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
 
-	if (CharacterCollision && IsHeld == false)
+	if (CharacterCollision && !IsHeld)
 	{
 		CharacterCollision->GetOverlappingActors(OverlappingActors);
 		for (AActor* Actor : OverlappingActors)
@@ -70,14 +70,12 @@ void UGrabber::Grab()
 			}
 		}
 
-		if (ItemToThrow && IsHeld == false)
+		if (ItemToThrow && !IsHeld)
 		{
 			IsHeld = true;
 			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
-			//ItemToGrab->SetCollisionProfileName(TEXT("IgnorePawnOnly"));
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
-
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
 			ItemToThrow->SetActorEnableCollision(false);
 			
