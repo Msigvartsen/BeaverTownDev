@@ -39,7 +39,7 @@ private:
 	virtual void Possess(APawn* Pawn) override;
 	void AttackDelayEnd();
 	FTimerHandle TimerHandle;
-	float AttackDelay = .8f;
+	float AttackDelay = .7f;
 
 public:
 

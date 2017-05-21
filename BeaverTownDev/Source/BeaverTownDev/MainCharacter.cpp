@@ -117,7 +117,7 @@ void AMainCharacter::Melee()
 
 void AMainCharacter::JumpPressed()
 {	
-	if (IsPlayerAlive)
+	if (IsPlayerAlive && CanMelee)
 	{
 		bCanJump = false;
 		Jump();
@@ -296,9 +296,6 @@ void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult,float Reach
 	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * Reach);
 	EndTrace.Z -= 25.f;
 	StartTrace.Z -= 25.f;
-
-	// Draws a red line that represents the line trace
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, .3f, 0, 10.f);
 
 	// Line trace from character mesh to get World Dynamic object
 	GetWorld()->LineTraceSingleByObjectType(

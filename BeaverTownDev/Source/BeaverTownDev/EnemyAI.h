@@ -47,12 +47,15 @@ private:
 		float AggroRange = 1000.f;
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
+	UPROPERTY(EditANywhere, Category = "AI")
+		float AttackDelay = .7f;
 
 	
 	FTimerHandle TimerHandle;
 	bool IsAlive = true;
 	bool CanAttack = false;
 	bool IsAggro = false;
+	bool CanDoDamage = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	USphereComponent* AttackRange = nullptr;
@@ -97,4 +100,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void SetCanAttack(bool Attacking) { CanAttack = Attacking; }
+
+	UFUNCTION()
+		bool GetCanDoDamage() { return CanDoDamage; }
+	UFUNCTION()
+		float GetAttackDelay() { return AttackDelay; }
 };
