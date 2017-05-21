@@ -5,6 +5,12 @@
 #include "GameFramework/Actor.h"
 #include "FloatingCrate.generated.h"
 
+/*
+Crate is constrained to simulate floating
+Crate is pushed by AStream class in the streams direction
+Crate removes constraints and start falling when overlapping with "waterfall" stream
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AFloatingCrate : public AActor
 {
@@ -19,11 +25,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	//UFUNCTION(BlueprintImplementableEvent, Category = "FloatingCrate")
-	//	void MoveCrate();
+	// Crate Movement functions
 	void MoveCrate(FVector Direction);
 	void MakeFall();
 	void StopFall();

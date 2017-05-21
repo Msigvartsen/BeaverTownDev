@@ -5,6 +5,10 @@
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
 
+/*
+
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AEnemy : public AActor
 {

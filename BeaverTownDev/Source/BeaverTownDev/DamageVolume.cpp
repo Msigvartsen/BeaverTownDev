@@ -35,8 +35,6 @@ void ADamageVolume::Tick(float DeltaTime)
 
 	if (Box->IsOverlappingActor(Cast<AActor>(GetWorld()->GetFirstPlayerController()->GetCharacter())))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OVERLAPPING"))
-
 			if (bPeriodicDamage && bActivate)
 			{
 				GameInstance->SetDamageTaken(DPS * DeltaTime);

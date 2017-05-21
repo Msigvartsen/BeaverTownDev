@@ -3,7 +3,6 @@
 #include "BeaverTownDev.h"
 #include "Enemy.h"
 
-
 // Sets default values
 AEnemy::AEnemy()
 {

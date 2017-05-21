@@ -17,17 +17,12 @@ private:
 	ARaft* Raft = nullptr;
 	ARollingDoor* Door = nullptr;
 
-
-	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-		USoundBase* Music = nullptr;
 public:
 	void SetRaft(ARaft* RaftToSet);
 	void SetDoor(ARollingDoor* DoorToSet);
-	UFUNCTION(BlueprintCallable, Category = Getter)
+	UFUNCTION(BlueprintCallable, Category = "Getter")
 		ARollingDoor* GetDoor();
-	UFUNCTION(BlueprintCallable, Category = Getter)
+	UFUNCTION(BlueprintCallable, Category = "Getter")
 		ARaft* GetRaft();
 
 };

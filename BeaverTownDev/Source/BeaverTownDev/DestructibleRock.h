@@ -5,9 +5,11 @@
 #include "Interact.h"
 #include "DestructibleRock.generated.h"
 
-/**
- * 
- */
+/*
+Rock that can be broken with player melee attack
+Rock spawns smaller throwable rocks in a random pattern when destroyed.
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API ADestructibleRock : public AInteract
 {

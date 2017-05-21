@@ -5,14 +5,13 @@
 
 ACrate::ACrate()
 {
+	// Sets variables declared in base class
 	bOnlyInteractFromAngle = false;
 	bCanBeDamaged = true;
 }
 
 void ACrate::OpenEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Calling Crate OpenEvent"))
-
 	// Takes damage
 	Health -= 50;
 	if (Health <= 0)
@@ -21,10 +20,8 @@ void ACrate::OpenEvent()
 		RandomSpawn = FMath::RandRange(0, 2);
 		UE_LOG(LogTemp, Warning, TEXT("RandSpawn: %d"), RandomSpawn)
 	}
-
 	// continues in blueprint
 	CrateOpen.Broadcast();
-
 }
 
 bool ACrate::GetIsBroken()

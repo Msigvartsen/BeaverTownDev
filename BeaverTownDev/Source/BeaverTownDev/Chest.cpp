@@ -7,11 +7,13 @@
 
 AChest::AChest()
 {
+	// Sets variables declared in base class
 	bOnlyInteractFromAngle = true;
 	MinOpenAngle -= 45.f;
 	MaxOpenAngle += 45.f;
 }
 
+// This function opens the chest and adds text according to settings.
 void AChest::OpenEvent()
 {
 	if (bIsOpenEvent == false && CanBeOpened)
@@ -20,6 +22,7 @@ void AChest::OpenEvent()
 		{
 			bIsOpenEvent = true;
 		}
+		// continues in blueprint
 		ChestOpen.Broadcast();
 		if (LootTexts.ToString() == TEXT("WoodKey"))
 		{
@@ -39,11 +42,13 @@ void AChest::OpenEvent()
 	}
 }
 
+// Close the chest
 void AChest::CloseEvent()
 {
 	if (bIsOpenEvent == true)
 	{
 		bIsOpenEvent = false;
+		// continues in blueprint
 		ChestClose.Broadcast();
 	}
 }

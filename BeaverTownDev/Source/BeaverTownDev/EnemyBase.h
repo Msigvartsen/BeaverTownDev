@@ -5,6 +5,10 @@
 #include "GameFramework/Character.h"
 #include "EnemyBase.generated.h"
 
+/*
+Prototype enemy not longer used.
+*/
+
 class AMainCharacter;
 class AComplexProjectile;
 

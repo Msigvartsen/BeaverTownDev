@@ -5,6 +5,11 @@
 #include "Interact.h"
 #include "Chest.generated.h"
 
+/*
+Chest that can be opened and closed by player.
+Chest can also contain loot
+*/
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FChestTriggerEvent);
 
 UCLASS()
@@ -13,25 +18,27 @@ class BEAVERTOWNDEV_API AChest : public AInteract
 	GENERATED_BODY()
 
 public:
-	//Constructor
 	AChest();
+	// Overrides Open and Close functions from base class
 	virtual void OpenEvent() override;
 	virtual void CloseEvent() override;
 	
+	// Variables that broadcast to blueprint
 	UPROPERTY(BlueprintAssignable)
 		FChestTriggerEvent ChestOpen;
 	UPROPERTY(BlueprintAssignable)
 		FChestTriggerEvent ChestClose;
-	// "WoodPart" 
+
+	// Chest options and loot text
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 		FText LootTexts;
 	UPROPERTY(EditAnywhere)
 		bool bOpenOnce = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bHasLoot = false;
-
 	FText GetLootText() const { return LootTexts; }
 
 private:
 	bool CanBeOpened = true;
+
 };
