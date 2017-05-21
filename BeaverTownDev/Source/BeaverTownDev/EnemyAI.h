@@ -94,4 +94,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsAggro() const { return IsAggro; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetCanAttack(bool Attacking) { CanAttack = Attacking; }
 };

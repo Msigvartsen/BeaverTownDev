@@ -33,13 +33,11 @@ void AEnemyAI::Tick(float DeltaTime)
 
 	if (AttackRange->IsOverlappingActor(Player))
 	{
-		CanAttack = true;
-		UE_LOG(LogTemp,Warning,TEXT("Can attack"))
+		//CanAttack = true;
 	}
 	else
 	{
-		CanAttack = false;
-		UE_LOG(LogTemp, Warning, TEXT("Cannot attack"))
+		//CanAttack = false;
 	}
 
 	if (Health <= 0 && IsAlive)
@@ -47,8 +45,6 @@ void AEnemyAI::Tick(float DeltaTime)
 		IsAlive = false;
 		AIController->SetIsAlive(IsAlive);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
-		UE_LOG(LogTemp, Warning, TEXT("Sets despawn timer 2sec"))
-		
 	}
 	
 }

@@ -37,6 +37,9 @@ private:
 	TArray<AActor*> BotTargetPoints;
 
 	virtual void Possess(APawn* Pawn) override;
+	void AttackDelayEnd();
+	FTimerHandle TimerHandle;
+	float AttackDelay = .8f;
 
 public:
 

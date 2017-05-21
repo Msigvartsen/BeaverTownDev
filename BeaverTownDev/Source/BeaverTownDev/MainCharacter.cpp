@@ -61,7 +61,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMainCharacter::MoveX(float value)
 {
-	if (IsPlayerAlive)
+	if (IsPlayerAlive && CanMelee)
 	{
 		AddMovementInput(FVector::ForwardVector, value);
 	}
@@ -70,7 +70,7 @@ void AMainCharacter::MoveX(float value)
 
 void AMainCharacter::MoveY(float value)
 {
-	if (IsPlayerAlive)
+	if (IsPlayerAlive && CanMelee)
 	{
 		AddMovementInput(FVector::RightVector, value);
 	}
