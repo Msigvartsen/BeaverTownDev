@@ -28,24 +28,18 @@ private:
 
 	//Blackboard Keys
 	const FName BlackboardPlayerKey = FName("Player");
-
+	const FName BlackboardIsAliveKey = FName("AIAlive?");
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName LocationToGoKey;
 	
-	AEnemyAI* EnemyAI = nullptr;
+	class AEnemyAI* EnemyAI = nullptr;
 
 	TArray<AActor*> BotTargetPoints;
 
 	virtual void Possess(APawn* Pawn) override;
-
-	//Function fires when AI perception gets updated
-	UFUNCTION()
-		void OnPerceptionUpdated(TArray<AActor*> UpdatedActors);
-
-	
-	//Sight sense config for AI
-	UAISenseConfig_Sight* Sight;
-
+	void AttackDelayEnd();
+	FTimerHandle TimerHandle;
+	float AttackDelay = .7f;
 
 public:
 
@@ -54,9 +48,8 @@ public:
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardComp; }
 	FORCEINLINE TArray<AActor*> GetAvailableTargetPoints() const { return BotTargetPoints; }
 
-	AActor* GetSeeingPawn();
-
 	UFUNCTION()
 		void Attack();
-	
+	UFUNCTION()
+		void SetIsAlive(bool IsAlive);
 };

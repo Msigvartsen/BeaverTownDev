@@ -13,12 +13,16 @@ ACrate::ACrate()
 void ACrate::OpenEvent()
 {
 	// Takes damage
-	Health -= 50;
+	Health -= 70;
 	if (Health <= 0)
 	{
 		bIsBroken = true;
 		RandomSpawn = FMath::RandRange(0, 2);
 		UE_LOG(LogTemp, Warning, TEXT("RandSpawn: %d"), RandomSpawn)
+			if (DestroyParticle)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyParticle, GetTransform(), true);
+			}
 	}
 	// continues in blueprint
 	CrateOpen.Broadcast();

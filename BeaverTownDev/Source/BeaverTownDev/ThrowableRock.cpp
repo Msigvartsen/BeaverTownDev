@@ -14,7 +14,7 @@ void AThrowableRock::BeginPlay()
 	Super::BeginPlay();
 
 	RockMesh = FindComponentByClass<UStaticMeshComponent>();
-	RockMesh->OnComponentHit.AddDynamic(this, &AThrowableRock::OnHit);
+	RockMesh->OnComponentHit.AddDynamic(this, &AThrowableRock::OnHit);	
 }
 
 void AThrowableRock::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -28,8 +28,6 @@ void AThrowableRock::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 			EnemyRef->SetTakeDamage(RockDamage);
 			SetIsThrown(false);
 		}
-		//Lag timer for å sette IsThrown tilbake til false hvis den ikke treffer noen.
-		UE_LOG(LogTemp, Warning, TEXT("Rock hit something"))
 
 	}
 	
