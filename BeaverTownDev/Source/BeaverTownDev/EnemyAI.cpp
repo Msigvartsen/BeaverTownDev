@@ -31,7 +31,7 @@ void AEnemyAI::Tick(float DeltaTime)
 	
 	LineTraceToPlayer();
 
-	if (AttackRange->IsOverlappingActor(Player))
+	if (AttackRange->IsOverlappingActor(Player) && IsAlive)
 	{
 		CanDoDamage = true;
 	}

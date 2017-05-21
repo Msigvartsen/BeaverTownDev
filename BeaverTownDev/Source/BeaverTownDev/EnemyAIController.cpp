@@ -35,7 +35,7 @@ void AEnemyAIController::Possess(APawn* Pawn)
 		//Finds all actors of set class, and puts them into an Array (BotTargetPoints) 
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABotTargetPoint::StaticClass(), BotTargetPoints);
 
-		//Starts BehaviorTree to specific character
+		//Starts BehaviorTree
 		BehaviorComp->StartTree(*EnemyAI->BehaviorTree);
 	}
 }
