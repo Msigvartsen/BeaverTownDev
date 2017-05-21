@@ -47,7 +47,7 @@ void UGrabber::Grab()
 
 	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
 
-	if (CharacterCollision && IsHeld == false)
+	if (CharacterCollision && !IsHeld)
 	{
 		CharacterCollision->GetOverlappingActors(OverlappingActors);
 		for (AActor* Actor : OverlappingActors)
@@ -70,14 +70,12 @@ void UGrabber::Grab()
 			}
 		}
 
-		if (ItemToThrow && IsHeld == false)
+		if (ItemToThrow && !IsHeld)
 		{
 			IsHeld = true;
 			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
-			//ItemToGrab->SetCollisionProfileName(TEXT("IgnorePawnOnly"));
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
-
 			PhysicsHandle->GrabComponentAtLocationWithRotation(ItemToGrab, NAME_None, ItemLocation, ItemRotation);
 			ItemToThrow->SetActorEnableCollision(false);
 			
@@ -133,7 +131,7 @@ void UGrabber::Release()
 		if (Char)
 		{
 			Char->SetIsPushingObject(false);
-			Char->SetMaxWalkSpeed(600.f);
+			Char->SetMaxWalkSpeed(Char->GetWalkSpeed());
 		}		
 	}
 }
@@ -147,6 +145,7 @@ void UGrabber::Throw()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Trying to THROW Object"))
 			PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
+			
 			PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*DefaultThrowForce, NAME_None, true);
 			ItemToThrow->SetActorEnableCollision(true);
 			ItemToThrow->SetIsThrown(true);
@@ -158,7 +157,7 @@ void UGrabber::Throw()
 			ObjectToPush = nullptr;
 		}
 		
-		PhysicsHandle->ReleaseComponent();	
+		PhysicsHandle->ReleaseComponent();
 
 		IsHeld = false;
 		
@@ -166,7 +165,7 @@ void UGrabber::Throw()
 		if (Char)
 		{
 			Char->SetIsPushingObject(false);
-			Char->SetMaxWalkSpeed(600.f);
+			Char->SetMaxWalkSpeed(Char->GetWalkSpeed());
 		}
 	}
 }

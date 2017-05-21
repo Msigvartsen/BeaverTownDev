@@ -19,6 +19,7 @@ void ADestructibleRock::OpenEvent()
 	{
 		// continues in blueprint
 		BreakRock();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyParticle, GetTransform(), true);
 	}
 }
 

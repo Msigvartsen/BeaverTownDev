@@ -40,7 +40,8 @@ private:
 	UPROPERTY(EditAnywhere)
 		UShapeComponent* PickupBox;
 	AMainCharacter* CharacterPickup = nullptr;
-
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* HealthParticle = nullptr;
 	
 	
 };

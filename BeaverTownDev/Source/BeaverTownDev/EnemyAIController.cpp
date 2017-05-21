@@ -17,23 +17,6 @@ AEnemyAIController::AEnemyAIController()
 	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
 
 	LocationToGoKey = "LocationToGo";
-	
-	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
-
-	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-	
-	Sight->SightRadius = 900.f;
-	Sight->LoseSightRadius = 1200.f;
-	Sight->PeripheralVisionAngleDegrees = 120.F;
-
-	//Setting Sight sense to detect anything
-	Sight->DetectionByAffiliation.bDetectEnemies = true;
-	Sight->DetectionByAffiliation.bDetectFriendlies = true;
-	Sight->DetectionByAffiliation.bDetectNeutrals = true;
-
-	//Registering sight sense to Perception Component
-	AIPerceptionComponent->ConfigureSense(*Sight);
-
 
 }
 
@@ -57,35 +40,13 @@ void AEnemyAIController::Possess(APawn* Pawn)
 
 		//Starts BehaviorTree to specific character
 		BehaviorComp->StartTree(*EnemyAI->BehaviorTree);
-		AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &AEnemyAIController::OnPerceptionUpdated);
 	}
 
-}
-
-void AEnemyAIController::OnPerceptionUpdated(TArray<AActor*> UpdatedActors)
-{
-	for (AActor* Actor : UpdatedActors)
-	{
-		if (Actor->IsA<AMainCharacter>() && !GetSeeingPawn())
-		{
-			BlackboardComp->SetValueAsObject(BlackboardPlayerKey, Actor);
-			return;
-		}
-	}
-	//If the player does not exist in UpdatedActors, Set key to nullptr
-	BlackboardComp->SetValueAsObject(BlackboardPlayerKey, nullptr);
-}
-
-AActor* AEnemyAIController::GetSeeingPawn()
-{
-	UObject* object = BlackboardComp->GetValueAsObject(BlackboardPlayerKey);
-
-	return object ? Cast<AActor>(object) : nullptr;
 }
 
 void AEnemyAIController::Attack()
 {
-	UE_LOG(LogTemp,Warning,TEXT("AI ATTACKING OWOW"))
+	
 	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
 	if (GameInstance)
 	{
@@ -94,7 +55,12 @@ void AEnemyAIController::Attack()
 		{
 			GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
 			UE_LOG(LogTemp, Warning, TEXT("AI Dealing damage"))
-		}
-		
+		}	
 	}
 }
+
+void AEnemyAIController::SetIsAlive(bool IsAlive)
+{
+	BlackboardComp->SetValueAsBool(BlackboardIsAliveKey, IsAlive);
+}
+

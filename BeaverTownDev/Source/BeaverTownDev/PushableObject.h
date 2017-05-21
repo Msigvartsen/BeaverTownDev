@@ -18,21 +18,4 @@ protected:
 
 	virtual void BeginPlay() override;
 	
-
-private:
-	USceneComponent* Root = nullptr;
-	UPROPERTY(EditDefaultsOnly)
-		UBoxComponent* BoxCollision = nullptr;
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* Mesh = nullptr;
-
-	bool CanMoveForward = false;
-	bool CanMoveRight = false;
-	bool IsCollisionActive = false;
-
-public:
-	
-
-	UFUNCTION()
-	void SetIgnorePlayerCollision(bool IsCollisionActive);
 };

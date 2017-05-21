@@ -55,8 +55,7 @@ private:
 	float MaxHealth = 100.f;
 	float Health = MaxHealth;
 	float AttackTime = .5f;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<AComplexProjectile> ComplexProjectileBlueprint;
+
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
 	

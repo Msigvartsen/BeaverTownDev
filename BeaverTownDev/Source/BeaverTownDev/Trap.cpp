@@ -30,15 +30,19 @@ void ATrap::Tick(float DeltaTime)
 
 void ATrap::TrapTriggered()
 {
-	if (!TrapTrigger) { return; }
-	AMainCharacter* MainCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	if (TrapTrigger->IsOverlappingActor(MainCharacter))
-	{	
-		UE_LOG(LogTemp,Warning,TEXT("Trap triggered!"))
-		AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ObjectToSpawn, GetActorLocation() + GetActorForwardVector() *100.f, GetActorRotation());
-		SpawnedActor->SetLifeSpan(Lifetime);
-		UGameplayStatics::PlaySound2D(GetWorld(), TriggerSound, 1.f, 1.f, 0.f);
-		TrapActive = false;
+	//Checks if there are a trigger volume connected
+	if (TrapTrigger)
+	{
+		AMainCharacter* MainCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+		if (TrapTrigger->IsOverlappingActor(MainCharacter))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Trap triggered!"))
+			AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ObjectToSpawn, GetActorLocation() + GetActorForwardVector() *100.f, GetActorRotation());
+			SpawnedActor->SetLifeSpan(Lifetime);
+			UGameplayStatics::PlaySound2D(GetWorld(), TriggerSound, 1.f, 1.f, 0.f);
+			TrapActive = false;
+		}
 	}
+	
 }
 

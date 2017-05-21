@@ -24,10 +24,12 @@ public:
 		FCrateTriggerEvent CrateOpen;
 	UPROPERTY(BlueprintReadWrite)
 		int32 RandomSpawn = 0;
-	
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* DestroyParticle = nullptr;
 private:
 	UPROPERTY(EditAnywhere)
 		int32 Health = 100;
 	bool bIsBroken = false;
+	
 
 };

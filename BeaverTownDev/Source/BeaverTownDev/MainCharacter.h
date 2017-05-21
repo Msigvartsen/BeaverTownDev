@@ -45,10 +45,10 @@ private:
 	void SetTextRotation(UTextRenderComponent* TextRenderComp);
 	void SetVisibilityOverheadText();
 	void TimerEnd();
+	void MeleeDelayEnd();
 	//Character Variables
 
-	UPROPERTY(EditAnywhere,Category="CharacterStats")
-		float DodgeSpeed = 2000.f;
+	
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float InteractReach = 100.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
@@ -57,8 +57,18 @@ private:
 		float MeleeDamage = 50.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float OverheadTextDespawnTime = 2.f;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+		float AttackDelay = 0.5f;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+		float WalkSpeed = 400.f;
+	UPROPERTY(EditAnywhere,Category = "CharacterStats")
+	class UParticleSystem* HealthParticle = nullptr;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+	class UParticleSystem* MeleeParticle = nullptr;
+	
 
 	FTimerHandle TimerHandle;
+	FTimerHandle MeleeTimerHandle;
 
 	float StartJumpTime = 0;
 	float EndJumpTime = 0;
@@ -69,10 +79,11 @@ private:
 	bool bCanTakeFallingDamage = false;
 	float TurnInterpolationSpeed = 1000.f;
 	bool IsTextVisible = false;
+	bool CanMelee = true;
+	bool IsPlayerAlive = true;
 	FText LootText;
 	
-	UPROPERTY(EditAnywhere)
-		float WalkSpeed = 500.f;
+	
 
 	class AChest* ChestRef = nullptr;
 
@@ -81,13 +92,22 @@ private:
 	UPROPERTY(EditAnywhere, Category = "TextRender")
 		UTextRenderComponent* OverheadText;
 public:
-	//Character Getters
+	//Character Getters // Setters
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
+	UFUNCTION()
+		float GetWalkSpeed() const { return WalkSpeed; }
+	UFUNCTION(BlueprintCallable)
+		bool GetCanMelee() const { return CanMelee; }
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();
+	UFUNCTION(BlueprintCallable)
+		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
+	UFUNCTION(BlueprintCallable)
+		bool GetIsPlayerAlive() { return IsPlayerAlive; }
 	USoundBase* GetHurtSound();
+
 
 };
