@@ -15,9 +15,7 @@ AEnemyAIController::AEnemyAIController()
 {
 	BehaviorComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComp"));
 	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
-
 	LocationToGoKey = "LocationToGo";
-
 }
 
 void AEnemyAIController::Possess(APawn* Pawn)
@@ -34,29 +32,18 @@ void AEnemyAIController::Possess(APawn* Pawn)
 			BlackboardComp->InitializeBlackboard(*(EnemyAI->BehaviorTree->BlackboardAsset));
 			
 		}
-
 		//Finds all actors of set class, and puts them into an Array (BotTargetPoints) 
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABotTargetPoint::StaticClass(), BotTargetPoints);
 
-		//Starts BehaviorTree to specific character
+		//Starts BehaviorTree
 		BehaviorComp->StartTree(*EnemyAI->BehaviorTree);
 	}
-
 }
 
 void AEnemyAIController::Attack()
 {
-	
-	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-	if (GameInstance)
-	{
-		
-		if (EnemyAI->GetCanAttack())
-		{
-			GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
-			UE_LOG(LogTemp, Warning, TEXT("AI Dealing damage"))
-		}	
-	}
+	EnemyAI->SetCanAttack(true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAIController::AttackDelayEnd, EnemyAI->GetAttackDelay());
 }
 
 void AEnemyAIController::SetIsAlive(bool IsAlive)
@@ -64,3 +51,13 @@ void AEnemyAIController::SetIsAlive(bool IsAlive)
 	BlackboardComp->SetValueAsBool(BlackboardIsAliveKey, IsAlive);
 }
 
+void AEnemyAIController::AttackDelayEnd()
+{
+	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+	if (GameInstance && EnemyAI->GetCanDoDamage())
+	{
+		GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);		
+	}
+	EnemyAI->SetCanAttack(false);
+}

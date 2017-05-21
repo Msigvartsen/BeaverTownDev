@@ -54,11 +54,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float MeleeRange = 75.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float MeleeDamage = 50.f;
+		float MeleeDamage = 30.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float OverheadTextDespawnTime = 2.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float AttackDelay = 0.5f;
+		float AttackDelay = 0.3f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float WalkSpeed = 400.f;
 	UPROPERTY(EditAnywhere,Category = "CharacterStats")

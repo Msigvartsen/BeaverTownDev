@@ -31,15 +31,13 @@ void AEnemyAI::Tick(float DeltaTime)
 	
 	LineTraceToPlayer();
 
-	if (AttackRange->IsOverlappingActor(Player))
+	if (AttackRange->IsOverlappingActor(Player) && IsAlive)
 	{
-		CanAttack = true;
-		UE_LOG(LogTemp,Warning,TEXT("Can attack"))
+		CanDoDamage = true;
 	}
 	else
 	{
-		CanAttack = false;
-		UE_LOG(LogTemp, Warning, TEXT("Cannot attack"))
+		CanDoDamage = false;
 	}
 
 	if (Health <= 0 && IsAlive)
@@ -47,8 +45,6 @@ void AEnemyAI::Tick(float DeltaTime)
 		IsAlive = false;
 		AIController->SetIsAlive(IsAlive);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
-		UE_LOG(LogTemp, Warning, TEXT("Sets despawn timer 2sec"))
-		
 	}
 	
 }
@@ -67,7 +63,7 @@ void AEnemyAI::SetTakeDamage(float Damage)
 
 void AEnemyAI::LineTraceToPlayer()
 {
-	UE_LOG(LogTemp,Warning,TEXT("LineTracing!"))
+	
 	FHitResult HitResult;
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * AggroRange);
@@ -106,7 +102,6 @@ void AEnemyAI::Despawn()
 	if (GetWorld())
 	{
 		Destroy();
-		UE_LOG(LogTemp,Warning,TEXT("Despawn timer up!"))
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);	
 	}
 }
