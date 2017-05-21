@@ -58,7 +58,7 @@ void AFloatingCrate::MoveCrate(FVector Direction)
 
 void AFloatingCrate::MakeFall()
 {
-	FloatingCrateMesh->SetConstraintMode(EDOFMode::None);
+	FloatingCrateMesh->SetConstraintMode(EDOFMode::YZPlane);
 }
 
 void AFloatingCrate::StopFall()
