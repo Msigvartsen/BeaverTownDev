@@ -25,7 +25,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Hitbox")
 		UStaticMeshComponent* RockMesh = nullptr;
-
+	
 	UPROPERTY(EditAnywhere)
 		float RockDamage = 50.f;
+
+	UFUNCTION()
+		void SetCollisionIgnorePawn();
 };

@@ -27,9 +27,12 @@ private:
 	AThrowableItems *ItemToThrow = nullptr;
 	APushableObject* ObjectToPush = nullptr;
 	ATorchPickup* TorchToHold = nullptr;
-
+	FTimerHandle TimerHandle;
+	class AThrowableRock* Rock = nullptr;
 	bool StartThrow = false;
 	float DefaultThrowForce = 2000;
+	UPROPERTY(EditAnywhere)
+	float RockCollisionTimer = 3.f;
 	float Reach = 20.f;
 	bool IsHeld = false;
 	UInputComponent* InputComponent = nullptr;
@@ -40,4 +43,5 @@ private:
 	void Throw();
 	void FindPhysicsHandle();
 	void FindInputComponent();
+	void RockCollisionTimerEnd();
 };

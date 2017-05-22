@@ -61,7 +61,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float WalkSpeed = 400.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float WalkSpeedWhileAttacking = 200.f;
+		float WalkSpeedWhileAttacking = 300.f;
 	UPROPERTY(EditAnywhere,Category = "CharacterStats")
 	class UParticleSystem* HealthParticle = nullptr;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
@@ -93,7 +93,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "TextRender")
 		UTextRenderComponent* OverheadText;
 public:
-	//Character Getters // Setters
+	//Character Getters
 	
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
@@ -104,8 +104,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool GetCanMelee() const { return CanMelee; }
 	UFUNCTION(BlueprintCallable)
-
 		bool GetIsPlayerAlive() { return IsPlayerAlive; }
+
 	USoundBase* GetHurtSound();
 
 	//Setters
