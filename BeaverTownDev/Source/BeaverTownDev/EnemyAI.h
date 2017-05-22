@@ -42,7 +42,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float ChaseSpeed = 400.f;
 	UPROPERTY(EditAnywhere, Category = "AI")
-		float AggroRange = 800.f;
+		float AggroRange = 1000.f;
 	UPROPERTY(EditANywhere, Category = "AI")
 		float AttackDelay = .7f;
 
