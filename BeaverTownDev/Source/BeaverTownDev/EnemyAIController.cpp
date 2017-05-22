@@ -42,8 +42,12 @@ void AEnemyAIController::Possess(APawn* Pawn)
 
 void AEnemyAIController::Attack()
 {
-	EnemyAI->SetCanAttack(true);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAIController::AttackDelayEnd, EnemyAI->GetAttackDelay());
+	if (EnemyAI->GetCanAttack())
+	{
+		EnemyAI->SetCanAttack(false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAIController::AttackDelayEnd, EnemyAI->GetAttackDelay());
+	}
+	
 }
 
 void AEnemyAIController::SetIsAlive(bool IsAlive)
@@ -52,13 +56,19 @@ void AEnemyAIController::SetIsAlive(bool IsAlive)
 	BlackboardComp->SetValueAsBool(BlackboardIsAliveKey, IsAlive);
 }
 
+void AEnemyAIController::SetIsAggro(bool Aggro)
+{
+	BlackboardComp->SetValueAsBool(BlackboardIsAggroKey, Aggro);
+}
+
 void AEnemyAIController::AttackDelayEnd()
 {
 	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+	UE_LOG(LogTemp,Warning,TEXT("AI Attacking"))
 	if (GameInstance && EnemyAI->GetCanDoDamage())
 	{
 		GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);		
 	}
-	EnemyAI->SetCanAttack(false);
+	EnemyAI->SetCanAttack(true);
 }

@@ -22,13 +22,14 @@ private:
 
 	//Blackboard ref
 	UBlackboardComponent* BlackboardComp;
-
+	
 	/*UPROPERTY(VisibleAnywhere)
 	UAIPerceptionComponent* AIPerceptionComponent;*/
 
 	//Blackboard Keys
 	const FName BlackboardPlayerKey = FName("Player");
 	const FName BlackboardIsAliveKey = FName("AIAlive?");
+	const FName BlackboardIsAggroKey = FName("AIAggro?");
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName LocationToGoKey;
 	
@@ -36,7 +37,7 @@ private:
 	TArray<AActor*> BotTargetPoints;
 	FTimerHandle TimerHandle;
 	float AttackDelay = .7f;
-
+	bool CanAttack = true;
 	void AttackDelayEnd();
 	virtual void Possess(APawn* Pawn) override;
 
@@ -51,4 +52,6 @@ public:
 		void Attack();
 	UFUNCTION()
 		void SetIsAlive(bool IsAlive);
+	UFUNCTION()
+		void SetIsAggro(bool Aggro);
 };

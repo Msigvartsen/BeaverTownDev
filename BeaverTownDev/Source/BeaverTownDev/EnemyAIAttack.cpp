@@ -13,8 +13,10 @@ EBTNodeResult::Type UEnemyAIAttack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	{	
 		//A task run in Behavior Tree. When conditions inside behavior tree is met, run Attack function from AI Controller
 		AIController->Attack();
+		
 		return EBTNodeResult::Succeeded;
 	}
+	UE_LOG(LogTemp, Warning, TEXT("AI ATTACK TASK FAILED"))
 	return EBTNodeResult::Failed;
 }
 

@@ -19,8 +19,9 @@ void AEnemyAI::BeginPlay()
 	Super::BeginPlay();
 	Health = MaxHealth;
 	Player = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	AIController = Cast<AEnemyAIController>(this->GetController());
-	AIController->SetIsAlive(IsAlive);
+	AIController = Cast<AEnemyAIController>(GetController());
+	AIController->SetIsAlive(true);
+	AIController->SetIsAggro(false);
 	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 }
 
@@ -35,9 +36,11 @@ void AEnemyAI::Tick(float DeltaTime)
 	if (AttackRange->IsOverlappingActor(Player) && IsAlive)
 	{
 		CanDoDamage = true;
+		UE_LOG(LogTemp,Warning,TEXT("Overlapping true"))
 	}
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Overlapping false"))
 		CanDoDamage = false;
 	}
 
@@ -45,7 +48,7 @@ void AEnemyAI::Tick(float DeltaTime)
 	if (Health <= 0 && IsAlive)
 	{	
 		IsAlive = false;
-		AIController->SetIsAlive(IsAlive);
+		AIController->SetIsAlive(false);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
 	}
 	
@@ -83,6 +86,8 @@ void AEnemyAI::LineTraceToPlayer()
 		if (HitResult.GetActor()->IsA(AMainCharacter::StaticClass()))
 		{
 			IsAggro = true;
+			//UE_LOG(LogTemp,Warning,TEXT("heaohaeo"))
+			AIController->SetIsAggro(true);
 			GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
 		}
 		//If AI havent seen the player, sets walking speed to slow
