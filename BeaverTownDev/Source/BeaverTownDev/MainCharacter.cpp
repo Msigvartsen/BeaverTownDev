@@ -10,6 +10,8 @@
 AMainCharacter::AMainCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	//Camera settings
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -23,6 +25,8 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//Settings
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
 	bCanJump = true;
 	SetMaxWalkSpeed(WalkSpeed);
@@ -38,13 +42,14 @@ void AMainCharacter::Tick(float DeltaTime)
 	//Rotates character mesh towards the mouse cursor
 	RotateToMousePosition(DeltaTime);
 	
+	//CHecks for falling damage
 	FallingDamage();
 
 	//Rotates Overhead text towards camera
 	SetTextRotation(OverheadText);
-	
 }
 
+//Sets key-bindigs
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -80,26 +85,28 @@ void AMainCharacter::Melee()
 {
 	if (IsPlayerAlive)
 	{
-
 		if (CanMelee)
 		{
 			CanMelee = false;
+			//Slows character while attacking
 			GetCharacterMovement()->MaxWalkSpeed = WalkSpeedWhileAttacking;
+			//Delays melee attack
 			GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, AttackDelay);
 
 			FHitResult HitResult;
 
+			//Inflict damage
 			GetHitResultFromLineTrace(HitResult, MeleeRange);
 			if (HitResult.GetActor())
 			{
-
+				//Damage enemy
 				if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
 				{
 					AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
 					EnemyAIHit->SetTakeDamage(MeleeDamage);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeleeParticle, GetTransform(), true);
 				}
-
+				//Damage interactable objects
 				if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 				{
 					AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
@@ -122,7 +129,6 @@ void AMainCharacter::JumpPressed()
 		bCanJump = false;
 		Jump();
 	}
-	
 }
 
 void AMainCharacter::JumpReleased()
@@ -130,6 +136,7 @@ void AMainCharacter::JumpReleased()
 	StopJumping();
 }
 
+//Start timer when player is falling with negative velocity
 void AMainCharacter::FallingDamage()
 {
 	if (!bFalling && GetCharacterMovement()->IsFalling() && GetVelocity().Z < 0.f)
@@ -140,6 +147,7 @@ void AMainCharacter::FallingDamage()
 	}
 }
 
+//Calculates falling damage when the player lands
 void AMainCharacter::Landed(const FHitResult & Hit)
 {
 	bCanJump = true;
@@ -148,6 +156,9 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 	float SecondsInAir = EndJumpTime - StartJumpTime;
 	if (SecondsInAir > 0.7f && GetVelocity().Z < 0.f)
 	{
+		//The player was 0.7 seconds or more in air
+		//and will take falling damage with (time++)^5
+		//this will make the falling damage exponential
 		SecondsInAir++;
 		float HealthLost = FMath::Pow(SecondsInAir, 5.f);
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
@@ -157,16 +168,14 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 			GameInstance->SetDamageTaken(HealthLost);
 			bCanTakeFallingDamage = false;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), HealthLost);
-		UE_LOG(LogTemp, Warning, TEXT("SECONDS IN AIR: %f! , END JUMP TIME %f, START JUMP TIME: %f"), SecondsInAir, EndJumpTime, StartJumpTime);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("NO FALLING DAMAGE!"));
 		bCanTakeFallingDamage = false;
 	}
 }
 
+//The player can interact with interactable objects through linetrace or collision
 void AMainCharacter::Interact()
 {
 	if (IsPlayerAlive)
@@ -247,7 +256,6 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
 	if (IsPlayerAlive)
 	{
-
 		if (!IsPushingObject)
 		{
 			/// get viewport center
@@ -257,7 +265,8 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 			ViewportCenter = ViewportSize / 2;
 
 			/// get mouse position
-			float X, Y;
+			float X;
+			float Y;
 			GetWorld()->GetFirstPlayerController()->GetMousePosition(X, Y);
 			FVector2D MousePosition = FVector2D(X, Y);
 
@@ -272,16 +281,14 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 			FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
 
 			/// Rotates smoothly towards mouse cursor
-
 			FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, TurnInterpolationSpeed);
-
 			GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 		}
 	}
 }
 
 
-
+//Takes HitResult as out parameter (modifies it by reference)
 void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult,float Reach)
 {
 	FVector StartTrace = GetActorLocation();
