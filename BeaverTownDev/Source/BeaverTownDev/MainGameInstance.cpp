@@ -10,7 +10,6 @@ void UMainGameInstance::ResetStats()
 {
 	MaxHealth = 100.f;
 	Health = MaxHealth;
-	Minerals = 0;
 	WoodenKey = false;
 }
 
@@ -19,11 +18,7 @@ float UMainGameInstance::GetHealthPercent()
 	return Health / MaxHealth;
 }
 
-void UMainGameInstance::SetMinerals(int32 PickedUpMinerals)
-{
-	Minerals += PickedUpMinerals;
-	UE_LOG(LogTemp,Warning,TEXT("PICKED UP CRYSTALS TO GAME INSTANCE"))
-}
+
 
 void UMainGameInstance::SetDamageTaken(float Damage)
 {
@@ -43,10 +38,7 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	}
 }
 
-int32 UMainGameInstance::GetMinerals()
-{
-	return Minerals;
-}
+
 
 void UMainGameInstance::SetHealthIncrease(float inHealth)
 {

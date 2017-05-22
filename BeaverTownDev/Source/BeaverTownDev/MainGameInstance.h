@@ -19,8 +19,6 @@ private:
 		float MaxHealth = 100.f;
 	UPROPERTY(EditAnywhere,Category = "PlayerStats")
 		float Health = MaxHealth;
-	UPROPERTY(EditAnywhere, Category = "PlayerStats")
-		float Minerals = 0;
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
 	bool WoodenKey = false;
@@ -34,48 +32,36 @@ private:
 	UPROPERTY(EditAnywhere)
 		int32 WoodParts;
 
-
 public:
 
 	void ResetStats();
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void ResetHealth(float inHealth);
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerStats")
+		void LoadRestartGameUI();
+
+	void ResetCanPlaySound();
 
 	//Player Function getter/setters
 
 	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
 		float GetHealthPercent();
-
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		float GetMaxHealth() { return MaxHealth; }
-
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-		void ResetHealth(float inHealth);
-
-	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-		void SetHealthIncrease(float inHealth);
-
-	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-		void SetDamageTaken(float Damage);
-
-	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-		void SetMinerals(int32 PickedUpMinerals);
-
-	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-		int32 GetMinerals();
-
-	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
 		int32 GetWoodParts() { return WoodParts; }
-
-	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-		void SetWoodParts() { WoodParts++; };
-
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		bool GetWoodenKey();
 
+	//Setters
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void SetHealthIncrease(float inHealth);
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void SetDamageTaken(float Damage);
+	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
+		void SetWoodParts() { WoodParts++; };
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetWoodenKey(bool KeyStatus);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerStats")
-		void LoadRestartGameUI();
-
-	void ResetCanPlaySound();
 };

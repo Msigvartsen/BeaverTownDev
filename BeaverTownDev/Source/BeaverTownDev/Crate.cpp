@@ -18,7 +18,7 @@ void ACrate::OpenEvent()
 	{
 		bIsBroken = true;
 		RandomSpawn = FMath::RandRange(0, 2);
-		UE_LOG(LogTemp, Warning, TEXT("RandSpawn: %d"), RandomSpawn)
+
 			if (DestroyParticle)
 			{
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyParticle, GetTransform(), true);

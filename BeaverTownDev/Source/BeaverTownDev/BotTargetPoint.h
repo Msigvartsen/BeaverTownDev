@@ -15,6 +15,7 @@ class BEAVERTOWNDEV_API ABotTargetPoint : public ATargetPoint
 	
 	
 public:
+	//Set index to match with AI's waypoint index. AI will only patrol between same index'ed waypoints
 	UPROPERTY(EditAnywhere,Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	

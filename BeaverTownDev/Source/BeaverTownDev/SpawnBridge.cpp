@@ -8,7 +8,6 @@
 ASpawnBridge::ASpawnBridge()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void ASpawnBridge::BeginPlay()
@@ -18,7 +17,6 @@ void ASpawnBridge::BeginPlay()
 	BridgeMesh = FindComponentByClass<UStaticMeshComponent>();
 	BridgeMesh->SetVisibility(false, true);
 	this->SetActorEnableCollision(false);
-	
 }
 
 void ASpawnBridge::Tick(float DeltaTime)
@@ -28,9 +26,9 @@ void ASpawnBridge::Tick(float DeltaTime)
 	PlayerCollectedWood = Cast<UMainGameInstance>(GetGameInstance())->GetWoodParts();
 	if (PlayerCollectedWood >= BridgeIndex)
 	{
+		//Is ran for each WoodPart the player has collected, and builds the bridge piece by piece
 		BuildBridge();
 	}
-	
 }
 
 void ASpawnBridge::BuildBridge()
