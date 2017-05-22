@@ -17,14 +17,7 @@ ARollingDoor::ARollingDoor()
 void ARollingDoor::BeginPlay()
 {
 	Super::BeginPlay();
+
 	auto GM = Cast<ABeaverTownDevGameModeBase>(GetWorld()->GetAuthGameMode());
 	GM->SetDoor(this);
 }
-
-// Called every frame
-void ARollingDoor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

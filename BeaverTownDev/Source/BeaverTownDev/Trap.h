@@ -5,6 +5,9 @@
 #include "GameFramework/Actor.h"
 #include "Trap.generated.h"
 
+/*
+DESCRIPTION
+*/
 
 UCLASS()
 class BEAVERTOWNDEV_API ATrap : public AActor

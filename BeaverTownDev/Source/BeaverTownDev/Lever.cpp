@@ -7,6 +7,7 @@
 
 ALever::ALever()
 {
+	// Overrides settings from base class
 	bOnlyInteractFromAngle = true;
 	MinOpenAngle -= 20.f;
 	MaxOpenAngle += 20.f;
@@ -14,21 +15,20 @@ ALever::ALever()
 
 void ALever::OpenEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Calling Lever OpenEvent"))
-
 	if (bIsOpenEvent == false)
 	{
 		bIsOpenEvent = true;
+		// Continues in blueprint
 		LeverOpen.Broadcast();
 	}
 }
 
 void ALever::CloseEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Calling Lever CloseEvent"))
 	if (bIsOpenEvent == true)
 	{
 		bIsOpenEvent = false;
+		// Continues in blueprint
 		LeverClose.Broadcast();
 	}
 }

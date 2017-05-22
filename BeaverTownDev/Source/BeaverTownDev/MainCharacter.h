@@ -4,6 +4,10 @@
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
 
+/*
+DESCRIPTION
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AMainCharacter : public ACharacter
 {
@@ -60,9 +64,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float WalkSpeedWhileAttacking = 300.f;
 	UPROPERTY(EditAnywhere,Category = "CharacterStats")
-	class UParticleSystem* HealthParticle = nullptr;
+		UParticleSystem* HealthParticle = nullptr;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-	class UParticleSystem* MeleeParticle = nullptr;
+		UParticleSystem* MeleeParticle = nullptr;
 	
 
 	FTimerHandle TimerHandle;

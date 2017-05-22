@@ -16,20 +16,6 @@ AInteract::AInteract()
 
 }
 
-// Called when the game starts or when spawned
-void AInteract::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AInteract::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AInteract::OpenEvent()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Calling base class OpenEvent"))

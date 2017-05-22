@@ -5,9 +5,10 @@
 #include "ThrowableItems.h"
 #include "ThrowableRock.generated.h"
 
-/**
- * 
- */
+/*
+A rock that the player can throw to solve puzzles or inflict damage
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AThrowableRock : public AThrowableItems
 {
@@ -22,13 +23,10 @@ public:
 	AThrowableRock();
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Hitbox")
-		UStaticMeshComponent* RockMesh = nullptr;
-	
-	UPROPERTY(EditAnywhere)
-		float RockDamage = 50.f;
-
 	UFUNCTION()
 		void SetCollisionIgnorePawn();
+	UPROPERTY(EditDefaultsOnly, Category = "Hitbox")
+		UStaticMeshComponent* RockMesh = nullptr;
+	UPROPERTY(EditAnywhere)
+		float RockDamage = 50.f;
 };

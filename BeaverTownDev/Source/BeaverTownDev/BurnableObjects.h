@@ -5,26 +5,28 @@
 #include "GameFramework/Actor.h"
 #include "BurnableObjects.generated.h"
 
+/*
+All objects that can be set on fire derives from this class
+The "IgniteBurnableObjects" function allows the fire to spread between 
+different burnable types. (the log can ignite sawtable etc)
+This function uses polymorphism principles with blueprint.
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API ABurnableObjects : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ABurnableObjects();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 	UPROPERTY(BlueprintReadWrite, Category = "FIRE")
 		bool bIsLit = false;
 	UPROPERTY(BlueprintReadWrite, Category = "FIRE")
 		bool bCanSpread = false;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "FIRE")
 		void IgniteBurnableObjects();
 	

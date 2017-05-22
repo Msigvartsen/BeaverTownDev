@@ -5,9 +5,16 @@
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
 
+/*
+Component added to AMainCharacter.
+Gives the player the ability to grab, throw and release objects
+*/
+
+// Forward declarations
 class AThrowableItems;
 class APushableObject;
 class ATorchPickup;
+class AThrowableRock;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BEAVERTOWNDEV_API UGrabber : public UActorComponent
@@ -22,22 +29,27 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	FHitResult LineTraceFromCharacter();
+	// Pointers to grabbable objects
 	UPrimitiveComponent* ComponentToGrab = nullptr;
 	AThrowableItems *ItemToThrow = nullptr;
 	APushableObject* ObjectToPush = nullptr;
 	ATorchPickup* TorchToHold = nullptr;
 	FTimerHandle TimerHandle;
-	class AThrowableRock* Rock = nullptr;
+	AThrowableRock* Rock = nullptr;
+
+	// Settings variables
 	bool StartThrow = false;
 	float DefaultThrowForce = 2000;
-	UPROPERTY(EditAnywhere)
-	float RockCollisionTimer = 3.f;
 	float Reach = 20.f;
 	bool IsHeld = false;
-	UInputComponent* InputComponent = nullptr;
-	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UPROPERTY(EditAnywhere)
+		float RockCollisionTimer = 3.f;
 
+
+	UInputComponent* InputComponent = nullptr;
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+	// Member functions
 	void Grab();
 	void Release();
 	void Throw();

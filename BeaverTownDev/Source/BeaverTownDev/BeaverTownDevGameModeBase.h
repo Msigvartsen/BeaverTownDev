@@ -5,6 +5,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "BeaverTownDevGameModeBase.generated.h"
 
+/*
+Keeps track of pointer references with setters and getters
+*/
+
+// Forward declarations
 class ARaft;
 class ARollingDoor;
 

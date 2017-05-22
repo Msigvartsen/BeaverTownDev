@@ -5,21 +5,19 @@
 #include "GameFramework/Actor.h"
 #include "StreamCollision.generated.h"
 
+/*
+Stream Collision that push AFloatingCrate along the stream direction
+Can also make crates fall or stop falling
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AStreamCollision : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AStreamCollision();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
@@ -36,6 +34,5 @@ public:
 private:
 	UBoxComponent* Collision = nullptr;
 	AFloatingCrate* Crate = nullptr;
-	
 	
 };

@@ -4,8 +4,6 @@
 #include "MainCharacter.h"
 #include "MainGameInstance.h"
 
-
-
 void UMainGameInstance::ResetStats()
 {
 	MaxHealth = 100.f;
@@ -18,17 +16,18 @@ float UMainGameInstance::GetHealthPercent()
 	return Health / MaxHealth;
 }
 
-
-
+//Inflict damage on player according to parameter value
 void UMainGameInstance::SetDamageTaken(float Damage)
 {
 	AMainCharacter* PC = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	HurtSound = PC->GetHurtSound();
 	Health -= Damage;
+	//Playe hurt sound only once when dead
 	if (CanPlaySound &&  PlayHurtSoundOnceWhenDead)
 	{
 		CanPlaySound = false;
 		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 5.f, 1.f, 0.f);
+		//Sets a timer before next hurt sound is played
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainGameInstance::ResetCanPlaySound, SoundDelay, false);
 		if (Health <= 0)
 		{
@@ -41,8 +40,6 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 		LoadRestartGameUI();
 	}
 }
-
-
 
 void UMainGameInstance::SetHealthIncrease(float inHealth)
 {

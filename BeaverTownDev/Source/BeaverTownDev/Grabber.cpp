@@ -26,14 +26,12 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	LineTraceFromCharacter();
-
+	// Sets the object held in front of the player.
 	if (PhysicsHandle->GrabbedComponent)
 	{
-		FVector StartTrace = GetOwner()->GetActorLocation();
-		FVector EndTrace = StartTrace + (GetOwner()->GetActorRotation().Vector() * Reach);
+		FVector EndTrace = GetOwner()->GetActorLocation() + (GetOwner()->GetActorRotation().Vector() * Reach);
 		EndTrace.Z -= 25.f;
-		StartTrace.Z -= 25.f;
+		EndTrace = EndTrace + GetOwner()->GetActorForwardVector().GetSafeNormal() * 25.f;
 		PhysicsHandle->SetTargetLocationAndRotation(EndTrace, GetOwner()->GetActorRotation());	
 	}
 }
@@ -45,10 +43,10 @@ void UGrabber::Grab()
 
 	if (CharacterCollision && !IsHeld)
 	{
+		// Finds grabbable objects that overlaps with player
 		CharacterCollision->GetOverlappingActors(OverlappingActors);
 		for (AActor* Actor : OverlappingActors)
 		{
-			
 			if (Actor->GetClass()->IsChildOf(AThrowableItems::StaticClass()))
 			{
 				ItemToThrow = Cast<AThrowableItems>(Actor);
@@ -61,15 +59,20 @@ void UGrabber::Grab()
 			if (Actor->GetClass()->IsChildOf(ATorchPickup::StaticClass()))
 			{
 				TorchToHold = Cast<ATorchPickup>(Actor);
+				// torch is placed in character socket and not grabbed by physics handle
+				// it uses PickUpTorch() function defined in ATorchPickup
 				TorchToHold->PickUpTorch();
 				IsHeld = true;
 				break;
 			}
 		}
 
+		// If ItemToThrow was found and nothing is already held by the player
+		// It will grab a throwable rock
 		if (ItemToThrow && !IsHeld)
 		{
-			//If item can be picked up, set location and rotation. Turns collision off while held to not collide with character
+			// If item can be picked up, set location and rotation. 
+			// Turn collision off while held to not collide with character
 			IsHeld = true;
 			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
@@ -79,6 +82,8 @@ void UGrabber::Grab()
 			
 		}
 
+		// If ObjectToPush was found it will grab the object and simulate pulling/pushing
+		// Can do this while holding another item
 		if (ObjectToPush)
 		{
 			//If object can be pushed, set location/rotation and set collision to ignore pawn.
@@ -88,6 +93,7 @@ void UGrabber::Grab()
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
 
+			// Adjusting character movement speed to simulate pushing/pulling
 			AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
 			if (Char)
 			{
@@ -102,7 +108,7 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
-	// For Torch
+	// Release Torch 
 	if (IsHeld && TorchToHold)
 	{
 		TorchToHold->DropTorch();
@@ -137,16 +143,17 @@ void UGrabber::Release()
 	}
 }
 
-
+// Throws objects and resets physics settings, collision channels, etc.
 void UGrabber::Throw()
 {
 	if (PhysicsHandle && IsHeld && !TorchToHold)
 	{	
 		if (ItemToThrow)
 		{
+			ItemToThrow->SetActorEnableCollision(true);
+			PhysicsHandle->GrabbedComponent->SetSimulatePhysics(true);
 			PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
 			PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*DefaultThrowForce, NAME_None, true);
-			ItemToThrow->SetActorEnableCollision(true);
 			ItemToThrow->SetIsThrown(true);
 			ItemToThrow->FindComponentByClass<UStaticMeshComponent>()->SetCollisionResponseToChannel(ECC_Pawn,ECR_Block);
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UGrabber::RockCollisionTimerEnd, RockCollisionTimer);
@@ -170,25 +177,6 @@ void UGrabber::Throw()
 	}
 }
 
-FHitResult UGrabber::LineTraceFromCharacter()
-{
-	FVector StartTrace = GetOwner()->GetActorLocation();
-	FVector EndTrace = StartTrace + (GetOwner()->GetActorRotation().Vector() * Reach);
-	EndTrace.Z -= 25.f;
-	StartTrace.Z -= 25.f;
-
-	FCollisionQueryParams QueryParams(FName(TEXT("")), false, GetOwner());
-	FHitResult HitResult;
-	GetWorld()->LineTraceSingleByObjectType(
-		HitResult,
-		StartTrace,
-		EndTrace,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), QueryParams
-		);
-
-	return HitResult;
-}
-
 void UGrabber::FindPhysicsHandle()
 {
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
@@ -198,6 +186,7 @@ void UGrabber::FindPhysicsHandle()
 	}
 }
 
+// Key-bindings to grab/throw/release
 void UGrabber::FindInputComponent()
 {
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
@@ -213,6 +202,7 @@ void UGrabber::FindInputComponent()
 	}
 }
 
+// Function called by timer
 void UGrabber::RockCollisionTimerEnd()
 {
 	Rock->SetCollisionIgnorePawn();

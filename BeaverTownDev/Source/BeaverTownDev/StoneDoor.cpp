@@ -12,17 +12,3 @@ AStoneDoor::AStoneDoor()
 
 }
 
-// Called when the game starts or when spawned
-void AStoneDoor::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AStoneDoor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

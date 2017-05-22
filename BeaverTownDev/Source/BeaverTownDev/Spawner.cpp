@@ -12,16 +12,11 @@ ASpawner::ASpawner()
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("MyRoot"));
 }
 
-void ASpawner::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 void ASpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Spawns in random range if enabled
 	if (bRandomRange)
 	{
 		SpawnLocation = GetActorLocation() + (GetActorForwardVector() * FMath::FRandRange(MinX, MaxX));
@@ -31,6 +26,7 @@ void ASpawner::Tick(float DeltaTime)
 		SpawnLocation = GetActorLocation();
 	}
 
+	// Spawns in intervals and delays first spawn if enabled
 	if (bCanSpawn && GetWorld()->GetTimeSeconds() > StartTimeDelay)
 	{
 		ActorsSpawned++;
@@ -44,7 +40,7 @@ void ASpawner::Tick(float DeltaTime)
 		}
 		bCanSpawn = false;
 		
-			
+		// Spawns object and adds the chosen LifeSpan to the object
 		if (ObjectToSpawn)
 		{
 			SpawnRotation = GetActorRotation();

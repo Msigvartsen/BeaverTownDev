@@ -5,9 +5,11 @@
 #include "Engine/GameInstance.h"
 #include "MainGameInstance.generated.h"
 
-/**
- * 
- */
+/*
+Keeps track on players stats (items, health etc)
+Also a has a lot of getters and setter to provide references to other classes.
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API UMainGameInstance : public UGameInstance
 {
@@ -34,17 +36,15 @@ private:
 		int32 WoodParts;
 
 public:
-
+	//Reset functions
 	void ResetStats();
+	void ResetCanPlaySound();
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void ResetHealth(float inHealth);
 	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerStats")
 		void LoadRestartGameUI();
 
-	void ResetCanPlaySound();
-
-	//Player Function getter/setters
-
+	//Getter
 	UFUNCTION(BlueprintCallable,Category = "PlayerStats")
 		float GetHealthPercent();
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
@@ -55,7 +55,6 @@ public:
 		bool GetWoodenKey();
 
 	//Setters
-
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetHealthIncrease(float inHealth);
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")

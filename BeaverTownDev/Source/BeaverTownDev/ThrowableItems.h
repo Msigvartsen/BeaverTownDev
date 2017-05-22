@@ -5,6 +5,12 @@
 #include "GameFramework/Actor.h"
 #include "ThrowableItems.generated.h"
 
+/*
+Base class for all other throwable items
+Contains some basic settings for throwable items
+(We only have one throwable item that is "ThrowableRock")
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AThrowableItems : public AActor
 {
@@ -12,22 +18,11 @@ class BEAVERTOWNDEV_API AThrowableItems : public AActor
 	
 public:	
 	AThrowableItems();
-
-	virtual void Tick(float DeltaTime) override;
-
 	void SetIsThrown(bool IsThrow);
-
 	UFUNCTION()
 		bool GetIsThrown() const { return IsThrown; }
-	
-protected:
-	virtual void BeginPlay() override;
 
 private:
 	bool IsThrown = false;
-
-
-	
-
 
 };

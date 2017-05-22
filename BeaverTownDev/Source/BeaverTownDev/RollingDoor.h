@@ -5,6 +5,11 @@
 #include "GameFramework/Actor.h"
 #include "RollingDoor.generated.h"
 
+/*
+A Rolling stone door that can only be opened by a lever or igniting torches
+Most of the functionality and animation is in the derived blueprint
+*/
+
 class ATorchStatic;
 
 UCLASS()
@@ -13,21 +18,19 @@ class BEAVERTOWNDEV_API ARollingDoor : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ARollingDoor();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	// Open/Close functions
 	UFUNCTION(BlueprintImplementableEvent, Category = "RollingDoor")
 		void OpenDoor();
 	UFUNCTION(BlueprintImplementableEvent, Category = "RollingDoor")
 		void CloseDoor();
+
+	// Torch references to open the door
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		ATorchStatic* Torch1 = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
