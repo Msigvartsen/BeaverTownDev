@@ -4,9 +4,6 @@
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
 
-// Forward declarations
-class AComplexProjectile;
-
 UCLASS()
 class BEAVERTOWNDEV_API AMainCharacter : public ACharacter
 {

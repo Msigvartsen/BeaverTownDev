@@ -2,7 +2,6 @@
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
 #include "Interact.h"
-#include "EnemyBase.h"
 #include "MainGameInstance.h"
 #include "EnemyAI.h"
 #include "Chest.h"
