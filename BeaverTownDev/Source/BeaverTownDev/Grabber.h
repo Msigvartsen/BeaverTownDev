@@ -29,9 +29,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	// Returns hit result from character linetrace
-	FHitResult LineTraceFromCharacter();
-
 	// Pointers to grabbable objects
 	UPrimitiveComponent* ComponentToGrab = nullptr;
 	AThrowableItems *ItemToThrow = nullptr;
@@ -43,14 +40,16 @@ private:
 	// Settings variables
 	bool StartThrow = false;
 	float DefaultThrowForce = 2000;
-	UPROPERTY(EditAnywhere)
-	float RockCollisionTimer = 3.f;
 	float Reach = 20.f;
 	bool IsHeld = false;
+	UPROPERTY(EditAnywhere)
+		float RockCollisionTimer = 3.f;
+
 
 	UInputComponent* InputComponent = nullptr;
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+	// Member functions
 	void Grab();
 	void Release();
 	void Throw();
