@@ -32,19 +32,17 @@ void AEnemyAI::Tick(float DeltaTime)
 	
 	LineTraceToPlayer();
 
-	//If AI is alive and player is withing attacking range
+	//Checks if AI is alive and player is withing attacking range
 	if (AttackRange->IsOverlappingActor(Player) && IsAlive)
 	{
 		CanDoDamage = true;
-		UE_LOG(LogTemp,Warning,TEXT("Overlapping true"))
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Overlapping false"))
 		CanDoDamage = false;
 	}
 
-	//When AI health is below 0, death animation is played, and starts a despawn timer for the character 
+	//When AI health is <= 0, death animation is played, and starts a despawn timer for the character 
 	if (Health <= 0)
 	{	
 		IsAlive = false;
@@ -66,7 +64,7 @@ void AEnemyAI::SetTakeDamage(float Damage)
 
 void AEnemyAI::LineTraceToPlayer()
 {
-	
+	//Checks if player is in within range
 	FHitResult HitResult;
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * AggroRange);

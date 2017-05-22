@@ -6,7 +6,7 @@
 #include "Trap.generated.h"
 
 /*
-DESCRIPTION
+A class that spawns an object when the player overlaps with the trigger volume
 */
 
 UCLASS()
@@ -17,25 +17,19 @@ class BEAVERTOWNDEV_API ATrap : public AActor
 public:	
 	ATrap();
 
-	virtual void BeginPlay() override;
-
 	virtual void Tick(float DeltaTime) override;
 
-	//SoundFX when the trap is triggered
 	UPROPERTY(EditAnywhere, Category = "Trap")
 		USoundBase* TriggerSound;
-	//TriggerVolume in editor
 	UPROPERTY(EditAnywhere,Category = "Trap")
 		ATriggerVolume* TrapTrigger = nullptr;
-	//Choose object to spawn
 	UPROPERTY(EditAnywhere, Category = "Trap")
 		UClass* ObjectToSpawn = nullptr;
-	//How lifetime of actor before destroyed
 	UPROPERTY(EditAnywhere, Category = "Trap")
 		float Lifetime = 0;
 
 	bool TrapActive = true;
-	
+
 	void TrapTriggered();
 	
 };
