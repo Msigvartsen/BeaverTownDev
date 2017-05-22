@@ -11,6 +11,7 @@ APickup::APickup()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Sets up mesh, collision, root etc
 	PickupRoot = CreateDefaultSubobject<USceneComponent>(TEXT("PickupRoot"));
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickupMesh"));
 	PickupBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
@@ -29,18 +30,12 @@ void APickup::BeginPlay()
 	CharacterPickup = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
-// Called every frame
-void APickup::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
-	/// her kan vi legge objektet til inventory
 	if (!CharacterPickup) { return; }
 
+	// If PickupBox is overlapping with player, 
+	// then destroy the box, play a sound, Spawn a particle, and heal the player
 	if (PickupBox->IsOverlappingActor(CharacterPickup))
 	{
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
@@ -52,10 +47,8 @@ void APickup::OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor
 			{
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, CharacterPickup->GetTransform(), true);
 			}
-			
 			Destroy();
 		}
-		
 	}
 }
 

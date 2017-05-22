@@ -19,13 +19,6 @@ AStreamCollision::AStreamCollision()
 	StreamArrow->SetupAttachment(RootComponent);
 }
 
-// Called when the game starts or when spawned
-void AStreamCollision::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 // Called every frame
 void AStreamCollision::Tick(float DeltaTime)
 {
@@ -49,7 +42,5 @@ void AStreamCollision::Tick(float DeltaTime)
 			}
 		}
 	}
-	
-
 }
 

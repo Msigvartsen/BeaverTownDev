@@ -5,28 +5,26 @@
 #include "GameFramework/Actor.h"
 #include "Spawner.generated.h"
 
+/*
+This class can spawn objects in the world with different settings
+The different settings allow it to take care of almost all the object spawning in the game.
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API ASpawner : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ASpawner();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void ResetTimer();
 
 private:
-	// Pointer to spawning class
-	FTimerHandle TimerHandle;
+	// Spawner settings
 	UPROPERTY(EditAnywhere, Category = "Spawning Options")
 		float Time = 5.f;
 	UPROPERTY(EditAnywhere, Category = "Spawning Options")
@@ -50,7 +48,7 @@ private:
 	FVector SpawnLocation;
 	FRotator SpawnRotation;
 	bool bCanSpawn = true;
-	
+	FTimerHandle TimerHandle;
 	int ActorsSpawned = 0;
 	
 	

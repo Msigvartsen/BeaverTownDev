@@ -60,9 +60,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float WalkSpeedWhileAttacking = 300.f;
 	UPROPERTY(EditAnywhere,Category = "CharacterStats")
-	class UParticleSystem* HealthParticle = nullptr;
+		UParticleSystem* HealthParticle = nullptr;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-	class UParticleSystem* MeleeParticle = nullptr;
+		UParticleSystem* MeleeParticle = nullptr;
 	
 
 	FTimerHandle TimerHandle;
