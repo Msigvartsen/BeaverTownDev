@@ -16,7 +16,6 @@ EBTNodeResult::Type UEnemyAIAttack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		
 		return EBTNodeResult::Succeeded;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("AI ATTACK TASK FAILED"))
 	return EBTNodeResult::Failed;
 }
 

@@ -37,7 +37,8 @@ private:
 	TArray<AActor*> BotTargetPoints;
 	FTimerHandle TimerHandle;
 	float AttackDelay = .7f;
-	bool CanAttack = true;
+	bool AIAttackReset = true;
+	bool IsAttacking = false;
 	void AttackDelayEnd();
 	virtual void Possess(APawn* Pawn) override;
 
@@ -51,7 +52,10 @@ public:
 	UFUNCTION()
 		void Attack();
 	UFUNCTION()
-		void SetIsAlive(bool IsAlive);
+		void SetIsAliveBlackboardKey(bool IsAlive);
 	UFUNCTION()
 		void SetIsAggro(bool Aggro);
+	UFUNCTION(BlueprintCallable)
+		bool GetIsAttacking() const { return IsAttacking; }
+	
 };

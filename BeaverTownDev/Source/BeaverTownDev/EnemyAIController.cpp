@@ -42,15 +42,15 @@ void AEnemyAIController::Possess(APawn* Pawn)
 
 void AEnemyAIController::Attack()
 {
-	if (EnemyAI->GetCanAttack())
+	if (!IsAttacking)
 	{
-		EnemyAI->SetCanAttack(false);
+		IsAttacking = true;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAIController::AttackDelayEnd, EnemyAI->GetAttackDelay());
 	}
 	
 }
 
-void AEnemyAIController::SetIsAlive(bool IsAlive)
+void AEnemyAIController::SetIsAliveBlackboardKey(bool IsAlive)
 {
 	//Updates Blackboard value of AI IsAlive
 	BlackboardComp->SetValueAsBool(BlackboardIsAliveKey, IsAlive);
@@ -64,11 +64,10 @@ void AEnemyAIController::SetIsAggro(bool Aggro)
 void AEnemyAIController::AttackDelayEnd()
 {
 	auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-	UE_LOG(LogTemp,Warning,TEXT("AI Attacking"))
 	if (GameInstance && EnemyAI->GetCanDoDamage())
 	{
 		GameInstance->SetDamageTaken(EnemyAI->GetAIDamage());
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);		
 	}
-	EnemyAI->SetCanAttack(true);
+	IsAttacking = false;
 }

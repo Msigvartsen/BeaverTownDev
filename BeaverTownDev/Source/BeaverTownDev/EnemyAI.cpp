@@ -20,7 +20,7 @@ void AEnemyAI::BeginPlay()
 	Health = MaxHealth;
 	Player = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	AIController = Cast<AEnemyAIController>(GetController());
-	AIController->SetIsAlive(true);
+	AIController->SetIsAliveBlackboardKey(true);
 	AIController->SetIsAggro(false);
 	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 }
@@ -45,19 +45,17 @@ void AEnemyAI::Tick(float DeltaTime)
 	}
 
 	//When AI health is below 0, death animation is played, and starts a despawn timer for the character 
-	if (Health <= 0 && IsAlive)
+	if (Health <= 0)
 	{	
 		IsAlive = false;
-		AIController->SetIsAlive(false);
+		AIController->SetIsAliveBlackboardKey(false);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
 	}
-	
 }
 
 void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void AEnemyAI::SetTakeDamage(float Damage)
@@ -73,7 +71,6 @@ void AEnemyAI::LineTraceToPlayer()
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * AggroRange);
 
-
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitResult,
 		StartTrace,
@@ -85,16 +82,8 @@ void AEnemyAI::LineTraceToPlayer()
 		//If AI spots the character, start chase mode. (Gives AI faster movement)
 		if (HitResult.GetActor()->IsA(AMainCharacter::StaticClass()))
 		{
-			IsAggro = true;
-			//UE_LOG(LogTemp,Warning,TEXT("heaohaeo"))
 			AIController->SetIsAggro(true);
 			GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
-		}
-		//If AI havent seen the player, sets walking speed to slow
-		else
-		{
-			IsAggro = false;
-			GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 		}
 	}
 }

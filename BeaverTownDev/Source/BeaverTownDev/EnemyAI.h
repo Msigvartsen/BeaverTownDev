@@ -5,6 +5,11 @@
 #include "GameFramework/Character.h"
 #include "EnemyAI.generated.h"
 
+
+class UBehaviorTree;
+class AEnemyAIController;
+class AMainCharacter;
+
 UCLASS()
 class BEAVERTOWNDEV_API AEnemyAI : public ACharacter
 {
@@ -13,12 +18,11 @@ class BEAVERTOWNDEV_API AEnemyAI : public ACharacter
 public:
 	
 	AEnemyAI();
-
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
-		class UBehaviorTree* BehaviorTree;
+		UBehaviorTree* BehaviorTree;
 
 protected:
 	
@@ -29,45 +33,36 @@ private:
 	UPROPERTY(EditAnywhere,Category = "AI")
 		float MaxHealth = 100.f;
 	float Health;
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float AIDamage = 30.f;
-
 	//Despawn timer after death
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float DespawnTimer = 3.f;
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float PatrolSpeed = 150.f;
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float ChaseSpeed = 400.f;
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float AggroRange = 1000.f;
-
 	UPROPERTY(EditANywhere, Category = "AI")
 		float AttackDelay = .7f;
-
 	//patrols between BotTargetPoints with the same index
 	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
 	FTimerHandle TimerHandle;
+
 	bool IsAlive = true;
-	bool CanAttack = true;
 	bool IsAggro = false;
 	bool CanDoDamage = false;
 
 	UPROPERTY(EditDefaultsOnly)
-	USphereComponent* AttackRange = nullptr;
-
-	class AEnemyAIController* AIController = nullptr;
-
-	class AMainCharacter* Player = nullptr;
-
+		USphereComponent* AttackRange = nullptr;
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
+
+	AEnemyAIController* AIController = nullptr;
+	AMainCharacter* Player = nullptr;
 
 	void LineTraceToPlayer();
 	FVector GetVectorTowardPlayer();
@@ -93,23 +88,17 @@ public:
 		float GetAIDamage() const { return AIDamage; }
 
 	UFUNCTION(BlueprintCallable)
-		bool GetCanAttack() const { return CanAttack; }
-
-	UFUNCTION(BlueprintCallable)
 		bool GetIsAggro() const { return IsAggro; }
 
 	UFUNCTION()
-		bool GetCanDoDamage() { return CanDoDamage; }
+		bool GetCanDoDamage() const { return CanDoDamage; }
 
 	UFUNCTION()
-		float GetAttackDelay() { return AttackDelay; }
+		float GetAttackDelay() const { return AttackDelay; }
 
 	//Setters
 
 	UFUNCTION(BlueprintCallable, Category = "AI")
 		void SetTakeDamage(float Damage);
-	UFUNCTION(BlueprintCallable)
-		void SetCanAttack(bool Attacking) { CanAttack = Attacking; }
-
-	
+		
 };
