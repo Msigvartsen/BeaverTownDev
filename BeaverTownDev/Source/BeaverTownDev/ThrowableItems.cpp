@@ -7,22 +7,7 @@
 
 AThrowableItems::AThrowableItems()
 {
- 
 	PrimaryActorTick.bCanEverTick = true;
-}
-
-
-void AThrowableItems::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-
-void AThrowableItems::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AThrowableItems::SetIsThrown(bool IsThrow)

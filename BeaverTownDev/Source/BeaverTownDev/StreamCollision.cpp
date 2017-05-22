@@ -31,7 +31,10 @@ void AStreamCollision::Tick(float DeltaTime)
 		if (Actor->GetClass()->IsChildOf(AFloatingCrate::StaticClass()))
 		{
 			Crate = Cast<AFloatingCrate>(Actor);
+			// Moves the crate according to this actors "ForwardVector"
 			Crate->MoveCrate(GetActorForwardVector());
+
+			// Make crate stop/start falling
 			if (bMakeFall)
 			{
 				Crate->MakeFall();

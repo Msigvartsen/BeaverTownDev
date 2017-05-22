@@ -4,6 +4,10 @@
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
 
+/*
+DESCRIPTION
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AMainCharacter : public ACharacter
 {

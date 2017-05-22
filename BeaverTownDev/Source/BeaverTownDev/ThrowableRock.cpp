@@ -15,7 +15,6 @@ void AThrowableRock::BeginPlay()
 
 	RockMesh = FindComponentByClass<UStaticMeshComponent>();
 	RockMesh->OnComponentHit.AddDynamic(this, &AThrowableRock::OnHit);
-	//RockMesh->SetCollisionProfileName(TEXT("IgnorePawn"));
 	RockMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 }
 
