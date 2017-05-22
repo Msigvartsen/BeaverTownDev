@@ -51,7 +51,8 @@ void UGrabber::Grab()
 			
 			if (Actor->GetClass()->IsChildOf(AThrowableItems::StaticClass()))
 			{
-				ItemToThrow = Cast<AThrowableItems>(Actor);	
+				ItemToThrow = Cast<AThrowableItems>(Actor);
+				Rock = Cast<AThrowableRock>(ItemToThrow);
 			}
 			if (Actor->IsA(APushableObject::StaticClass()))
 			{
@@ -147,6 +148,8 @@ void UGrabber::Throw()
 			PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*DefaultThrowForce, NAME_None, true);
 			ItemToThrow->SetActorEnableCollision(true);
 			ItemToThrow->SetIsThrown(true);
+			ItemToThrow->FindComponentByClass<UStaticMeshComponent>()->SetCollisionResponseToChannel(ECC_Pawn,ECR_Block);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UGrabber::RockCollisionTimerEnd, RockCollisionTimer);
 			ItemToThrow = nullptr; 
 		}
 		if (ObjectToPush)
@@ -210,3 +213,8 @@ void UGrabber::FindInputComponent()
 	}
 }
 
+void UGrabber::RockCollisionTimerEnd()
+{
+	Rock->SetCollisionIgnorePawn();
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+}

@@ -14,7 +14,9 @@ void AThrowableRock::BeginPlay()
 	Super::BeginPlay();
 
 	RockMesh = FindComponentByClass<UStaticMeshComponent>();
-	RockMesh->OnComponentHit.AddDynamic(this, &AThrowableRock::OnHit);	
+	RockMesh->OnComponentHit.AddDynamic(this, &AThrowableRock::OnHit);
+	//RockMesh->SetCollisionProfileName(TEXT("IgnorePawn"));
+	RockMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 }
 
 void AThrowableRock::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -28,7 +30,10 @@ void AThrowableRock::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 			EnemyRef->SetTakeDamage(RockDamage);
 			SetIsThrown(false);
 		}
-
 	}
-	
+}
+
+void AThrowableRock::SetCollisionIgnorePawn()
+{
+	RockMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 }
