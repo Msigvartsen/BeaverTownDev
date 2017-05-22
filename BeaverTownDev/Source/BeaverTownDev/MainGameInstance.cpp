@@ -25,11 +25,15 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	AMainCharacter* PC = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	HurtSound = PC->GetHurtSound();
 	Health -= Damage;
-	if (CanPlaySound)
+	if (CanPlaySound &&  PlayHurtSoundOnceWhenDead)
 	{
 		CanPlaySound = false;
 		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 5.f, 1.f, 0.f);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainGameInstance::ResetCanPlaySound, SoundDelay, false);
+		if (Health <= 0)
+		{
+			PlayHurtSoundOnceWhenDead = false;
+		}
 	}
 	if (Health <= 0.f)
 	{
