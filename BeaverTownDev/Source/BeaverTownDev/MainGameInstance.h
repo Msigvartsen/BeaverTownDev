@@ -35,6 +35,7 @@ private:
 	UPROPERTY(EditAnywhere)
 		int32 WoodParts;
 
+
 public:
 	//Reset functions
 	void ResetStats();
