@@ -43,7 +43,7 @@ void AEnemyAI::Tick(float DeltaTime)
 	}
 
 	//When AI health is <= 0, death animation is played, and starts a despawn timer for the character 
-	if (Health <= 0)
+	if (Health <= 0 && IsAlive)
 	{	
 		IsAlive = false;
 		AIController->SetIsAliveBlackboardKey(false);
