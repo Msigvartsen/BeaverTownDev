@@ -60,6 +60,8 @@ private:
 		float AttackDelay = 0.3f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float WalkSpeed = 400.f;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+		float WalkSpeedWhileAttacking = 200.f;
 	UPROPERTY(EditAnywhere,Category = "CharacterStats")
 	class UParticleSystem* HealthParticle = nullptr;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")

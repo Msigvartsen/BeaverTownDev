@@ -61,7 +61,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMainCharacter::MoveX(float value)
 {
-	if (IsPlayerAlive && CanMelee)
+	if (IsPlayerAlive)
 	{
 		AddMovementInput(FVector::ForwardVector, value);
 	}
@@ -70,7 +70,7 @@ void AMainCharacter::MoveX(float value)
 
 void AMainCharacter::MoveY(float value)
 {
-	if (IsPlayerAlive && CanMelee)
+	if (IsPlayerAlive)
 	{
 		AddMovementInput(FVector::RightVector, value);
 	}
@@ -85,6 +85,7 @@ void AMainCharacter::Melee()
 		if (CanMelee)
 		{
 			CanMelee = false;
+			GetCharacterMovement()->MaxWalkSpeed = WalkSpeedWhileAttacking;
 			GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, AttackDelay);
 
 			FHitResult HitResult;
@@ -117,7 +118,7 @@ void AMainCharacter::Melee()
 
 void AMainCharacter::JumpPressed()
 {	
-	if (IsPlayerAlive && CanMelee)
+	if (IsPlayerAlive)
 	{
 		bCanJump = false;
 		Jump();
@@ -171,11 +172,7 @@ void AMainCharacter::Interact()
 {
 	if (IsPlayerAlive)
 	{
-
-		UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
-
 		bIsInteractActive = true;
-
 		FHitResult HitResult;
 		GetHitResultFromLineTrace(HitResult, InteractReach);
 
@@ -379,6 +376,7 @@ void AMainCharacter::MeleeDelayEnd()
 	if (GetWorld())
 	{
 		CanMelee = true;
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 		GetWorld()->GetTimerManager().ClearTimer(MeleeTimerHandle);
 	}
 }
