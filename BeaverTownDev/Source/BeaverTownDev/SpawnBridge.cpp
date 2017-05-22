@@ -33,7 +33,6 @@ void ASpawnBridge::Tick(float DeltaTime)
 
 void ASpawnBridge::BuildBridge()
 {
-	//Checks for trigger volume in editor
 	if (BridgeTrigger)
 	{
 		AMainCharacter* MainCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
@@ -42,8 +41,6 @@ void ASpawnBridge::BuildBridge()
 		{
 			BridgeMesh->SetVisibility(true, true);
 			this->SetActorEnableCollision(true);
-
 		}
-	}
-	
+	}	
 }

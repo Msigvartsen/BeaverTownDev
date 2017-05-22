@@ -30,7 +30,6 @@ void AEnemyAIController::Possess(APawn* Pawn)
 		if (EnemyAI->BehaviorTree->BlackboardAsset)
 		{
 			BlackboardComp->InitializeBlackboard(*(EnemyAI->BehaviorTree->BlackboardAsset));
-			
 		}
 		//Finds all actors of set class, and puts them into an Array (BotTargetPoints) 
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABotTargetPoint::StaticClass(), BotTargetPoints);
@@ -58,6 +57,7 @@ void AEnemyAIController::SetIsAliveBlackboardKey(bool IsAlive)
 
 void AEnemyAIController::SetIsAggro(bool Aggro)
 {
+	//Updates Blackboard value of AI Aggro
 	BlackboardComp->SetValueAsBool(BlackboardIsAggroKey, Aggro);
 }
 

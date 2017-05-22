@@ -6,8 +6,12 @@
 #include "TargetPointSelectionTask.generated.h"
 
 /**
- * 
+ * Finds and sets patrolpoints for AI. AI will move to BotTargetPoints with matching indexes as EnemyAI
+ * When AI reaches the Waypoint, random search for new point
  */
+class ABotTargetPoint;
+class AEnemyAI;
+
 UCLASS()
 class BEAVERTOWNDEV_API UTargetPointSelectionTask : public UBTTaskNode
 {
@@ -16,8 +20,6 @@ class BEAVERTOWNDEV_API UTargetPointSelectionTask : public UBTTaskNode
 private:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
-	class ABotTargetPoint* BotWaypoint;
-	class AEnemyAI* EnemyWaypoint;
-	
-	
+	ABotTargetPoint* BotWaypoint;
+	AEnemyAI* EnemyWaypoint;	
 };
