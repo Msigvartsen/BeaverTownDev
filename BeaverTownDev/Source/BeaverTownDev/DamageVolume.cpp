@@ -33,6 +33,7 @@ void ADamageVolume::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Inflict damage to overlapping player if active
 	if (Box->IsOverlappingActor(Cast<AActor>(GetWorld()->GetFirstPlayerController()->GetCharacter())))
 	{
 			if (bPeriodicDamage && bActivate)

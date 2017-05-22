@@ -19,6 +19,7 @@ class BEAVERTOWNDEV_API ACrate : public AInteract
 	
 public:
 	ACrate();
+
 	virtual void OpenEvent() override;
 	UFUNCTION(BlueprintCallable, Category = Crate)
 		bool GetIsBroken();
@@ -27,7 +28,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		int32 RandomSpawn = 0;
 	UPROPERTY(EditAnywhere)
-	class UParticleSystem* DestroyParticle = nullptr;
+		class UParticleSystem* DestroyParticle = nullptr;
+
 private:
 	UPROPERTY(EditAnywhere)
 		int32 Health = 100;

@@ -11,18 +11,3 @@ ABurnableObjects::ABurnableObjects()
 	PrimaryActorTick.bCanEverTick = true;
 
 }
-
-// Called when the game starts or when spawned
-void ABurnableObjects::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ABurnableObjects::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
