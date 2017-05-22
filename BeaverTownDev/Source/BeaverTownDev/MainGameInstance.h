@@ -23,6 +23,7 @@ private:
 		USoundBase* HurtSound;
 	bool WoodenKey = false;
 	bool CanPlaySound = true;
+	bool PlayHurtSoundOnceWhenDead = true;
 	FTimerHandle TimerHandle;
 	UPROPERTY(EditAnywhere)
 		float SoundDelay = 0.5f;
