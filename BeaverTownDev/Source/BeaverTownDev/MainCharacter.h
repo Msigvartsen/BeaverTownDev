@@ -5,7 +5,7 @@
 #include "MainCharacter.generated.h"
 
 /*
-DESCRIPTION
+The character controlled by the player
 */
 
 UCLASS()
@@ -22,7 +22,6 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -46,9 +45,8 @@ private:
 	void SetVisibilityOverheadText();
 	void TimerEnd();
 	void MeleeDelayEnd();
-	//Character Variables
-
 	
+	//Character Variables	
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float InteractReach = 100.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
@@ -68,40 +66,35 @@ private:
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		UParticleSystem* MeleeParticle = nullptr;
 	
-
+	// Timer variables
 	FTimerHandle TimerHandle;
 	FTimerHandle MeleeTimerHandle;
-
 	float StartJumpTime = 0;
 	float EndJumpTime = 0;
+
+	// Other variables
 	bool bCanJump;	
 	bool bIsInteractActive = false;
 	bool IsPushingObject = false;
 	bool bFalling = false;
 	bool bCanTakeFallingDamage = false;
-	float TurnInterpolationSpeed = 1000.f;
 	bool IsTextVisible = false;
 	bool CanMelee = true;
 	bool IsPlayerAlive = true;
+	float TurnInterpolationSpeed = 1000.f;
 	FText LootText;
-	
-	
-
-	class AChest* ChestRef = nullptr;
+	AChest* ChestRef = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundBase* HurtSound;
 	UPROPERTY(EditAnywhere, Category = "TextRender")
 		UTextRenderComponent* OverheadText;
 public:
-	//Character Getters
-	
+	//Character Getters	
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
-
 	UFUNCTION()
 		float GetWalkSpeed() const { return WalkSpeed; }
-
 	UFUNCTION(BlueprintCallable)
 		bool GetCanMelee() const { return CanMelee; }
 	UFUNCTION(BlueprintCallable)
@@ -110,14 +103,11 @@ public:
 	USoundBase* GetHurtSound();
 
 	//Setters
-	void SetIsInteractActive(bool Status);
-	
+	void SetIsInteractActive(bool Status);	
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();
 	UFUNCTION(BlueprintCallable)
 		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
 	
-
-
 };
