@@ -203,8 +203,6 @@ void AMainCharacter::Interact()
 									UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
 								}
 							}
-
-
 						}
 					}
 					float PlayerAngle = GetActorRotation().Yaw;
@@ -221,7 +219,6 @@ void AMainCharacter::Interact()
 							}
 							else
 							{
-
 								InteractObject->OpenEvent();
 							}
 						}
@@ -245,7 +242,6 @@ void AMainCharacter::Interact()
 
 void AMainCharacter::InteractReleased()
 {
-	UE_LOG(LogTemp, Warning, TEXT("InteractReleased"))
 	bIsInteractActive = false;
 }
 
@@ -320,8 +316,8 @@ bool AMainCharacter::GetIsInteractActive() const
 
 void AMainCharacter::SetIsPushingObject(bool IsPushing)
 {
+	//If true, locks mesh rotation from mouse
 	IsPushingObject = IsPushing;
-	UE_LOG(LogTemp,Warning,TEXT("Locks camera rotation!"))
 }
 
 
@@ -337,21 +333,20 @@ USoundBase* AMainCharacter::GetHurtSound()
 
 void AMainCharacter::SetOverheadText()
 {
+	//Retreived text from chest looted and display if over the player characters head
 	LootText = ChestRef->GetLootText();
 	OverheadText->SetText(LootText);
 	OverheadText->SetVisibility(true);
 	IsTextVisible = true;
-	UE_LOG(LogTemp, Warning, TEXT("Setting overhead Text!"))
 	SetVisibilityOverheadText();
 }
 
 void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)
 {
-	// rotates text so it will face the camera
+	// Rotates text over character, so it will face the camera
 	FVector TextLocation = TextRenderComp->GetComponentLocation();
 	FVector CameraLocation = PlayerCamera->GetComponentLocation();
 	FVector End = CameraLocation - TextLocation;
-
 
 	FRotator Rotation = FRotationMatrix::MakeFromX(End).Rotator();
 	TextRenderComp->SetWorldRotation(FRotator(Rotation.Pitch, Rotation.Yaw, 0));
@@ -361,7 +356,6 @@ void AMainCharacter::SetVisibilityOverheadText()
 {
 	if (IsTextVisible)
 	{
-		
 		IsTextVisible = false;
 		if (GetWorld())
 		{
@@ -373,12 +367,11 @@ void AMainCharacter::SetVisibilityOverheadText()
 void AMainCharacter::TimerEnd()
 {
 	OverheadText->SetVisibility(false);
-	UE_LOG(LogTemp,Warning,TEXT("Timer ended for text!"))
-		if (GetWorld())
-		{
-			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		}
-	
+
+	if (GetWorld())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	}
 }
 
 void AMainCharacter::MeleeDelayEnd()

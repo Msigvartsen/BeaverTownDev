@@ -7,22 +7,18 @@
 // Sets default values
 APushableObject::APushableObject()
 {
-
 	PrimaryActorTick.bCanEverTick = true;	
-
 }
 
 void APushableObject::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void APushableObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 

@@ -23,8 +23,8 @@ private:
 	//Blackboard ref
 	UBlackboardComponent* BlackboardComp;
 
-	UPROPERTY(VisibleAnywhere)
-	UAIPerceptionComponent* AIPerceptionComponent;
+	/*UPROPERTY(VisibleAnywhere)
+	UAIPerceptionComponent* AIPerceptionComponent;*/
 
 	//Blackboard Keys
 	const FName BlackboardPlayerKey = FName("Player");
@@ -33,13 +33,12 @@ private:
 		FName LocationToGoKey;
 	
 	class AEnemyAI* EnemyAI = nullptr;
-
 	TArray<AActor*> BotTargetPoints;
-
-	virtual void Possess(APawn* Pawn) override;
-	void AttackDelayEnd();
 	FTimerHandle TimerHandle;
 	float AttackDelay = .7f;
+
+	void AttackDelayEnd();
+	virtual void Possess(APawn* Pawn) override;
 
 public:
 

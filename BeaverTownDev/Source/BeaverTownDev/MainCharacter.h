@@ -21,8 +21,7 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void SetIsInteractActive(bool Status);
+	
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -93,21 +92,29 @@ private:
 		UTextRenderComponent* OverheadText;
 public:
 	//Character Getters // Setters
-
+	
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
+
 	UFUNCTION()
 		float GetWalkSpeed() const { return WalkSpeed; }
+
 	UFUNCTION(BlueprintCallable)
 		bool GetCanMelee() const { return CanMelee; }
+	UFUNCTION(BlueprintCallable)
+
+		bool GetIsPlayerAlive() { return IsPlayerAlive; }
+	USoundBase* GetHurtSound();
+
+	//Setters
+	void SetIsInteractActive(bool Status);
+	
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();
 	UFUNCTION(BlueprintCallable)
 		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
-	UFUNCTION(BlueprintCallable)
-		bool GetIsPlayerAlive() { return IsPlayerAlive; }
-	USoundBase* GetHurtSound();
+	
 
 
 };

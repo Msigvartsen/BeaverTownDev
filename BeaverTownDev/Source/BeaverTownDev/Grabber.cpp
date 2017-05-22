@@ -13,11 +13,10 @@ UGrabber::UGrabber()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	FindPhysicsHandle();
 	FindInputComponent();
 }
@@ -41,11 +40,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UGrabber::Grab()
 {
-
 	auto CharacterCollision = GetOwner()->FindComponentByClass<UCapsuleComponent>();
 	TArray<AActor*> OverlappingActors;
-
-	UE_LOG(LogTemp, Warning, TEXT("Calling Grab"))
 
 	if (CharacterCollision && !IsHeld)
 	{
@@ -72,6 +68,7 @@ void UGrabber::Grab()
 
 		if (ItemToThrow && !IsHeld)
 		{
+			//If item can be picked up, set location and rotation. Turns collision off while held to not collide with character
 			IsHeld = true;
 			auto ItemToGrab = ItemToThrow->FindComponentByClass<UStaticMeshComponent>();
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
@@ -83,6 +80,7 @@ void UGrabber::Grab()
 
 		if (ObjectToPush)
 		{
+			//If object can be pushed, set location/rotation and set collision to ignore pawn.
 			IsHeld = true;
 			auto ItemToGrab = ObjectToPush->FindComponentByClass<UStaticMeshComponent>();
 			ItemToGrab->SetCollisionProfileName(TEXT("IgnorePawnOnly"));
@@ -124,12 +122,14 @@ void UGrabber::Release()
 			ObjectToPush->SetActorEnableCollision(true);
 			ObjectToPush = nullptr;
 		}
+		//Drop the object/item held
 		PhysicsHandle->ReleaseComponent();
 		IsHeld = false;
 
 		AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
 		if (Char)
 		{
+			//If item is released, sets movespeed back to default
 			Char->SetIsPushingObject(false);
 			Char->SetMaxWalkSpeed(Char->GetWalkSpeed());
 		}		
@@ -143,9 +143,7 @@ void UGrabber::Throw()
 	{	
 		if (ItemToThrow)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Trying to THROW Object"))
 			PhysicsHandle->GrabbedComponent->WakeRigidBody(NAME_None);
-			
 			PhysicsHandle->GrabbedComponent->AddImpulse(GetOwner()->GetActorForwardVector()*DefaultThrowForce, NAME_None, true);
 			ItemToThrow->SetActorEnableCollision(true);
 			ItemToThrow->SetIsThrown(true);
@@ -156,9 +154,8 @@ void UGrabber::Throw()
 			ObjectToPush->SetActorEnableCollision(true);
 			ObjectToPush = nullptr;
 		}
-		
+		//If item can be thrown, add force before releasing. Else, object is just released
 		PhysicsHandle->ReleaseComponent();
-
 		IsHeld = false;
 		
 		AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());

@@ -15,10 +15,7 @@ public:
 	AEnemyAI();
 
 	virtual void Tick(float DeltaTime) override;
-
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
@@ -26,14 +23,11 @@ protected:
 	
 	virtual void BeginPlay() override;
 
-
 private:
 	
 	UPROPERTY(EditAnywhere,Category = "AI")
 		float MaxHealth = 100.f;
-
 	float Health;
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float AIDamage = 30.f;
 	//Despawn timer after death
@@ -44,12 +38,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float ChaseSpeed = 400.f;
 	UPROPERTY(EditAnywhere, Category = "AI")
-		float AggroRange = 1000.f;
-	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
-		int32 WaypointIndex = 0;
+		float AggroRange = 1000.f;	
 	UPROPERTY(EditANywhere, Category = "AI")
 		float AttackDelay = .7f;
-
+	//patrols between BotTargetPoints with the same index
+	UPROPERTY(EditAnywhere, Category = "WaypointIndex")
+		int32 WaypointIndex = 0;
 	
 	FTimerHandle TimerHandle;
 	bool IsAlive = true;
@@ -73,21 +67,19 @@ private:
 
 public:
 
-	//Getters // Setters
+	//Getters
 
 	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
 		bool GetIsAlive() const { return IsAlive; }
+
 	UFUNCTION(BlueprintCallable,Category = "EnemyAI")
-	float GetHealthPercent() const { return Health / MaxHealth; }
-	
+		float GetHealthPercent() const { return Health / MaxHealth; }
+
 	UFUNCTION(BlueprintCallable, Category = "EnemyAI")
 		float GetHealth() const { return Health; }
 
-	UFUNCTION(BlueprintCallable, Category = "AI")
-		void SetTakeDamage(float Damage);
-
 	UFUNCTION()
-	int32 GetWaypointIndex() const { return WaypointIndex; }
+		int32 GetWaypointIndex() const { return WaypointIndex; }
 
 	UFUNCTION()
 		float GetAIDamage() const { return AIDamage; }
@@ -98,11 +90,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool GetIsAggro() const { return IsAggro; }
 
+	UFUNCTION()
+		bool GetCanDoDamage() { return CanDoDamage; }
+
+	UFUNCTION()
+		float GetAttackDelay() { return AttackDelay; }
+
+	//Setters
+
+	UFUNCTION(BlueprintCallable, Category = "AI")
+		void SetTakeDamage(float Damage);
 	UFUNCTION(BlueprintCallable)
 		void SetCanAttack(bool Attacking) { CanAttack = Attacking; }
 
-	UFUNCTION()
-		bool GetCanDoDamage() { return CanDoDamage; }
-	UFUNCTION()
-		float GetAttackDelay() { return AttackDelay; }
+	
 };

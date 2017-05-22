@@ -7,7 +7,7 @@
 AInteract::AInteract()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false; // HUSK AT TICK ER DISABLED!!!!
+	PrimaryActorTick.bCanEverTick = false; // Tick is DISABLED.
 
 	MainRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Main Root"));
 	RootComponent = MainRoot;

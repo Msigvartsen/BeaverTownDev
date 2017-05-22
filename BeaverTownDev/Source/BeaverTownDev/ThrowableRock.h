@@ -14,16 +14,12 @@ class BEAVERTOWNDEV_API AThrowableRock : public AThrowableItems
 	GENERATED_BODY()
 	
 private:
-	
-	
-	virtual void BeginPlay() override;
 
+	virtual void BeginPlay() override;
 	bool IsThrown = false;
 	
-
 public:
 	AThrowableRock();
-	
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 

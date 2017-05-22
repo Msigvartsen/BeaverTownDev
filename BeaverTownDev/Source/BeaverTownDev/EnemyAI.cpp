@@ -31,6 +31,7 @@ void AEnemyAI::Tick(float DeltaTime)
 	
 	LineTraceToPlayer();
 
+	//If AI is alive and player is withing attacking range
 	if (AttackRange->IsOverlappingActor(Player) && IsAlive)
 	{
 		CanDoDamage = true;
@@ -40,6 +41,7 @@ void AEnemyAI::Tick(float DeltaTime)
 		CanDoDamage = false;
 	}
 
+	//When AI health is below 0, death animation is played, and starts a despawn timer for the character 
 	if (Health <= 0 && IsAlive)
 	{	
 		IsAlive = false;
@@ -77,11 +79,13 @@ void AEnemyAI::LineTraceToPlayer()
 		FCollisionQueryParams(FName(""), false, this)
 		))
 	{
+		//If AI spots the character, start chase mode. (Gives AI faster movement)
 		if (HitResult.GetActor()->IsA(AMainCharacter::StaticClass()))
 		{
 			IsAggro = true;
 			GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
 		}
+		//If AI havent seen the player, sets walking speed to slow
 		else
 		{
 			IsAggro = false;
