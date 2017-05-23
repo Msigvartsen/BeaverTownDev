@@ -29,29 +29,31 @@ void AEnemyAI::BeginPlay()
 void AEnemyAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	LineTraceToPlayer();
+	if (!IsAIFriendly)
+	{
+		LineTraceToPlayer();
 
-	//Checks if AI is alive and player is withing attacking range
-	if (AttackRange->IsOverlappingActor(Player) && IsAlive)
-	{
-		CanDoDamage = true;
-	}
-	else
-	{
-		CanDoDamage = false;
-	}
+		//Checks if AI is alive and player is withing attacking range
+		if (AttackRange->IsOverlappingActor(Player) && IsAlive)
+		{
+			CanDoDamage = true;
+		}
+		else
+		{
+			CanDoDamage = false;
+		}
 
-	//When AI health is <= 0, death animation is played, and starts a despawn timer for the character 
-	if (Health <= 0 && IsAlive)
-	{	
-		IsAlive = false;
-		AIController->SetIsAliveBlackboardKey(false);
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
-	}
-	if (IsTakingDamage)
-	{
-		IsTakingDamage = false;
+		//When AI health is <= 0, death animation is played, and starts a despawn timer for the character 
+		if (Health <= 0 && IsAlive)
+		{
+			IsAlive = false;
+			AIController->SetIsAliveBlackboardKey(false);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
+		}
+		if (IsTakingDamage)
+		{
+			IsTakingDamage = false;
+		}
 	}
 }
 
@@ -62,9 +64,12 @@ void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemyAI::SetTakeDamage(float Damage)
 {
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HurtSound,GetActorLocation(),1.f,1.f,0.f);
-	Health -= Damage;
-	IsTakingDamage = true;
+	if (!IsAIFriendly)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HurtSound, GetActorLocation(), 1.f, 1.f, 0.f);
+		Health -= Damage;
+		IsTakingDamage = true;
+	}
 }
 
 void AEnemyAI::LineTraceToPlayer()
