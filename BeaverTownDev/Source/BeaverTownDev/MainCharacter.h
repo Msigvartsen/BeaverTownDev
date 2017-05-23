@@ -7,6 +7,7 @@
 /*
 The character controlled by the player
 */
+class AChest;
 
 UCLASS()
 class BEAVERTOWNDEV_API AMainCharacter : public ACharacter
