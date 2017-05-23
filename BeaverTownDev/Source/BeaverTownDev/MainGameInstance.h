@@ -26,16 +26,18 @@ private:
 		float Health = MaxHealth;
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
+
+	bool WoodenKey = false;
+	bool CanPlaySound = true;
+	bool PlayHurtSoundOnceWhenDead = true;
+	bool IsTakingDamage = false;
+	FTimerHandle TimerHandle;
+
 	UPROPERTY(EditAnywhere)
 		float SoundDelay = 0.5f;
 	UPROPERTY(EditAnywhere)
 		USoundBase* Music;
 
-	bool WoodenKey = false;
-	bool CanPlaySound = true;
-	bool PlayHurtSoundOnceWhenDead = true;
-	FTimerHandle TimerHandle;
-	
 	//Used for building a bridge in level2
 	UPROPERTY(EditAnywhere)
 		int32 WoodParts;
@@ -58,6 +60,8 @@ public:
 		int32 GetWoodParts() { return WoodParts; }
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		bool GetWoodenKey();
+	UFUNCTION(BlueprintCallable)
+		bool GetIsTakingDamage() const { return IsTakingDamage; }
 
 	//Setters
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")

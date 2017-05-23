@@ -47,6 +47,11 @@ void AMainCharacter::Tick(float DeltaTime)
 
 	//Rotates Overhead text towards camera
 	SetTextRotation(OverheadText);
+
+	if (IsThrowing)
+	{
+		SetIsThrowing(false);
+	}
 }
 
 //Sets key-bindigs

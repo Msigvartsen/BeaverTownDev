@@ -172,6 +172,7 @@ void UGrabber::Throw()
 		if (Char)
 		{
 			Char->SetIsPushingObject(false);
+			Char->SetIsThrowing(true);
 			Char->SetMaxWalkSpeed(Char->GetWalkSpeed());
 		}
 	}
