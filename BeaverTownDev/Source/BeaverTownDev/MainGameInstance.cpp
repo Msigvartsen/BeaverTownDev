@@ -22,10 +22,12 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	AMainCharacter* PC = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	HurtSound = PC->GetHurtSound();
 	Health -= Damage;
+	IsTakingDamage = true;
 	//Playe hurt sound only once when dead
 	if (CanPlaySound &&  PlayHurtSoundOnceWhenDead)
 	{
 		CanPlaySound = false;
+		
 		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 5.f, 1.f, 0.f);
 		//Sets a timer before next hurt sound is played
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainGameInstance::ResetCanPlaySound, SoundDelay, false);
@@ -68,4 +70,5 @@ void UMainGameInstance::SetWoodenKey(bool KeyStatus)
 void UMainGameInstance::ResetCanPlaySound()
 {
 	CanPlaySound = true;
+	IsTakingDamage = false;
 }

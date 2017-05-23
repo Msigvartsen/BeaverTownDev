@@ -26,6 +26,7 @@ private:
 	bool WoodenKey = false;
 	bool CanPlaySound = true;
 	bool PlayHurtSoundOnceWhenDead = true;
+	bool IsTakingDamage = false;
 	FTimerHandle TimerHandle;
 	UPROPERTY(EditAnywhere)
 		float SoundDelay = 0.5f;
@@ -53,6 +54,8 @@ public:
 		int32 GetWoodParts() { return WoodParts; }
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		bool GetWoodenKey();
+	UFUNCTION(BlueprintCallable)
+		bool GetIsTakingDamage() const { return IsTakingDamage; }
 
 	//Setters
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")

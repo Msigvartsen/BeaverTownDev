@@ -82,6 +82,7 @@ private:
 	bool IsTextVisible = false;
 	bool CanMelee = true;
 	bool IsPlayerAlive = true;
+	bool IsThrowing = false;
 	float TurnInterpolationSpeed = 1000.f;
 	FText LootText;
 	AChest* ChestRef = nullptr;
@@ -100,14 +101,19 @@ public:
 		bool GetCanMelee() const { return CanMelee; }
 	UFUNCTION(BlueprintCallable)
 		bool GetIsPlayerAlive() { return IsPlayerAlive; }
-
+	UFUNCTION(BlueprintCallable)
+		bool GetIsPushingObject() const { return IsPushingObject; }
 	USoundBase* GetHurtSound();
+	UFUNCTION(BlueprintCallable)
+		bool GetIsThrowing() const { return IsThrowing; }
 
 	//Setters
 	void SetIsInteractActive(bool Status);	
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();
+	UFUNCTION()
+	void SetIsThrowing(bool Throwing) { IsThrowing = Throwing; }
 	UFUNCTION(BlueprintCallable)
 		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
 	
