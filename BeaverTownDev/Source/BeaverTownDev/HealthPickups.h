@@ -24,13 +24,13 @@ public:
 
 	void SetHealUsed() { CanHeal = false; }
 
+	
 protected:
 		virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(EditAnywhere,Category="Healing")
 		float HealingApplied = 40.f;
-
 	bool CanHeal = true;
 		
 };
