@@ -72,3 +72,12 @@ void UMainGameInstance::ResetCanPlaySound()
 	CanPlaySound = true;
 	IsTakingDamage = false;
 }
+
+void UMainGameInstance::SetWoodParts()
+{
+	if (WoodParts < 5)
+	{
+		WoodParts++;
+	}
+	
+}
