@@ -71,7 +71,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetDamageTaken(float Damage);
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
-		void SetWoodParts() { WoodParts++; };
+		void SetWoodParts();
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetWoodenKey(bool KeyStatus);
 
