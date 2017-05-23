@@ -24,6 +24,8 @@ void AChest::OpenEvent()
 		}
 		// continues in blueprint
 		ChestOpen.Broadcast();
+
+
 		if (LootTexts.ToString() == TEXT("WoodKey"))
 		{
 			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
@@ -31,12 +33,15 @@ void AChest::OpenEvent()
 			GameInstance->SetWoodenKey(true);
 			UE_LOG(LogTemp, Warning, TEXT("wOODKEY"))
 		}
-		if (LootTexts.ToString() == TEXT("WoodPart"))
+		if (bLooted == false)
 		{
-			UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
-			Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter())->SetOverheadText();
-			GameInstance->SetWoodParts();
-			UE_LOG(LogTemp,Warning,TEXT("WoodParts::: %d"), GameInstance->GetWoodParts())
+			if (LootTexts.ToString() == TEXT("WoodPart"))
+			{
+				UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetWorld()->GetGameInstance());
+				Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter())->SetOverheadText();
+				GameInstance->SetWoodParts();
+				UE_LOG(LogTemp, Warning, TEXT("WoodParts::: %d"), GameInstance->GetWoodParts())
+			}
 		}
 		CanBeOpened = false;
 	}
@@ -53,4 +58,7 @@ void AChest::CloseEvent()
 	}
 }
 
-
+void AChest::GetAllChestReferences()
+{
+	UGameplayStatics::GetAllActorsOfClass(this, AChest::StaticClass(), ChestArray);
+}

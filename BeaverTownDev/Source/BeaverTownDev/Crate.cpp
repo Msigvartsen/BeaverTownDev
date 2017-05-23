@@ -18,11 +18,10 @@ void ACrate::OpenEvent()
 	{
 		bIsBroken = true;
 		RandomSpawn = FMath::RandRange(0, 2);
-
-			if (DestroyParticle)
-			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyParticle, GetTransform(), true);
-			}
+		if (DestroyParticle)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyParticle, GetTransform(), true);
+		}
 	}
 	// continues in blueprint
 	CrateOpen.Broadcast();
