@@ -15,6 +15,11 @@ class BEAVERTOWNDEV_API APushableObject : public AActor
 {
 	GENERATED_BODY()
 	
+protected:
+	UStaticMeshComponent* Mesh = nullptr;
 public:	
 	APushableObject();
+	virtual void BeginPlay() override;
+	UFUNCTION()
+		void SetCollisionIgnorePawn(bool CanIgnore);
 };

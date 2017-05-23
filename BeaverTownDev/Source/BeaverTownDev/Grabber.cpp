@@ -31,7 +31,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	{
 		FVector EndTrace = GetOwner()->GetActorLocation() + (GetOwner()->GetActorRotation().Vector() * Reach);
 		EndTrace.Z -= 25.f;
-		EndTrace = EndTrace + GetOwner()->GetActorForwardVector().GetSafeNormal() * 25.f;
+		EndTrace = EndTrace + GetOwner()->GetActorForwardVector().GetSafeNormal() * 5.f;
 		PhysicsHandle->SetTargetLocationAndRotation(EndTrace, GetOwner()->GetActorRotation());	
 	}
 }
@@ -89,9 +89,9 @@ void UGrabber::Grab()
 			//If object can be pushed, set location/rotation and set collision to ignore pawn.
 			IsHeld = true;
 			auto ItemToGrab = ObjectToPush->FindComponentByClass<UStaticMeshComponent>();
-			ItemToGrab->SetCollisionProfileName(TEXT("IgnorePawnOnly"));
 			FVector ItemLocation = ItemToGrab->GetOwner()->GetActorLocation();
 			FRotator ItemRotation = ItemToGrab->GetOwner()->GetActorRotation();
+			ObjectToPush->SetCollisionIgnorePawn(true);
 
 			// Adjusting character movement speed to simulate pushing/pulling
 			AMainCharacter* Char = Cast<AMainCharacter>(GetOwner());
@@ -99,7 +99,7 @@ void UGrabber::Grab()
 			{
 				Char->SetIsPushingObject(true);
 				Char->SetMaxWalkSpeed(250.f);
-				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation() + FVector(0,0,-50.f));
+				PhysicsHandle->GrabComponentAtLocation(ItemToGrab, NAME_None, GetOwner()->GetActorLocation() );
 				IsHeld = true;
 			}			
 		}
@@ -127,6 +127,7 @@ void UGrabber::Release()
 		if (ObjectToPush)
 		{
 			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush->SetCollisionIgnorePawn(false);
 			ObjectToPush = nullptr;
 		}
 		//Drop the object/item held
@@ -162,6 +163,7 @@ void UGrabber::Throw()
 		if (ObjectToPush)
 		{
 			ObjectToPush->SetActorEnableCollision(true);
+			ObjectToPush->SetCollisionIgnorePawn(false);
 			ObjectToPush = nullptr;
 		}
 		//If item can be thrown, add force before releasing. Else, object is just released
