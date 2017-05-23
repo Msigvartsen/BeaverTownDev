@@ -62,6 +62,8 @@ public:
 		bool GetWoodenKey();
 	UFUNCTION(BlueprintCallable)
 		bool GetIsTakingDamage() const { return IsTakingDamage; }
+	UFUNCTION(BlueprintCallable)
+		float GetHealth() const { return Health; }
 
 	//Setters
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
