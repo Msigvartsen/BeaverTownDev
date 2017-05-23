@@ -47,6 +47,9 @@ private:
 		float AttackDelay = .7f;
 
 	bool IsTakingDamage = false;
+	//Check this to make AI friendly
+	UPROPERTY(EditAnywhere)
+		bool IsAIFriendly = false;
 	float Health;
 
 	//patrols between BotTargetPoints with the same index
@@ -99,7 +102,7 @@ public:
 	UFUNCTION()
 		float GetAttackDelay() const { return AttackDelay; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		bool GetIsTakingDamage() const { return IsTakingDamage; }
 
 	//Setters
