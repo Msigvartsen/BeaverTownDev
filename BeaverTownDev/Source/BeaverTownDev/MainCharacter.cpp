@@ -189,51 +189,41 @@ void AMainCharacter::Interact()
 		FHitResult HitResult;
 		GetHitResultFromLineTrace(HitResult, InteractReach);
 
-		// Opens chest if hit
+		//Opens chest if hit
 		if (HitResult.GetActor())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
+			if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+			{
+				AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+				ChestRef = Cast<AChest>(InteractObject);
 
-				if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+				//For interacting with HealthPickup
+				if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
 				{
-					AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-					ChestRef = Cast<AChest>(InteractObject);
-					if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
+					AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
+					if (HealthPickup)
 					{
-						AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
-						if (HealthPickup)
+						if (HealthPickup->GetCanHeal())
 						{
-							if (HealthPickup->GetCanHeal())
+							auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+							GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
+							HealthPickup->SetHealUsed();
+							if (HealthParticle)
 							{
-								auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-								GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
-								HealthPickup->SetHealUsed();
-								if (HealthParticle)
-								{
-									UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
-								}
+								UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
 							}
 						}
 					}
-					float PlayerAngle = GetActorRotation().Yaw;
-					float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
-					float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
+				}
+				//Checks if angle is right
+				float PlayerAngle = GetActorRotation().Yaw;
+				float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
+				float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
 
-					if (InteractObject->GetOnlyInteractFromAngle())
-					{
-						if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
-						{
-							if (InteractObject->GetIsOpenEvent())
-							{
-								InteractObject->CloseEvent();
-							}
-							else
-							{
-								InteractObject->OpenEvent();
-							}
-						}
-					}
-					else if (InteractObject->GetCanBeDamaged() == false)
+				//Open/Close the interactable object if the angle is correct
+				if (InteractObject->GetOnlyInteractFromAngle())
+				{
+					if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
 					{
 						if (InteractObject->GetIsOpenEvent())
 						{
@@ -241,11 +231,24 @@ void AMainCharacter::Interact()
 						}
 						else
 						{
-
 							InteractObject->OpenEvent();
 						}
 					}
 				}
+				//For interacting with destructible objects
+				else if (InteractObject->GetCanBeDamaged() == false)
+				{
+					if (InteractObject->GetIsOpenEvent())
+					{
+						InteractObject->CloseEvent();
+					}
+					else
+					{
+
+						InteractObject->OpenEvent();
+					}
+				}
+			}
 		}
 	}
 }
