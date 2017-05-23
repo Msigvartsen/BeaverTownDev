@@ -28,7 +28,7 @@ void UMainGameInstance::SetDamageTaken(float Damage)
 	{
 		CanPlaySound = false;
 		
-		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 5.f, 1.f, 0.f);
+		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
 		//Sets a timer before next hurt sound is played
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainGameInstance::ResetCanPlaySound, SoundDelay, false);
 		if (Health <= 0)
