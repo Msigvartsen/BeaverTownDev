@@ -49,9 +49,9 @@ private:
 	
 	//Character Variables	
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float InteractReach = 100.f;
+		float InteractReach = 130.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float MeleeRange = 100.f;
+		float MeleeRange = 130.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float MeleeDamage = 30.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
