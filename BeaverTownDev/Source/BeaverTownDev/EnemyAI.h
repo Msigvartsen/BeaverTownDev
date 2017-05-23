@@ -99,7 +99,7 @@ public:
 	UFUNCTION()
 		float GetAttackDelay() const { return AttackDelay; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		bool GetIsTakingDamage() const { return IsTakingDamage; }
 
 	//Setters
