@@ -116,5 +116,7 @@ public:
 	void SetIsThrowing(bool Throwing) { IsThrowing = Throwing; }
 	UFUNCTION(BlueprintCallable)
 		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
+	UFUNCTION(BlueprintCallable)
+		void SetCanMelee(bool CanAttack) { CanMelee = CanMelee; }
 	
 };
