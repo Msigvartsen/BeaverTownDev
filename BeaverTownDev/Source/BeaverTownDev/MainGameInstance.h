@@ -26,24 +26,18 @@ private:
 		float Health = MaxHealth;
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
-<<<<<<< HEAD
+
 	bool WoodenKey = false;
 	bool CanPlaySound = true;
 	bool PlayHurtSoundOnceWhenDead = true;
 	bool IsTakingDamage = false;
 	FTimerHandle TimerHandle;
-=======
->>>>>>> 52a5d9ae0ef7c3bf0644c63bdfe221dc4c14d5a9
+
 	UPROPERTY(EditAnywhere)
 		float SoundDelay = 0.5f;
 	UPROPERTY(EditAnywhere)
 		USoundBase* Music;
 
-	bool WoodenKey = false;
-	bool CanPlaySound = true;
-	bool PlayHurtSoundOnceWhenDead = true;
-	FTimerHandle TimerHandle;
-	
 	//Used for building a bridge in level2
 	UPROPERTY(EditAnywhere)
 		int32 WoodParts;
