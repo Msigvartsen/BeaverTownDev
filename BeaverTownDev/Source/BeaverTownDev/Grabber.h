@@ -40,7 +40,7 @@ private:
 	// Settings variables
 	bool StartThrow = false;
 	float DefaultThrowForce = 2000;
-	float Reach = 20.f;
+	float Reach = 10.f;
 	bool IsHeld = false;
 	UPROPERTY(EditAnywhere)
 		float RockCollisionTimer = 3.f;
