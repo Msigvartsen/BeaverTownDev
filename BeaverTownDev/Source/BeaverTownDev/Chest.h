@@ -32,6 +32,8 @@ public:
 	// Chest options and loot text
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 		FText LootTexts;
+	UPROPERTY(BlueprintReadWrite)
+		bool bLooted = false;
 	UPROPERTY(EditAnywhere)
 		bool bOpenOnce = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -41,4 +43,6 @@ public:
 private:
 	bool CanBeOpened = true;
 
+	TArray<AActor*>ChestArray;
+	void GetAllChestReferences();
 };

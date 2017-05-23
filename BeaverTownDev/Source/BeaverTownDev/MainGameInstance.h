@@ -10,6 +10,9 @@ Keeps track on players stats (items, health etc)
 Also a has a lot of getters and setter to provide references to other classes.
 */
 
+//Forward declaration
+class AChest;
+
 UCLASS()
 class BEAVERTOWNDEV_API UMainGameInstance : public UGameInstance
 {
@@ -23,14 +26,16 @@ private:
 		float Health = MaxHealth;
 	UPROPERTY(EditAnywhere)
 		USoundBase* HurtSound;
-	bool WoodenKey = false;
-	bool CanPlaySound = true;
-	bool PlayHurtSoundOnceWhenDead = true;
-	FTimerHandle TimerHandle;
 	UPROPERTY(EditAnywhere)
 		float SoundDelay = 0.5f;
 	UPROPERTY(EditAnywhere)
 		USoundBase* Music;
+
+	bool WoodenKey = false;
+	bool CanPlaySound = true;
+	bool PlayHurtSoundOnceWhenDead = true;
+	FTimerHandle TimerHandle;
+	
 	//Used for building a bridge in level2
 	UPROPERTY(EditAnywhere)
 		int32 WoodParts;
@@ -63,5 +68,17 @@ public:
 		void SetWoodParts() { WoodParts++; };
 	UFUNCTION(BlueprintCallable, Category = "PlayerStats")
 		void SetWoodenKey(bool KeyStatus);
+
+	//Save chest state
+	UPROPERTY(BlueprintReadWrite)
+		bool Chest1Looted = false;
+	UPROPERTY(BlueprintReadWrite)
+		bool Chest2Looted = false;
+	UPROPERTY(BlueprintReadWrite)
+		bool Chest3Looted = false;
+	UPROPERTY(BlueprintReadWrite)
+		bool Chest4Looted = false;
+	UPROPERTY(BlueprintReadWrite)
+		bool Chest5Looted = false;
 
 };
