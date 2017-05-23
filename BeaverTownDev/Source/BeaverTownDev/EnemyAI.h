@@ -46,6 +46,7 @@ private:
 	UPROPERTY(EditANywhere, Category = "AI")
 		float AttackDelay = .7f;
 
+	bool IsTakingDamage = false;
 	float Health;
 
 	//patrols between BotTargetPoints with the same index
@@ -97,6 +98,9 @@ public:
 
 	UFUNCTION()
 		float GetAttackDelay() const { return AttackDelay; }
+
+	UFUNCTION()
+		bool GetIsTakingDamage() const { return IsTakingDamage; }
 
 	//Setters
 
