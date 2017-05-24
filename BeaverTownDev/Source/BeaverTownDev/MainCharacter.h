@@ -117,6 +117,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
 	UFUNCTION(BlueprintCallable)
-		void SetCanMelee(bool CanAttack) { CanMelee = CanMelee; }
+		void SetCanMelee(bool CanAttack) { CanMelee = CanAttack; }
 	
 };
