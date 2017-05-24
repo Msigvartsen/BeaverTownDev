@@ -10,8 +10,6 @@ ADestructibleRock::ADestructibleRock()
 
 void ADestructibleRock::OpenEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Calling Rock OpenEvent"))
-
 	// Takes damage
 	Health -= Damage;
 	PlayRockHitSound();

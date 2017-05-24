@@ -5,8 +5,14 @@
 #include "GameFramework/Actor.h"
 #include "Pickup.generated.h"
 
+/*
+Makes objects that is destroyed/picked up when the player overlaps with them.
+All pickable objects will heal the player for 10 hp.
+*/
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlaySoundEvent);
 
+// Forward declaration
 class AMainCharacter;
 
 UCLASS()
@@ -15,20 +21,14 @@ class BEAVERTOWNDEV_API APickup : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	APickup();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	UFUNCTION()
-	void OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
-
+		void OnOverlap(UPrimitiveComponent* OverlappingComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
 	UPROPERTY(BlueprintAssignable)
 		FPlaySoundEvent PlaySoundWhenPickup;
 
@@ -40,8 +40,8 @@ private:
 	UPROPERTY(EditAnywhere)
 		UShapeComponent* PickupBox;
 	AMainCharacter* CharacterPickup = nullptr;
-	UPROPERTY(EditAnywhere)
-	class UParticleSystem* HealthParticle = nullptr;
+		UPROPERTY(EditAnywhere)
+	UParticleSystem* HealthParticle = nullptr;
 	
 	
 };

@@ -7,26 +7,12 @@
 AInteract::AInteract()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false; // HUSK AT TICK ER DISABLED!!!!
+	PrimaryActorTick.bCanEverTick = false; // Tick is DISABLED.
 
 	MainRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Main Root"));
 	RootComponent = MainRoot;
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
 	BaseMesh->SetupAttachment(RootComponent);
-
-}
-
-// Called when the game starts or when spawned
-void AInteract::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AInteract::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
 }
 

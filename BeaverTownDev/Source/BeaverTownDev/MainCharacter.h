@@ -4,8 +4,10 @@
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
 
-// Forward declarations
-class AComplexProjectile;
+/*
+The character controlled by the player
+*/
+class AChest;
 
 UCLASS()
 class BEAVERTOWNDEV_API AMainCharacter : public ACharacter
@@ -21,8 +23,6 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void SetIsInteractActive(bool Status);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -46,68 +46,77 @@ private:
 	void SetVisibilityOverheadText();
 	void TimerEnd();
 	void MeleeDelayEnd();
-	//Character Variables
-
 	
+	//Character Variables	
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float InteractReach = 100.f;
+		float InteractReach = 150.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float MeleeRange = 75.f;
+		float MeleeRange = 130.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float MeleeDamage = 50.f;
+		float MeleeDamage = 30.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float OverheadTextDespawnTime = 2.f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-		float AttackDelay = 0.5f;
+		float AttackDelay = 0.3f;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
 		float WalkSpeed = 400.f;
-	UPROPERTY(EditAnywhere,Category = "CharacterStats")
-	class UParticleSystem* HealthParticle = nullptr;
 	UPROPERTY(EditAnywhere, Category = "CharacterStats")
-	class UParticleSystem* MeleeParticle = nullptr;
+		float WalkSpeedWhileAttacking = 300.f;
+	UPROPERTY(EditAnywhere,Category = "CharacterStats")
+		UParticleSystem* HealthParticle = nullptr;
+	UPROPERTY(EditAnywhere, Category = "CharacterStats")
+		UParticleSystem* MeleeParticle = nullptr;
 	
-
+	// Timer variables
 	FTimerHandle TimerHandle;
 	FTimerHandle MeleeTimerHandle;
-
 	float StartJumpTime = 0;
 	float EndJumpTime = 0;
+
+	// Other variables
 	bool bCanJump;	
 	bool bIsInteractActive = false;
 	bool IsPushingObject = false;
 	bool bFalling = false;
 	bool bCanTakeFallingDamage = false;
-	float TurnInterpolationSpeed = 1000.f;
 	bool IsTextVisible = false;
 	bool CanMelee = true;
 	bool IsPlayerAlive = true;
+	bool IsThrowing = false;
+	float TurnInterpolationSpeed = 1000.f;
 	FText LootText;
-	
-	
-
-	class AChest* ChestRef = nullptr;
+	AChest* ChestRef = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundBase* HurtSound;
 	UPROPERTY(EditAnywhere, Category = "TextRender")
 		UTextRenderComponent* OverheadText;
 public:
-	//Character Getters // Setters
-
+	//Character Getters	
 	UFUNCTION(BlueprintCallable)
 		bool GetIsInteractActive() const;
 	UFUNCTION()
 		float GetWalkSpeed() const { return WalkSpeed; }
 	UFUNCTION(BlueprintCallable)
 		bool GetCanMelee() const { return CanMelee; }
+	UFUNCTION(BlueprintCallable)
+		bool GetIsPlayerAlive() { return IsPlayerAlive; }
+	UFUNCTION(BlueprintCallable)
+		bool GetIsPushingObject() const { return IsPushingObject; }
+	USoundBase* GetHurtSound();
+	UFUNCTION(BlueprintCallable)
+		bool GetIsThrowing() const { return IsThrowing; }
+
+	//Setters
+	void SetIsInteractActive(bool Status);	
 	void SetIsPushingObject(bool IsPushing);
 	void SetMaxWalkSpeed(float MovementSpeed);
 	void SetOverheadText();
+	UFUNCTION()
+	void SetIsThrowing(bool Throwing) { IsThrowing = Throwing; }
 	UFUNCTION(BlueprintCallable)
 		void SetIsPlayerAlive(bool IsAlive) { IsPlayerAlive = IsAlive; }
 	UFUNCTION(BlueprintCallable)
-		bool GetIsPlayerAlive() { return IsPlayerAlive; }
-	USoundBase* GetHurtSound();
-
-
+		void SetCanMelee(bool CanAttack) { CanMelee = CanAttack; }
+	
 };

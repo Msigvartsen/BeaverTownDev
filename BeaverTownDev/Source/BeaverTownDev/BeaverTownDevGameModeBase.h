@@ -5,6 +5,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "BeaverTownDevGameModeBase.generated.h"
 
+/*
+Keeps track of pointer references with setters and getters
+*/
+
+// Forward declarations
 class ARaft;
 class ARollingDoor;
 
@@ -17,17 +22,12 @@ private:
 	ARaft* Raft = nullptr;
 	ARollingDoor* Door = nullptr;
 
-
-	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-		USoundBase* Music = nullptr;
 public:
 	void SetRaft(ARaft* RaftToSet);
 	void SetDoor(ARollingDoor* DoorToSet);
-	UFUNCTION(BlueprintCallable, Category = Getter)
+	UFUNCTION(BlueprintCallable, Category = "Getter")
 		ARollingDoor* GetDoor();
-	UFUNCTION(BlueprintCallable, Category = Getter)
+	UFUNCTION(BlueprintCallable, Category = "Getter")
 		ARaft* GetRaft();
 
 };

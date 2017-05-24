@@ -1,13 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BeaverTownDev.h"
 #include "Trap.h"
 #include "MainCharacter.h"
-// Sets default values
+
 ATrap::ATrap()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+<<<<<<< HEAD
 	
 }
 
@@ -16,9 +15,10 @@ void ATrap::BeginPlay()
 {
 	Super::BeginPlay();
 	TrapActive = true;
+=======
+>>>>>>> Develop
 }
 
-// Called every frame
 void ATrap::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -30,7 +30,7 @@ void ATrap::Tick(float DeltaTime)
 
 void ATrap::TrapTriggered()
 {
-	//Checks if there are a trigger volume connected
+	//If a TriggerVolume is enabled in editor, check for overlapping player. Spawns a falling rock above the player
 	if (TrapTrigger)
 	{
 		AMainCharacter* MainCharacter = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());

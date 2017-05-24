@@ -5,8 +5,13 @@
 #include "Interact.h"
 #include "Lever.generated.h"
 
+/*
+A lever that can trigger an event when interacted with
+*/
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLeverTriggerEvent);
 
+// Forward declarations
 class APickup;
 class AChest;
 
@@ -16,7 +21,6 @@ class BEAVERTOWNDEV_API ALever : public AInteract
 	GENERATED_BODY()
 	
 public:
-	// Constructor
 	ALever();
 
 	virtual void OpenEvent() override;

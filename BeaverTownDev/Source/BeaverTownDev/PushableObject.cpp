@@ -7,22 +7,24 @@
 // Sets default values
 APushableObject::APushableObject()
 {
-
-	PrimaryActorTick.bCanEverTick = true;	
-
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void APushableObject::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Mesh = FindComponentByClass<UStaticMeshComponent>();
+	Mesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 }
 
-// Called every frame
-void APushableObject::Tick(float DeltaTime)
+void APushableObject::SetCollisionIgnorePawn(bool CanIgnore)
 {
-	Super::Tick(DeltaTime);
-
+	if (CanIgnore)
+	{
+		Mesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+	}
+	else
+	{
+		Mesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
+	}	
 }
-
-

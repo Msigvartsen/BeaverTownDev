@@ -4,7 +4,10 @@
 
 #include "GameFramework/Actor.h"
 #include "SpawnBridge.generated.h"
-
+/*
+	Sets objects visible depending on how many items the player has looted.
+	Creates a full bridge when the player has collected all of the parts
+*/
 UCLASS()
 class BEAVERTOWNDEV_API ASpawnBridge : public AActor
 {
@@ -17,10 +20,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-		class ATriggerVolume* BridgeTrigger = nullptr;
+		ATriggerVolume* BridgeTrigger = nullptr;
 
 	UPROPERTY(EditAnywhere)
-		int32 BridgeIndex;
+		int32 BridgeIndex = 0;
 
 	UPROPERTY(EditAnywhere)
 		int32 PlayerCollectedWood;

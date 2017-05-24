@@ -10,6 +10,9 @@
 /**
  * 
  */
+class UBehaviorTreeComponent;
+class AEnemyAI;
+
 UCLASS()
 class BEAVERTOWNDEV_API AEnemyAIController : public AAIController
 {
@@ -17,25 +20,26 @@ class BEAVERTOWNDEV_API AEnemyAIController : public AAIController
 	
 private:
 
-	//BehaviorTree ref
-	class UBehaviorTreeComponent* BehaviorComp;
 
-	//Blackboard ref
+	UBehaviorTreeComponent* BehaviorComp;
 	UBlackboardComponent* BlackboardComp;
-
-	UPROPERTY(VisibleAnywhere)
-	UAIPerceptionComponent* AIPerceptionComponent;
-
+	
 	//Blackboard Keys
 	const FName BlackboardPlayerKey = FName("Player");
 	const FName BlackboardIsAliveKey = FName("AIAlive?");
+	const FName BlackboardIsAggroKey = FName("AIAggro?");
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName LocationToGoKey;
 	
-	class AEnemyAI* EnemyAI = nullptr;
 
+	AEnemyAI* EnemyAI = nullptr;
 	TArray<AActor*> BotTargetPoints;
+	FTimerHandle TimerHandle;
+	
+	bool AIAttackReset = true;
+	bool IsAttacking = false;
 
+	void AttackDelayEnd();
 	virtual void Possess(APawn* Pawn) override;
 
 public:
@@ -47,6 +51,14 @@ public:
 
 	UFUNCTION()
 		void Attack();
+
 	UFUNCTION()
-		void SetIsAlive(bool IsAlive);
+		void SetIsAliveBlackboardKey(bool IsAlive);
+
+	UFUNCTION()
+		void SetIsAggro(bool Aggro);
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsAttacking() const { return IsAttacking; }
+	
 };

@@ -5,6 +5,9 @@
 #include "Interact.h"
 #include "Crate.generated.h"
 
+/*
+Destructable crate that spawns a random crystal when destroyed
+*/
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCrateTriggerEvent);
 
@@ -16,16 +19,17 @@ class BEAVERTOWNDEV_API ACrate : public AInteract
 	
 public:
 	ACrate();
+
 	virtual void OpenEvent() override;
 	UFUNCTION(BlueprintCallable, Category = Crate)
 		bool GetIsBroken();
-
 	UPROPERTY(BlueprintAssignable)
 		FCrateTriggerEvent CrateOpen;
 	UPROPERTY(BlueprintReadWrite)
 		int32 RandomSpawn = 0;
 	UPROPERTY(EditAnywhere)
-	class UParticleSystem* DestroyParticle = nullptr;
+		class UParticleSystem* DestroyParticle = nullptr;
+
 private:
 	UPROPERTY(EditAnywhere)
 		int32 Health = 100;

@@ -5,6 +5,10 @@
 #include "Interact.h"
 #include "FellableTree.generated.h"
 
+/*
+Tree that can be knocked over by players melee attack.
+*/
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFellTree);
 
 UCLASS()
@@ -13,7 +17,6 @@ class BEAVERTOWNDEV_API AFellableTree : public AInteract
 	GENERATED_BODY()
 
 public:
-	// Constructor
 	AFellableTree();
 
 	virtual void OpenEvent() override;

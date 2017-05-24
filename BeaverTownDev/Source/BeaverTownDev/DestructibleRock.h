@@ -5,16 +5,17 @@
 #include "Interact.h"
 #include "DestructibleRock.generated.h"
 
-/**
- * 
- */
+/*
+Rock that can be broken with player melee attack
+Rock spawns smaller throwable rocks in a random pattern when destroyed.
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API ADestructibleRock : public AInteract
 {
 	GENERATED_BODY()
 	
 public:
-	// Constructor
 	ADestructibleRock();
 
 	virtual void OpenEvent() override;
@@ -28,5 +29,5 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Rock")
 		void BreakRock();
 	UPROPERTY(EditAnywhere)
-	class UParticleSystem* DestroyParticle = nullptr;
+		class UParticleSystem* DestroyParticle = nullptr;
 };

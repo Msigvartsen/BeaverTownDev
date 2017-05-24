@@ -19,8 +19,9 @@ void AEnemyAI::BeginPlay()
 	Super::BeginPlay();
 	Health = MaxHealth;
 	Player = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-	AIController = Cast<AEnemyAIController>(this->GetController());
-	AIController->SetIsAlive(IsAlive);
+	AIController = Cast<AEnemyAIController>(GetController());
+	AIController->SetIsAliveBlackboardKey(true);
+	AIController->SetIsAggro(false);
 	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 }
 
@@ -28,50 +29,55 @@ void AEnemyAI::BeginPlay()
 void AEnemyAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	LineTraceToPlayer();
-
-	if (AttackRange->IsOverlappingActor(Player))
+	if (!IsAIFriendly)
 	{
-		CanAttack = true;
-		UE_LOG(LogTemp,Warning,TEXT("Can attack"))
-	}
-	else
-	{
-		CanAttack = false;
-		UE_LOG(LogTemp, Warning, TEXT("Cannot attack"))
-	}
+		LineTraceToPlayer();
 
-	if (Health <= 0 && IsAlive)
-	{	
-		IsAlive = false;
-		AIController->SetIsAlive(IsAlive);
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
-		UE_LOG(LogTemp, Warning, TEXT("Sets despawn timer 2sec"))
-		
+		//Checks if AI is alive and player is withing attacking range
+		if (AttackRange->IsOverlappingActor(Player) && IsAlive)
+		{
+			CanDoDamage = true;
+		}
+		else
+		{
+			CanDoDamage = false;
+		}
+
+		//When AI health is <= 0, death animation is played, and starts a despawn timer for the character 
+		if (Health <= 0 && IsAlive)
+		{
+			IsAlive = false;
+			AIController->SetIsAliveBlackboardKey(false);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyAI::Despawn, DespawnTimer);
+		}
+		if (IsTakingDamage)
+		{
+			IsTakingDamage = false;
+		}
 	}
-	
 }
 
 void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void AEnemyAI::SetTakeDamage(float Damage)
 {
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HurtSound,GetActorLocation(),1.f,1.f,0.f);
-	Health -= Damage;
+	if (!IsAIFriendly)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HurtSound, GetActorLocation(), 1.f, 1.f, 0.f);
+		Health -= Damage;
+		IsTakingDamage = true;
+	}
 }
 
 void AEnemyAI::LineTraceToPlayer()
 {
-	UE_LOG(LogTemp,Warning,TEXT("LineTracing!"))
+	//Checks if player is in within range
 	FHitResult HitResult;
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = GetActorLocation() + (GetVectorTowardPlayer().GetSafeNormal() * AggroRange);
-
 
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitResult,
@@ -81,15 +87,11 @@ void AEnemyAI::LineTraceToPlayer()
 		FCollisionQueryParams(FName(""), false, this)
 		))
 	{
+		//If AI spots the character, start chase mode. (Gives AI faster movement)
 		if (HitResult.GetActor()->IsA(AMainCharacter::StaticClass()))
 		{
-			IsAggro = true;
+			AIController->SetIsAggro(true);
 			GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
-		}
-		else
-		{
-			IsAggro = false;
-			GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 		}
 	}
 }
@@ -106,7 +108,6 @@ void AEnemyAI::Despawn()
 	if (GetWorld())
 	{
 		Destroy();
-		UE_LOG(LogTemp,Warning,TEXT("Despawn timer up!"))
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);	
 	}
 }

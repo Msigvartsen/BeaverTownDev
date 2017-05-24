@@ -10,8 +10,10 @@ EBTNodeResult::Type UEnemyAIAttack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 {
 	AEnemyAIController* AIController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 	if (AIController)
-	{
+	{	
+		//A task run in Behavior Tree. When conditions inside behavior tree is met, run Attack function from AI Controller
 		AIController->Attack();
+		
 		return EBTNodeResult::Succeeded;
 	}
 	return EBTNodeResult::Failed;

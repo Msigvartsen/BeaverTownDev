@@ -10,8 +10,6 @@ AFellableTree::AFellableTree()
 
 void AFellableTree::OpenEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Calling Tree OpenEvent"))
-
 	// Takes damage
 	Health -= 25;
 	PlayChopSound();

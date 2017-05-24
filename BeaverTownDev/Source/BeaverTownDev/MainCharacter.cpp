@@ -2,7 +2,6 @@
 #include "BeaverTownDev.h"
 #include "MainCharacter.h"
 #include "Interact.h"
-#include "EnemyBase.h"
 #include "MainGameInstance.h"
 #include "EnemyAI.h"
 #include "Chest.h"
@@ -11,6 +10,8 @@
 AMainCharacter::AMainCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	//Camera settings
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -24,6 +25,8 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//Settings
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
 	bCanJump = true;
 	SetMaxWalkSpeed(WalkSpeed);
@@ -39,13 +42,19 @@ void AMainCharacter::Tick(float DeltaTime)
 	//Rotates character mesh towards the mouse cursor
 	RotateToMousePosition(DeltaTime);
 	
+	//CHecks for falling damage
 	FallingDamage();
 
 	//Rotates Overhead text towards camera
 	SetTextRotation(OverheadText);
-	
+
+	if (IsThrowing)
+	{
+		SetIsThrowing(false);
+	}
 }
 
+//Sets key-bindigs
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -81,25 +90,28 @@ void AMainCharacter::Melee()
 {
 	if (IsPlayerAlive)
 	{
-
 		if (CanMelee)
 		{
 			CanMelee = false;
+			//Slows character while attacking
+			GetCharacterMovement()->MaxWalkSpeed = WalkSpeedWhileAttacking;
+			//Delays melee attack
 			GetWorld()->GetTimerManager().SetTimer(MeleeTimerHandle, this, &AMainCharacter::MeleeDelayEnd, AttackDelay);
 
 			FHitResult HitResult;
 
+			//Inflict damage
 			GetHitResultFromLineTrace(HitResult, MeleeRange);
 			if (HitResult.GetActor())
 			{
-
+				//Damage enemy
 				if (HitResult.GetActor()->IsA(AEnemyAI::StaticClass()))
 				{
 					AEnemyAI* EnemyAIHit = Cast<AEnemyAI>(HitResult.GetActor());
 					EnemyAIHit->SetTakeDamage(MeleeDamage);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MeleeParticle, GetTransform(), true);
 				}
-
+				//Damage interactable objects
 				if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
 				{
 					AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
@@ -122,7 +134,6 @@ void AMainCharacter::JumpPressed()
 		bCanJump = false;
 		Jump();
 	}
-	
 }
 
 void AMainCharacter::JumpReleased()
@@ -130,6 +141,7 @@ void AMainCharacter::JumpReleased()
 	StopJumping();
 }
 
+//Start timer when player is falling with negative velocity
 void AMainCharacter::FallingDamage()
 {
 	if (!bFalling && GetCharacterMovement()->IsFalling() && GetVelocity().Z < 0.f)
@@ -140,6 +152,7 @@ void AMainCharacter::FallingDamage()
 	}
 }
 
+//Calculates falling damage when the player lands
 void AMainCharacter::Landed(const FHitResult & Hit)
 {
 	bCanJump = true;
@@ -148,6 +161,9 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 	float SecondsInAir = EndJumpTime - StartJumpTime;
 	if (SecondsInAir > 0.7f && GetVelocity().Z < 0.f)
 	{
+		//The player was 0.7 seconds or more in air
+		//and will take falling damage with (time++)^5
+		//this will make the falling damage exponential
 		SecondsInAir++;
 		float HealthLost = FMath::Pow(SecondsInAir, 5.f);
 		auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
@@ -157,76 +173,57 @@ void AMainCharacter::Landed(const FHitResult & Hit)
 			GameInstance->SetDamageTaken(HealthLost);
 			bCanTakeFallingDamage = false;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("TOOK %f FALLING DAMAGE!"), HealthLost);
-		UE_LOG(LogTemp, Warning, TEXT("SECONDS IN AIR: %f! , END JUMP TIME %f, START JUMP TIME: %f"), SecondsInAir, EndJumpTime, StartJumpTime);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("NO FALLING DAMAGE!"));
 		bCanTakeFallingDamage = false;
 	}
 }
 
+//The player can interact with interactable objects through linetrace or collision
 void AMainCharacter::Interact()
 {
 	if (IsPlayerAlive)
 	{
-
-		UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
-
 		bIsInteractActive = true;
-
 		FHitResult HitResult;
 		GetHitResultFromLineTrace(HitResult, InteractReach);
 
-		// Opens chest if hit
+		//Opens chest if hit
 		if (HitResult.GetActor())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Line Trace hit: %s"), *HitResult.Actor->GetName())
+			if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+			{
+				AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
+				ChestRef = Cast<AChest>(InteractObject);
 
-				if (HitResult.GetActor()->GetClass()->IsChildOf(AInteract::StaticClass()))
+				//For interacting with HealthPickup
+				if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
 				{
-					AInteract* InteractObject = Cast<AInteract>(HitResult.GetActor());
-					ChestRef = Cast<AChest>(InteractObject);
-					if (HitResult.GetActor()->IsA(AHealthPickups::StaticClass()))
+					AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
+					if (HealthPickup)
 					{
-						AHealthPickups* HealthPickup = Cast<AHealthPickups>(HitResult.GetActor());
-						if (HealthPickup)
+						if (HealthPickup->GetCanHeal())
 						{
-							if (HealthPickup->GetCanHeal())
+							auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
+							GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
+							HealthPickup->SetHealUsed();
+							if (HealthParticle)
 							{
-								auto GameInstance = Cast<UMainGameInstance>(GetGameInstance());
-								GameInstance->SetHealthIncrease(HealthPickup->HealTarget());
-								HealthPickup->SetHealUsed();
-								if (HealthParticle)
-								{
-									UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
-								}
-							}
-
-
-						}
-					}
-					float PlayerAngle = GetActorRotation().Yaw;
-					float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
-					float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
-
-					if (InteractObject->GetOnlyInteractFromAngle())
-					{
-						if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
-						{
-							if (InteractObject->GetIsOpenEvent())
-							{
-								InteractObject->CloseEvent();
-							}
-							else
-							{
-
-								InteractObject->OpenEvent();
+								UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HealthParticle, GetTransform(), true);
 							}
 						}
 					}
-					else if (InteractObject->GetCanBeDamaged() == false)
+				}
+				//Checks if angle is right
+				float PlayerAngle = GetActorRotation().Yaw;
+				float MinAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMinOpenAngle();
+				float MaxAngle = InteractObject->GetActorForwardVector().Rotation().Yaw + InteractObject->GetMaxOpenAngle();
+
+				//Open/Close the interactable object if the angle is correct
+				if (InteractObject->GetOnlyInteractFromAngle())
+				{
+					if (PlayerAngle > MinAngle && PlayerAngle < MaxAngle)
 					{
 						if (InteractObject->GetIsOpenEvent())
 						{
@@ -234,18 +231,30 @@ void AMainCharacter::Interact()
 						}
 						else
 						{
-
 							InteractObject->OpenEvent();
 						}
 					}
 				}
+				//For interacting with destructible objects
+				else if (InteractObject->GetCanBeDamaged() == false)
+				{
+					if (InteractObject->GetIsOpenEvent())
+					{
+						InteractObject->CloseEvent();
+					}
+					else
+					{
+
+						InteractObject->OpenEvent();
+					}
+				}
+			}
 		}
 	}
 }
 
 void AMainCharacter::InteractReleased()
 {
-	UE_LOG(LogTemp, Warning, TEXT("InteractReleased"))
 	bIsInteractActive = false;
 }
 
@@ -255,7 +264,6 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 {
 	if (IsPlayerAlive)
 	{
-
 		if (!IsPushingObject)
 		{
 			/// get viewport center
@@ -265,7 +273,8 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 			ViewportCenter = ViewportSize / 2;
 
 			/// get mouse position
-			float X, Y;
+			float X;
+			float Y;
 			GetWorld()->GetFirstPlayerController()->GetMousePosition(X, Y);
 			FVector2D MousePosition = FVector2D(X, Y);
 
@@ -280,25 +289,20 @@ void AMainCharacter::RotateToMousePosition(float DeltaTime)
 			FVector RotatedMouseVector = MyRotationMatrix.TransformVector(MouseDirection3D);
 
 			/// Rotates smoothly towards mouse cursor
-
 			FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), RotatedMouseVector.Rotation(), DeltaTime, TurnInterpolationSpeed);
-
 			GetWorld()->GetFirstPlayerController()->SetControlRotation(NewRotation);
 		}
 	}
 }
 
 
-
+//Takes HitResult as out parameter (modifies it by reference)
 void AMainCharacter::GetHitResultFromLineTrace(FHitResult &HitResult,float Reach)
 {
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = StartTrace + (GetActorRotation().Vector() * Reach);
 	EndTrace.Z -= 25.f;
 	StartTrace.Z -= 25.f;
-
-	// Draws a red line that represents the line trace
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(0, 255, 0), false, .3f, 0, 10.f);
 
 	// Line trace from character mesh to get World Dynamic object
 	GetWorld()->LineTraceSingleByObjectType(
@@ -323,8 +327,8 @@ bool AMainCharacter::GetIsInteractActive() const
 
 void AMainCharacter::SetIsPushingObject(bool IsPushing)
 {
+	//If true, locks mesh rotation from mouse
 	IsPushingObject = IsPushing;
-	UE_LOG(LogTemp,Warning,TEXT("Locks camera rotation!"))
 }
 
 
@@ -340,21 +344,20 @@ USoundBase* AMainCharacter::GetHurtSound()
 
 void AMainCharacter::SetOverheadText()
 {
+	//Retreived text from chest looted and display if over the player characters head
 	LootText = ChestRef->GetLootText();
 	OverheadText->SetText(LootText);
 	OverheadText->SetVisibility(true);
 	IsTextVisible = true;
-	UE_LOG(LogTemp, Warning, TEXT("Setting overhead Text!"))
 	SetVisibilityOverheadText();
 }
 
 void AMainCharacter::SetTextRotation(UTextRenderComponent* TextRenderComp)
 {
-	// rotates text so it will face the camera
+	// Rotates text over character, so it will face the camera
 	FVector TextLocation = TextRenderComp->GetComponentLocation();
 	FVector CameraLocation = PlayerCamera->GetComponentLocation();
 	FVector End = CameraLocation - TextLocation;
-
 
 	FRotator Rotation = FRotationMatrix::MakeFromX(End).Rotator();
 	TextRenderComp->SetWorldRotation(FRotator(Rotation.Pitch, Rotation.Yaw, 0));
@@ -364,7 +367,6 @@ void AMainCharacter::SetVisibilityOverheadText()
 {
 	if (IsTextVisible)
 	{
-		
 		IsTextVisible = false;
 		if (GetWorld())
 		{
@@ -376,12 +378,11 @@ void AMainCharacter::SetVisibilityOverheadText()
 void AMainCharacter::TimerEnd()
 {
 	OverheadText->SetVisibility(false);
-	UE_LOG(LogTemp,Warning,TEXT("Timer ended for text!"))
-		if (GetWorld())
-		{
-			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		}
-	
+
+	if (GetWorld())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	}
 }
 
 void AMainCharacter::MeleeDelayEnd()
@@ -389,6 +390,7 @@ void AMainCharacter::MeleeDelayEnd()
 	if (GetWorld())
 	{
 		CanMelee = true;
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 		GetWorld()->GetTimerManager().ClearTimer(MeleeTimerHandle);
 	}
 }

@@ -5,6 +5,13 @@
 #include "GameFramework/Actor.h"
 #include "Raft.generated.h"
 
+/*
+A raft that can be controlled by the player.
+The raft will add force if the player interact with the raft edges at the right angle.
+This will simulate paddling
+*/
+
+// Forward declarations
 class AMainCharacter;
 class ABeaverTownDevGameModeBase;
 
@@ -14,21 +21,20 @@ class BEAVERTOWNDEV_API ARaft : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ARaft();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Raft")
-		void MoveRaftTowardPlayer();
+	//TODO
 	UFUNCTION(BlueprintImplementableEvent, Category = "Raft")
 		void PlaySplashSound();
+	void ResetTimer();
+	bool RightAngleWithDotProduct(FName Name);
+	bool DotProductTest(FVector Vector1, FVector Vector2);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -44,24 +50,21 @@ private:
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* LeftTrigger;
 
+	// Pointer references
 	AMainCharacter* PlayerCharacter = nullptr;
 	ABeaverTownDevGameModeBase* GameMode = nullptr;
 	UPrimitiveComponent* RaftPrimitive = nullptr;
 
-	void ResetTimer();
-	bool RightAngle(FName Name);
-	bool AngleTest(float PlayerYaw, float RaftYaw, float AcceptedAngle);
-	bool RightAngleWithDotProduct(FName Name);
-	bool DotProductTest(FVector Vector1, FVector Vector2);
-	UPROPERTY(EditAnywhere, Category = "Raft Settings")
-		float AcceptedAngle = 90.f;
-
+	// variables
 	bool bTimerReady = true;
 	FTimerHandle TimerHandle;
 	FVector TargetLocation;
 	FVector CurrentLocation;
 	FHitResult RaftHitResult;
 
+	// Settings variables
+	UPROPERTY(EditAnywhere, Category = "Raft Settings")
+		float AcceptedAngle = 90.f;
 	UPROPERTY(EditAnywhere, Category = "Raft Settings")
 		float Timer = .3f;
 	UPROPERTY(EditAnywhere, Category = "Raft Settings")

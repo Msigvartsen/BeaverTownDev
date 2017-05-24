@@ -5,26 +5,18 @@
 #include "Spawner.h"
 
 
-// Sets default values
 ASpawner::ASpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("MyRoot"));
 }
 
-// Called when the game starts or when spawned
-void ASpawner::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
 void ASpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Spawns in random range if enabled
 	if (bRandomRange)
 	{
 		SpawnLocation = GetActorLocation() + (GetActorForwardVector() * FMath::FRandRange(MinX, MaxX));
@@ -34,6 +26,7 @@ void ASpawner::Tick(float DeltaTime)
 		SpawnLocation = GetActorLocation();
 	}
 
+	// Spawns in intervals and delays first spawn if enabled
 	if (bCanSpawn && GetWorld()->GetTimeSeconds() > StartTimeDelay)
 	{
 		ActorsSpawned++;
@@ -47,7 +40,7 @@ void ASpawner::Tick(float DeltaTime)
 		}
 		bCanSpawn = false;
 		
-			
+		// Spawns object and adds the chosen LifeSpan to the object
 		if (ObjectToSpawn)
 		{
 			SpawnRotation = GetActorRotation();

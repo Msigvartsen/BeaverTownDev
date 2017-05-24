@@ -5,6 +5,11 @@
 #include "GameFramework/Actor.h"
 #include "DamageVolume.generated.h"
 
+/*
+Player take damage when overlapping with this actors collision
+Can deal periodic or instant damage
+*/
+
 class UMainGameInstance;
 
 UCLASS()

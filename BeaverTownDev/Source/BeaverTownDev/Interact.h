@@ -5,25 +5,24 @@
 #include "GameFramework/Actor.h"
 #include "Interact.generated.h"
 
+/*
+This works as a baseclass and provides the common/basic functionality
+to all the interactable objects.
+*/
+
 UCLASS()
 class BEAVERTOWNDEV_API AInteract : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AInteract();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	// These two functions are overridden in most of the derived classes
 	virtual void OpenEvent();
 	virtual void CloseEvent();
+	// Getters
 	bool GetIsOpenEvent();
 	bool GetOnlyInteractFromAngle();
 	bool GetCanBeDamaged();
@@ -31,6 +30,7 @@ public:
 	float GetMinOpenAngle();
 
 protected:
+	// Settings
 	UPROPERTY(BlueprintReadWrite)
 		bool bIsOpenEvent = false;
 	UPROPERTY(BlueprintReadWrite)
@@ -39,7 +39,6 @@ protected:
 		float MaxOpenAngle = 0;
 	UPROPERTY(EditAnywhere)
 		float MinOpenAngle = 0;
-
 	bool bCanBeDamaged = false;
 
 private:

@@ -4,13 +4,10 @@
 #include "MainCharacter.h"
 #include "MainGameInstance.h"
 
-
-
 void UMainGameInstance::ResetStats()
 {
 	MaxHealth = 100.f;
 	Health = MaxHealth;
-	Minerals = 0;
 	WoodenKey = false;
 }
 
@@ -19,33 +16,31 @@ float UMainGameInstance::GetHealthPercent()
 	return Health / MaxHealth;
 }
 
-void UMainGameInstance::SetMinerals(int32 PickedUpMinerals)
-{
-	Minerals += PickedUpMinerals;
-	UE_LOG(LogTemp,Warning,TEXT("PICKED UP CRYSTALS TO GAME INSTANCE"))
-}
-
+//Inflict damage on player according to parameter value
 void UMainGameInstance::SetDamageTaken(float Damage)
 {
 	AMainCharacter* PC = Cast<AMainCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	HurtSound = PC->GetHurtSound();
 	Health -= Damage;
-	if (CanPlaySound)
+	IsTakingDamage = true;
+	//Playe hurt sound only once when dead
+	if (CanPlaySound &&  PlayHurtSoundOnceWhenDead)
 	{
 		CanPlaySound = false;
-		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 5.f, 1.f, 0.f);
+		
+		UGameplayStatics::PlaySound2D(GetWorld(), HurtSound, 1.f, 1.f, 0.f);
+		//Sets a timer before next hurt sound is played
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UMainGameInstance::ResetCanPlaySound, SoundDelay, false);
+		if (Health <= 0)
+		{
+			PlayHurtSoundOnceWhenDead = false;
+		}
 	}
 	if (Health <= 0.f)
 	{
 		PC->SetIsPlayerAlive(false);
 		LoadRestartGameUI();
 	}
-}
-
-int32 UMainGameInstance::GetMinerals()
-{
-	return Minerals;
 }
 
 void UMainGameInstance::SetHealthIncrease(float inHealth)
@@ -75,4 +70,14 @@ void UMainGameInstance::SetWoodenKey(bool KeyStatus)
 void UMainGameInstance::ResetCanPlaySound()
 {
 	CanPlaySound = true;
+	IsTakingDamage = false;
+}
+
+void UMainGameInstance::SetWoodParts()
+{
+	if (WoodParts < 5)
+	{
+		WoodParts++;
+	}
+	
 }

@@ -39,11 +39,8 @@ EBTNodeResult::Type UTargetPointSelectionTask::ExecuteTask(UBehaviorTreeComponen
 					BlackboardComp->SetValueAsObject("LocationToGo", NextTargetPoint);
 				}
 
-
 		} while (CurrentPoint == NextTargetPoint);
 	
-			//While patrolling, the AI has lower movespeed.
-			AIController->GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = 150.f;
 			//return Successfull task
 			return EBTNodeResult::Succeeded;
 		

@@ -13,8 +13,9 @@ class BEAVERTOWNDEV_API ABotTargetPoint : public ATargetPoint
 {
 	GENERATED_BODY()
 	
-	
+	/*Class used to set specific waypoints for AI.*/
 public:
+	//Set index to match with AI's waypoint index. AI will only patrol between same index'ed waypoints
 	UPROPERTY(EditAnywhere,Category = "WaypointIndex")
 		int32 WaypointIndex = 0;
 	
