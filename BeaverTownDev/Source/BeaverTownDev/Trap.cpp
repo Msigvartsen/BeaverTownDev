@@ -6,7 +6,7 @@
 ATrap::ATrap()
 {
 	PrimaryActorTick.bCanEverTick = true;
-<<<<<<< HEAD
+
 	
 }
 
@@ -15,8 +15,6 @@ void ATrap::BeginPlay()
 {
 	Super::BeginPlay();
 	TrapActive = true;
-=======
->>>>>>> Develop
 }
 
 void ATrap::Tick(float DeltaTime)

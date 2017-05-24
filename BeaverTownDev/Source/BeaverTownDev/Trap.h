@@ -8,7 +8,7 @@
 /*
 A class that spawns an object when the player overlaps with the trigger volume
 */
-
+class ATriggerVolume;
 UCLASS()
 class BEAVERTOWNDEV_API ATrap : public AActor
 {
@@ -18,7 +18,7 @@ public:
 	ATrap();
 
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, Category = "Trap")
 		USoundBase* TriggerSound;
 	UPROPERTY(EditAnywhere,Category = "Trap")
@@ -27,17 +27,8 @@ public:
 		UClass* ObjectToSpawn = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Trap")
 		float Lifetime = 0;
-<<<<<<< HEAD
-	bool TrapActive;
-=======
 
 	bool TrapActive = true;
-<<<<<<< HEAD
->>>>>>> Develop
-	
-=======
-
->>>>>>> Develop
 	void TrapTriggered();
 	
 };
